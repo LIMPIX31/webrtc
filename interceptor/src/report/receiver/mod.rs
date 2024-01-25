@@ -1,6 +1,6 @@
-mod receiver_stream;
+pub mod receiver_stream;
 #[cfg(test)]
-mod receiver_test;
+pub mod receiver_test;
 
 use std::collections::HashMap;
 use std::time::{Duration, SystemTime};
@@ -13,16 +13,16 @@ use super::*;
 use crate::error::Error;
 use crate::*;
 
-pub(crate) struct ReceiverReportInternal {
-    pub(crate) interval: Duration,
-    pub(crate) now: Option<FnTimeGen>,
-    pub(crate) streams: Mutex<HashMap<u32, Arc<ReceiverStream>>>,
-    pub(crate) close_rx: Mutex<Option<mpsc::Receiver<()>>>,
+pub struct ReceiverReportInternal {
+    pub interval: Duration,
+    pub now: Option<FnTimeGen>,
+    pub streams: Mutex<HashMap<u32, Arc<ReceiverStream>>>,
+    pub close_rx: Mutex<Option<mpsc::Receiver<()>>>,
 }
 
-pub(crate) struct ReceiverReportRtcpReader {
-    pub(crate) internal: Arc<ReceiverReportInternal>,
-    pub(crate) parent_rtcp_reader: Arc<dyn RTCPReader + Send + Sync>,
+pub struct ReceiverReportRtcpReader {
+    pub internal: Arc<ReceiverReportInternal>,
+    pub parent_rtcp_reader: Arc<dyn RTCPReader + Send + Sync>,
 }
 
 #[async_trait]
@@ -61,10 +61,10 @@ impl RTCPReader for ReceiverReportRtcpReader {
 
 /// ReceiverReport interceptor generates receiver reports.
 pub struct ReceiverReport {
-    pub(crate) internal: Arc<ReceiverReportInternal>,
+    pub internal: Arc<ReceiverReportInternal>,
 
-    pub(crate) wg: Mutex<Option<WaitGroup>>,
-    pub(crate) close_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub wg: Mutex<Option<WaitGroup>>,
+    pub close_tx: Mutex<Option<mpsc::Sender<()>>>,
 }
 
 impl ReceiverReport {

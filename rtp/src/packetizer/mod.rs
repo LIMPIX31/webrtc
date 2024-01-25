@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod packetizer_test;
+pub mod packetizer_test;
 
 use std::fmt;
 use std::sync::Arc;
@@ -60,16 +60,16 @@ pub trait Depacketizer {
 pub type FnTimeGen = Arc<dyn (Fn() -> SystemTime) + Send + Sync>;
 
 #[derive(Clone)]
-pub(crate) struct PacketizerImpl {
-    pub(crate) mtu: usize,
-    pub(crate) payload_type: u8,
-    pub(crate) ssrc: u32,
-    pub(crate) payloader: Box<dyn Payloader + Send + Sync>,
-    pub(crate) sequencer: Box<dyn Sequencer + Send + Sync>,
-    pub(crate) timestamp: u32,
-    pub(crate) clock_rate: u32,
-    pub(crate) abs_send_time: u8, //http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
-    pub(crate) time_gen: Option<FnTimeGen>,
+pub struct PacketizerImpl {
+    pub mtu: usize,
+    pub payload_type: u8,
+    pub ssrc: u32,
+    pub payloader: Box<dyn Payloader + Send + Sync>,
+    pub sequencer: Box<dyn Sequencer + Send + Sync>,
+    pub timestamp: u32,
+    pub clock_rate: u32,
+    pub abs_send_time: u8, //http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
+    pub time_gen: Option<FnTimeGen>,
 }
 
 impl fmt::Debug for PacketizerImpl {

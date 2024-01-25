@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod association_internal_test;
+pub mod association_internal_test;
 
 use std::sync::atomic::AtomicBool;
 
@@ -12,17 +12,17 @@ use crate::param::param_unrecognized::ParamUnrecognized;
 
 #[derive(Default)]
 pub struct AssociationInternal {
-    pub(crate) name: String,
-    pub(crate) state: Arc<AtomicU8>,
-    pub(crate) max_message_size: Arc<AtomicU32>,
-    pub(crate) inflight_queue_length: Arc<AtomicUsize>,
-    pub(crate) will_send_shutdown: Arc<AtomicBool>,
+    pub name: String,
+    pub state: Arc<AtomicU8>,
+    pub max_message_size: Arc<AtomicU32>,
+    pub inflight_queue_length: Arc<AtomicUsize>,
+    pub will_send_shutdown: Arc<AtomicBool>,
     awake_write_loop_ch: Option<Arc<mpsc::Sender<()>>>,
 
     peer_verification_tag: u32,
-    pub(crate) my_verification_tag: u32,
+    pub my_verification_tag: u32,
 
-    pub(crate) my_next_tsn: u32, // nextTSN
+    pub my_next_tsn: u32, // nextTSN
     peer_last_tsn: u32,          // lastRcvdTSN
     min_tsn2measure_rtt: u32,    // for RTT measurement
     will_send_forward_tsn: bool,
@@ -40,39 +40,39 @@ pub struct AssociationInternal {
     // Non-RFC internal data
     source_port: u16,
     destination_port: u16,
-    pub(crate) my_max_num_inbound_streams: u16,
-    pub(crate) my_max_num_outbound_streams: u16,
+    pub my_max_num_inbound_streams: u16,
+    pub my_max_num_outbound_streams: u16,
     my_cookie: Option<ParamStateCookie>,
     payload_queue: PayloadQueue,
     inflight_queue: PayloadQueue,
     pending_queue: Arc<PendingQueue>,
     control_queue: ControlQueue,
-    pub(crate) mtu: u32,
+    pub mtu: u32,
     max_payload_size: u32, // max DATA chunk payload size
     cumulative_tsn_ack_point: u32,
     advanced_peer_tsn_ack_point: u32,
     use_forward_tsn: bool,
 
     // Congestion control parameters
-    pub(crate) max_receive_buffer_size: u32,
-    pub(crate) cwnd: u32,     // my congestion window size
+    pub max_receive_buffer_size: u32,
+    pub cwnd: u32,     // my congestion window size
     rwnd: u32,                // calculated peer's receiver windows size
-    pub(crate) ssthresh: u32, // slow start threshold
+    pub ssthresh: u32, // slow start threshold
     partial_bytes_acked: u32,
-    pub(crate) in_fast_recovery: bool,
+    pub in_fast_recovery: bool,
     fast_recover_exit_point: u32,
 
     // RTX & Ack timer
-    pub(crate) rto_mgr: RtoManager,
-    pub(crate) t1init: Option<RtxTimer<AssociationInternal>>,
-    pub(crate) t1cookie: Option<RtxTimer<AssociationInternal>>,
-    pub(crate) t2shutdown: Option<RtxTimer<AssociationInternal>>,
-    pub(crate) t3rtx: Option<RtxTimer<AssociationInternal>>,
-    pub(crate) treconfig: Option<RtxTimer<AssociationInternal>>,
-    pub(crate) ack_timer: Option<AckTimer<AssociationInternal>>,
+    pub rto_mgr: RtoManager,
+    pub t1init: Option<RtxTimer<AssociationInternal>>,
+    pub t1cookie: Option<RtxTimer<AssociationInternal>>,
+    pub t2shutdown: Option<RtxTimer<AssociationInternal>>,
+    pub t3rtx: Option<RtxTimer<AssociationInternal>>,
+    pub treconfig: Option<RtxTimer<AssociationInternal>>,
+    pub ack_timer: Option<AckTimer<AssociationInternal>>,
 
     // Chunks stored for retransmission
-    pub(crate) stored_init: Option<ChunkInit>,
+    pub stored_init: Option<ChunkInit>,
     stored_cookie_echo: Option<ChunkCookieEcho>,
 
     streams: HashMap<u16, Arc<Stream>>,
@@ -88,13 +88,13 @@ pub struct AssociationInternal {
     delayed_ack_triggered: bool,
     immediate_ack_triggered: bool,
 
-    pub(crate) stats: Arc<AssociationStats>,
+    pub stats: Arc<AssociationStats>,
     ack_state: AckState,
-    pub(crate) ack_mode: AckMode, // for testing
+    pub ack_mode: AckMode, // for testing
 }
 
 impl AssociationInternal {
-    pub(crate) fn new(
+    pub fn new(
         config: Config,
         close_loop_ch_tx: broadcast::Sender<()>,
         accept_ch_tx: mpsc::Sender<Arc<Stream>>,
@@ -174,7 +174,7 @@ impl AssociationInternal {
     }
 
     /// caller must hold self.lock
-    pub(crate) fn send_init(&mut self) -> Result<()> {
+    pub fn send_init(&mut self) -> Result<()> {
         if let Some(stored_init) = self.stored_init.clone() {
             log::debug!("[{}] sending INIT", self.name);
 
@@ -217,7 +217,7 @@ impl AssociationInternal {
         }
     }
 
-    pub(crate) async fn close(&mut self) -> Result<()> {
+    pub async fn close(&mut self) -> Result<()> {
         if self.get_state() != AssociationState::Closed {
             self.set_state(AssociationState::Closed);
 
@@ -311,7 +311,7 @@ impl AssociationInternal {
     }
 
     /// handle_inbound parses incoming raw packets
-    pub(crate) async fn handle_inbound(&mut self, raw: &Bytes) -> Result<()> {
+    pub async fn handle_inbound(&mut self, raw: &Bytes) -> Result<()> {
         let p = match Packet::unmarshal(raw) {
             Ok(p) => p,
             Err(err) => {
@@ -551,7 +551,7 @@ impl AssociationInternal {
 
     /// gather_outbound gathers outgoing packets. The returned bool value set to
     /// false means the association should be closed down after the final send.
-    pub(crate) async fn gather_outbound(&mut self) -> (Vec<Packet>, bool) {
+    pub async fn gather_outbound(&mut self) -> (Vec<Packet>, bool) {
         let mut raw_packets = Vec::with_capacity(16);
 
         if !self.control_queue.is_empty() {
@@ -588,7 +588,7 @@ impl AssociationInternal {
     }
 
     /// set_state atomically sets the state of the Association.
-    pub(crate) fn set_state(&self, new_state: AssociationState) {
+    pub fn set_state(&self, new_state: AssociationState) {
         let old_state = AssociationState::from(self.state.swap(new_state as u8, Ordering::SeqCst));
         if new_state != old_state {
             log::debug!(
@@ -1007,7 +1007,7 @@ impl AssociationInternal {
         Ok(reply)
     }
 
-    pub(crate) async fn get_my_receiver_window_credit(&self) -> u32 {
+    pub async fn get_my_receiver_window_credit(&self) -> u32 {
         let mut bytes_queued = 0;
         for s in self.streams.values() {
             bytes_queued += s.get_num_bytes_in_reassembly_queue().await as u32;
@@ -1020,7 +1020,7 @@ impl AssociationInternal {
         }
     }
 
-    pub(crate) fn open_stream(
+    pub fn open_stream(
         &mut self,
         stream_identifier: u16,
         default_payload_type: PayloadProtocolIdentifier,
@@ -1613,7 +1613,7 @@ impl AssociationInternal {
 
     /// create_packet wraps chunks in a packet.
     /// The caller should hold the read lock.
-    pub(crate) fn create_packet(&self, chunks: Vec<Box<dyn Chunk + Send + Sync>>) -> Packet {
+    pub fn create_packet(&self, chunks: Vec<Box<dyn Chunk + Send + Sync>>) -> Packet {
         Packet {
             verification_tag: self.peer_verification_tag,
             source_port: self.source_port,
@@ -2248,7 +2248,7 @@ impl AssociationInternal {
 
     /// buffered_amount returns total amount (in bytes) of currently buffered user data.
     /// This is used only by testing.
-    pub(crate) fn buffered_amount(&self) -> usize {
+    pub fn buffered_amount(&self) -> usize {
         self.pending_queue.get_num_bytes() + self.inflight_queue.get_num_bytes()
     }
 }

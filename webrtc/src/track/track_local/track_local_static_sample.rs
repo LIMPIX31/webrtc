@@ -236,7 +236,7 @@ impl TrackLocal for TrackLocalStaticSample {
     }
 }
 
-mod sample_writer {
+pub mod sample_writer {
     use media::Sample;
     use rtp::extension::audio_level_extension::AudioLevelExtension;
     use rtp::extension::video_orientation_extension::VideoOrientationExtension;
@@ -254,7 +254,7 @@ mod sample_writer {
     }
 
     impl<'track> SampleWriter<'track> {
-        pub(super) fn new(track: &'track TrackLocalStaticSample) -> Self {
+        pub fn new(track: &'track TrackLocalStaticSample) -> Self {
             Self {
                 track,
                 extensions: vec![],

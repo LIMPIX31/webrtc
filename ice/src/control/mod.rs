@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod control_test;
+pub mod control_test;
 
 use std::fmt;
 
@@ -11,7 +11,7 @@ use stun::message::*;
 #[derive(Default, PartialEq, Eq, Debug, Copy, Clone)]
 pub struct TieBreaker(pub u64);
 
-pub(crate) const TIE_BREAKER_SIZE: usize = 8; // 64 bit
+pub const TIE_BREAKER_SIZE: usize = 8; // 64 bit
 
 impl TieBreaker {
     /// Adds Tiebreaker value to m as t attribute.

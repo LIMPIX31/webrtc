@@ -6,8 +6,8 @@ pub mod direction;
 pub mod extmap;
 pub mod util;
 
-mod error;
-pub(crate) mod lexer;
+pub mod error;
+pub mod lexer;
 
 pub use description::media::MediaDescription;
 pub use description::session::SessionDescription;

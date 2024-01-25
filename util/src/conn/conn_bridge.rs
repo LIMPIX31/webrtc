@@ -215,7 +215,7 @@ impl Bridge {
     }
 }
 
-pub(crate) fn inverse(s: &mut VecDeque<Bytes>) -> bool {
+pub fn inverse(s: &mut VecDeque<Bytes>) -> bool {
     if s.len() < 2 {
         return false;
     }

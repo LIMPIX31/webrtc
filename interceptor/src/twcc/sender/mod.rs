@@ -1,6 +1,6 @@
-mod sender_stream;
+pub mod sender_stream;
 #[cfg(test)]
-mod sender_test;
+pub mod sender_test;
 
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
@@ -12,7 +12,7 @@ use util::Marshal;
 
 use crate::{Attributes, RTPWriter, *};
 
-pub(crate) const TRANSPORT_CC_URI: &str =
+pub const TRANSPORT_CC_URI: &str =
     "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01";
 
 /// HeaderExtensionBuilder is a InterceptorBuilder for a HeaderExtension Interceptor

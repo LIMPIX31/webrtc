@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_server_key_exchange_test;
+pub mod handshake_message_server_key_exchange_test;
 
 use std::io::{Read, Write};
 
@@ -13,13 +13,13 @@ use crate::signature_hash_algorithm::*;
 // Structure supports ECDH and PSK
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageServerKeyExchange {
-    pub(crate) identity_hint: Vec<u8>,
+    pub identity_hint: Vec<u8>,
 
-    pub(crate) elliptic_curve_type: EllipticCurveType,
-    pub(crate) named_curve: NamedCurve,
-    pub(crate) public_key: Vec<u8>,
-    pub(crate) algorithm: SignatureHashAlgorithm,
-    pub(crate) signature: Vec<u8>,
+    pub elliptic_curve_type: EllipticCurveType,
+    pub named_curve: NamedCurve,
+    pub public_key: Vec<u8>,
+    pub algorithm: SignatureHashAlgorithm,
+    pub signature: Vec<u8>,
 }
 
 impl HandshakeMessageServerKeyExchange {

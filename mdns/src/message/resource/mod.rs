@@ -87,7 +87,7 @@ impl Resource {
         Ok(off)
     }
 
-    pub(crate) fn skip(msg: &[u8], off: usize) -> Result<usize> {
+    pub fn skip(msg: &[u8], off: usize) -> Result<usize> {
         let mut new_off = Name::skip(msg, off)?;
         new_off = DnsType::skip(msg, new_off)?;
         new_off = DnsClass::skip(msg, new_off)?;

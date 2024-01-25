@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod generic_test;
+pub mod generic_test;
 
 use super::*;
 
@@ -24,9 +24,9 @@ fn fmtp_consist(a: &HashMap<String, String>, b: &HashMap<String, String>) -> boo
 }
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct GenericFmtp {
-    pub(crate) mime_type: String,
-    pub(crate) parameters: HashMap<String, String>,
+pub struct GenericFmtp {
+    pub mime_type: String,
+    pub parameters: HashMap<String, String>,
 }
 
 impl Fmtp for GenericFmtp {

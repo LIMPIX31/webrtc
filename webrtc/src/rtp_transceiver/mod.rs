@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod rtp_transceiver_test;
+pub mod rtp_transceiver_test;
 
 use std::fmt;
 use std::future::Future;
@@ -23,12 +23,12 @@ use crate::rtp_transceiver::rtp_sender::RTCRtpSender;
 use crate::rtp_transceiver::rtp_transceiver_direction::RTCRtpTransceiverDirection;
 use crate::track::track_local::TrackLocal;
 
-pub(crate) mod fmtp;
+pub mod fmtp;
 pub mod rtp_codec;
 pub mod rtp_receiver;
 pub mod rtp_sender;
 pub mod rtp_transceiver_direction;
-pub(crate) mod srtp_writer_future;
+pub mod srtp_writer_future;
 
 /// SSRC represents a synchronization source
 /// A synchronization source is a randomly chosen
@@ -129,7 +129,7 @@ pub struct RTCRtpTransceiverInit {
     // Streams       []*Track
 }
 
-pub(crate) fn create_stream_info(
+pub fn create_stream_info(
     id: String,
     ssrc: SSRC,
     payload_type: PayloadType,
@@ -181,8 +181,8 @@ pub struct RTCRtpTransceiver {
 
     codecs: Arc<Mutex<Vec<RTCRtpCodecParameters>>>, // User provided codecs via set_codec_preferences
 
-    pub(crate) stopped: AtomicBool,
-    pub(crate) kind: RTPCodecType,
+    pub stopped: AtomicBool,
+    pub kind: RTPCodecType,
 
     media_engine: Arc<MediaEngine>,
 
@@ -242,7 +242,7 @@ impl RTCRtpTransceiver {
     }
 
     /// Codecs returns list of supported codecs
-    pub(crate) async fn get_codecs(&self) -> Vec<RTCRtpCodecParameters> {
+    pub async fn get_codecs(&self) -> Vec<RTCRtpCodecParameters> {
         let mut codecs = self.codecs.lock().await;
         RTPReceiverInternal::get_codecs(&mut codecs, self.kind, &self.media_engine)
     }
@@ -281,7 +281,7 @@ impl RTCRtpTransceiver {
         receiver.clone()
     }
 
-    pub(crate) async fn set_receiver(&self, r: Arc<RTCRtpReceiver>) {
+    pub async fn set_receiver(&self, r: Arc<RTCRtpReceiver>) {
         r.set_transceiver_codecs(Some(Arc::clone(&self.codecs)));
 
         {
@@ -293,7 +293,7 @@ impl RTCRtpTransceiver {
     }
 
     /// set_mid sets the RTPTransceiver's mid. If it was already set, will return an error.
-    pub(crate) fn set_mid(&self, mid: SmolStr) -> Result<()> {
+    pub fn set_mid(&self, mid: SmolStr) -> Result<()> {
         self.mid
             .set(mid)
             .map_err(|_| Error::ErrRTPTransceiverCannotChangeMid)
@@ -326,7 +326,7 @@ impl RTCRtpTransceiver {
         }
     }
 
-    pub(crate) fn set_direction_internal(&self, d: RTCRtpTransceiverDirection) -> bool {
+    pub fn set_direction_internal(&self, d: RTCRtpTransceiverDirection) -> bool {
         let previous: RTCRtpTransceiverDirection =
             self.direction.swap(d as u8, Ordering::SeqCst).into();
 
@@ -354,7 +354,7 @@ impl RTCRtpTransceiver {
         self.current_direction.load(Ordering::SeqCst).into()
     }
 
-    pub(crate) fn set_current_direction(&self, d: RTCRtpTransceiverDirection) {
+    pub fn set_current_direction(&self, d: RTCRtpTransceiverDirection) {
         let previous: RTCRtpTransceiverDirection = self
             .current_direction
             .swap(d as u8, Ordering::SeqCst)
@@ -373,7 +373,7 @@ impl RTCRtpTransceiver {
     ///
     /// After changing the transceiver's direction this method should be called to perform any
     /// side-effects that results from the new direction, such as pausing/resuming the RTP receiver.
-    pub(crate) async fn process_new_current_direction(
+    pub async fn process_new_current_direction(
         &self,
         previous_direction: RTCRtpTransceiverDirection,
     ) -> Result<()> {
@@ -437,7 +437,7 @@ impl RTCRtpTransceiver {
         Ok(())
     }
 
-    pub(crate) async fn set_sending_track(
+    pub async fn set_sending_track(
         &self,
         track: Option<Arc<dyn TrackLocal + Send + Sync>>,
     ) -> Result<()> {
@@ -474,7 +474,7 @@ impl fmt::Debug for RTCRtpTransceiver {
     }
 }
 
-pub(crate) async fn find_by_mid(
+pub async fn find_by_mid(
     mid: &str,
     local_transceivers: &mut Vec<Arc<RTCRtpTransceiver>>,
 ) -> Option<Arc<RTCRtpTransceiver>> {
@@ -489,7 +489,7 @@ pub(crate) async fn find_by_mid(
 
 /// Given a direction+type pluck a transceiver from the passed list
 /// if no entry satisfies the requested type+direction return a inactive Transceiver
-pub(crate) async fn satisfy_type_and_direction(
+pub async fn satisfy_type_and_direction(
     remote_kind: RTPCodecType,
     remote_direction: RTCRtpTransceiverDirection,
     local_transceivers: &mut Vec<Arc<RTCRtpTransceiver>>,
@@ -523,7 +523,7 @@ pub(crate) async fn satisfy_type_and_direction(
 
 /// handle_unknown_rtp_packet consumes a single RTP Packet and returns information that is helpful
 /// for demuxing and handling an unknown SSRC (usually for Simulcast)
-pub(crate) fn handle_unknown_rtp_packet(
+pub fn handle_unknown_rtp_packet(
     buf: &[u8],
     mid_extension_id: u8,
     sid_extension_id: u8,

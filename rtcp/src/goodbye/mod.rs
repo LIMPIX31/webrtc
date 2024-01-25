@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod goodbye_test;
+pub mod goodbye_test;
 
 use std::any::Any;
 use std::fmt;

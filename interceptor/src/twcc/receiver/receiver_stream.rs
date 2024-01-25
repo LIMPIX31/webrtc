@@ -1,6 +1,6 @@
 use super::*;
 
-pub(super) struct ReceiverStream {
+pub struct ReceiverStream {
     parent_rtp_reader: Arc<dyn RTPReader + Send + Sync>,
     hdr_ext_id: u8,
     ssrc: u32,
@@ -10,7 +10,7 @@ pub(super) struct ReceiverStream {
 }
 
 impl ReceiverStream {
-    pub(super) fn new(
+    pub fn new(
         parent_rtp_reader: Arc<dyn RTPReader + Send + Sync>,
         hdr_ext_id: u8,
         ssrc: u32,

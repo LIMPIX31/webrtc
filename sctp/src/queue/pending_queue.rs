@@ -19,11 +19,11 @@ const QUEUE_BYTES_LIMIT: usize = 128 * 1024;
 const QUEUE_APPEND_LARGE: usize = (QUEUE_BYTES_LIMIT * 2) / 3;
 
 /// Basic queue for either ordered or unordered chunks.
-pub(crate) type PendingBaseQueue = VecDeque<ChunkPayloadData>;
+pub type PendingBaseQueue = VecDeque<ChunkPayloadData>;
 
 /// A queue for both ordered and unordered chunks.
 #[derive(Debug)]
-pub(crate) struct PendingQueue {
+pub struct PendingQueue {
     // These two fields limit appending bytes to the queue
     // This two step process is necessary because
     // A) We need backpressure which the semaphore applies by limiting the total amount of bytes via the permits
@@ -48,7 +48,7 @@ impl Default for PendingQueue {
 }
 
 impl PendingQueue {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             semaphore_lock: Mutex::default(),
             semaphore: Semaphore::new(QUEUE_BYTES_LIMIT),
@@ -62,7 +62,7 @@ impl PendingQueue {
     }
 
     /// Appends a chunk to the back of the pending queue.
-    pub(crate) async fn push(&self, c: ChunkPayloadData) {
+    pub async fn push(&self, c: ChunkPayloadData) {
         let user_data_len = c.user_data.len();
 
         {
@@ -89,7 +89,7 @@ impl PendingQueue {
     /// # Panics
     ///
     /// If it's a mix of unordered and ordered chunks.
-    pub(crate) async fn append(&self, chunks: Vec<ChunkPayloadData>) {
+    pub async fn append(&self, chunks: Vec<ChunkPayloadData>) {
         if chunks.is_empty() {
             return;
         }
@@ -161,7 +161,7 @@ impl PendingQueue {
         self.queue_len.fetch_add(chunks_len, Ordering::SeqCst);
     }
 
-    pub(crate) fn peek(&self) -> Option<ChunkPayloadData> {
+    pub fn peek(&self) -> Option<ChunkPayloadData> {
         if self.selected.load(Ordering::SeqCst) {
             if self.unordered_is_selected.load(Ordering::SeqCst) {
                 let unordered_queue = self.unordered_queue.read();
@@ -185,7 +185,7 @@ impl PendingQueue {
         ordered_queue.front().cloned()
     }
 
-    pub(crate) fn pop(
+    pub fn pop(
         &self,
         beginning_fragment: bool,
         unordered: bool,
@@ -245,15 +245,15 @@ impl PendingQueue {
         popped
     }
 
-    pub(crate) fn get_num_bytes(&self) -> usize {
+    pub fn get_num_bytes(&self) -> usize {
         self.n_bytes.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.queue_len.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
 }

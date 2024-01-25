@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod g7xx_test;
+pub mod g7xx_test;
 
 use bytes::Bytes;
 

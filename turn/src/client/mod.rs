@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod client_test;
+pub mod client_test;
 
 pub mod binding;
 pub mod periodic_timer;

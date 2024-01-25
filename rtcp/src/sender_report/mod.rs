@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod sender_report_test;
+pub mod sender_report_test;
 
 use std::any::Any;
 use std::fmt;
@@ -15,18 +15,18 @@ use crate::util::*;
 
 type Result<T> = std::result::Result<T, util::Error>;
 
-pub(crate) const SR_HEADER_LENGTH: usize = 24;
-pub(crate) const SR_SSRC_OFFSET: usize = HEADER_LENGTH;
-pub(crate) const SR_REPORT_OFFSET: usize = SR_SSRC_OFFSET + SR_HEADER_LENGTH;
+pub const SR_HEADER_LENGTH: usize = 24;
+pub const SR_SSRC_OFFSET: usize = HEADER_LENGTH;
+pub const SR_REPORT_OFFSET: usize = SR_SSRC_OFFSET + SR_HEADER_LENGTH;
 
-pub(crate) const SR_NTP_OFFSET: usize = SR_SSRC_OFFSET + SSRC_LENGTH;
-pub(crate) const NTP_TIME_LENGTH: usize = 8;
-pub(crate) const SR_RTP_OFFSET: usize = SR_NTP_OFFSET + NTP_TIME_LENGTH;
-pub(crate) const RTP_TIME_LENGTH: usize = 4;
-pub(crate) const SR_PACKET_COUNT_OFFSET: usize = SR_RTP_OFFSET + RTP_TIME_LENGTH;
-pub(crate) const SR_PACKET_COUNT_LENGTH: usize = 4;
-pub(crate) const SR_OCTET_COUNT_OFFSET: usize = SR_PACKET_COUNT_OFFSET + SR_PACKET_COUNT_LENGTH;
-pub(crate) const SR_OCTET_COUNT_LENGTH: usize = 4;
+pub const SR_NTP_OFFSET: usize = SR_SSRC_OFFSET + SSRC_LENGTH;
+pub const NTP_TIME_LENGTH: usize = 8;
+pub const SR_RTP_OFFSET: usize = SR_NTP_OFFSET + NTP_TIME_LENGTH;
+pub const RTP_TIME_LENGTH: usize = 4;
+pub const SR_PACKET_COUNT_OFFSET: usize = SR_RTP_OFFSET + RTP_TIME_LENGTH;
+pub const SR_PACKET_COUNT_LENGTH: usize = 4;
+pub const SR_OCTET_COUNT_OFFSET: usize = SR_PACKET_COUNT_OFFSET + SR_PACKET_COUNT_LENGTH;
+pub const SR_OCTET_COUNT_LENGTH: usize = 4;
 
 /// A SenderReport (SR) packet provides reception quality feedback for an RTP stream
 #[derive(Debug, PartialEq, Eq, Default, Clone)]

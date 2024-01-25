@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod h264_test;
+pub mod h264_test;
 
 use super::*;
 
@@ -28,8 +28,8 @@ fn profile_level_id_matches(a: &str, b: &str) -> bool {
 }
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct H264Fmtp {
-    pub(crate) parameters: HashMap<String, String>,
+pub struct H264Fmtp {
+    pub parameters: HashMap<String, String>,
 }
 
 impl Fmtp for H264Fmtp {

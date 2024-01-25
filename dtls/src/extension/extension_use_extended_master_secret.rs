@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extension_use_extended_master_secret_test;
+pub mod extension_use_extended_master_secret_test;
 
 use super::*;
 
@@ -8,7 +8,7 @@ const EXTENSION_USE_EXTENDED_MASTER_SECRET_HEADER_SIZE: usize = 4;
 // https://tools.ietf.org/html/rfc8422
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ExtensionUseExtendedMasterSecret {
-    pub(crate) supported: bool,
+    pub supported: bool,
 }
 
 impl ExtensionUseExtendedMasterSecret {

@@ -46,7 +46,7 @@ impl SenderStreamInternal {
     }
 }
 
-pub(crate) struct SenderStream {
+pub struct SenderStream {
     next_rtp_writer: Arc<dyn RTPWriter + Send + Sync>,
     now: Option<FnTimeGen>,
 
@@ -54,7 +54,7 @@ pub(crate) struct SenderStream {
 }
 
 impl SenderStream {
-    pub(crate) fn new(
+    pub fn new(
         ssrc: u32,
         clock_rate: u32,
         writer: Arc<dyn RTPWriter + Send + Sync>,
@@ -79,7 +79,7 @@ impl SenderStream {
         internal.process_rtp(now, pkt);
     }
 
-    pub(crate) async fn generate_report(
+    pub async fn generate_report(
         &self,
         now: SystemTime,
     ) -> rtcp::sender_report::SenderReport {
@@ -105,7 +105,7 @@ impl RTPWriter for SenderStream {
 }
 
 #[derive(Default)]
-pub(crate) struct Counters {
+pub struct Counters {
     packets: u32,
     octets: u32,
 }

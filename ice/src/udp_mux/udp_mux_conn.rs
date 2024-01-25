@@ -237,27 +237,27 @@ impl UDPMuxConnInner {
     }
 
     // Address related methods
-    pub(super) fn get_addresses(&self) -> Vec<SocketAddr> {
+    pub fn get_addresses(&self) -> Vec<SocketAddr> {
         let addresses = self.addresses.lock();
 
         addresses.iter().copied().collect()
     }
 
-    pub(super) fn add_address(self: &Arc<Self>, addr: SocketAddr) {
+    pub fn add_address(self: &Arc<Self>, addr: SocketAddr) {
         {
             let mut addresses = self.addresses.lock();
             addresses.insert(addr);
         }
     }
 
-    pub(super) fn remove_address(&self, addr: &SocketAddr) {
+    pub fn remove_address(&self, addr: &SocketAddr) {
         {
             let mut addresses = self.addresses.lock();
             addresses.remove(addr);
         }
     }
 
-    pub(super) fn contains_address(&self, addr: &SocketAddr) -> bool {
+    pub fn contains_address(&self, addr: &SocketAddr) -> bool {
         let addresses = self.addresses.lock();
 
         addresses.contains(addr)

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod auth_test;
+pub mod auth_test;
 
 use std::net::SocketAddr;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};

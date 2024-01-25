@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod signature_hash_algorithm_test;
+pub mod signature_hash_algorithm_test;
 
 use std::fmt;
 
@@ -55,14 +55,14 @@ impl fmt::Display for HashAlgorithm {
 }
 
 impl HashAlgorithm {
-    pub(crate) fn insecure(&self) -> bool {
+    pub fn insecure(&self) -> bool {
         matches!(
             *self,
             HashAlgorithm::Md2 | HashAlgorithm::Md5 | HashAlgorithm::Sha1
         )
     }
 
-    pub(crate) fn invalid(&self) -> bool {
+    pub fn invalid(&self) -> bool {
         matches!(*self, HashAlgorithm::Md2)
     }
 }
@@ -95,7 +95,7 @@ pub struct SignatureHashAlgorithm {
 
 impl SignatureHashAlgorithm {
     // is_compatible checks that given private key is compatible with the signature scheme.
-    pub(crate) fn is_compatible(&self, private_key: &CryptoPrivateKey) -> bool {
+    pub fn is_compatible(&self, private_key: &CryptoPrivateKey) -> bool {
         match &private_key.kind {
             CryptoPrivateKeyKind::Ed25519(_) => self.signature == SignatureAlgorithm::Ed25519,
             CryptoPrivateKeyKind::Ecdsa256(_) => self.signature == SignatureAlgorithm::Ecdsa,
@@ -104,7 +104,7 @@ impl SignatureHashAlgorithm {
     }
 }
 
-pub(crate) fn default_signature_schemes() -> Vec<SignatureHashAlgorithm> {
+pub fn default_signature_schemes() -> Vec<SignatureHashAlgorithm> {
     vec![
         SignatureHashAlgorithm {
             hash: HashAlgorithm::Sha256,
@@ -138,7 +138,7 @@ pub(crate) fn default_signature_schemes() -> Vec<SignatureHashAlgorithm> {
 }
 
 // select Signature Scheme returns most preferred and compatible scheme.
-pub(crate) fn select_signature_scheme(
+pub fn select_signature_scheme(
     sigs: &[SignatureHashAlgorithm],
     private_key: &CryptoPrivateKey,
 ) -> Result<SignatureHashAlgorithm> {
@@ -180,7 +180,7 @@ pub enum SignatureScheme {
 
 // parse_signature_schemes translates []tls.SignatureScheme to []signatureHashAlgorithm.
 // It returns default signature scheme list if no SignatureScheme is passed.
-pub(crate) fn parse_signature_schemes(
+pub fn parse_signature_schemes(
     sigs: &[u16],
     insecure_hashes: bool,
 ) -> Result<Vec<SignatureHashAlgorithm>> {

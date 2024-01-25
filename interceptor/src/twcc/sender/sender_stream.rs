@@ -1,13 +1,13 @@
 use super::*;
 
-pub(super) struct SenderStream {
+pub struct SenderStream {
     next_rtp_writer: Arc<dyn RTPWriter + Send + Sync>,
     next_sequence_nr: Arc<AtomicU32>,
     hdr_ext_id: u8,
 }
 
 impl SenderStream {
-    pub(super) fn new(
+    pub fn new(
         next_rtp_writer: Arc<dyn RTPWriter + Send + Sync>,
         next_sequence_nr: Arc<AtomicU32>,
         hdr_ext_id: u8,

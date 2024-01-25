@@ -1,7 +1,7 @@
 #[cfg(test)]
-mod sample_builder_test;
+pub mod sample_builder_test;
 #[cfg(test)]
-mod sample_sequence_location_test;
+pub mod sample_sequence_location_test;
 
 pub mod sample_sequence_location;
 
@@ -392,7 +392,7 @@ impl<T: Depacketizer> SampleBuilder<T> {
 }
 
 /// Computes the distance between two sequence numbers
-/*pub(crate) fn seqnum_distance(head: u16, tail: u16) -> u16 {
+/*pub fn seqnum_distance(head: u16, tail: u16) -> u16 {
     if head > tail {
         head.wrapping_add(tail)
     } else {
@@ -400,7 +400,7 @@ impl<T: Depacketizer> SampleBuilder<T> {
     }
 }*/
 
-pub(crate) fn seqnum_distance(x: u16, y: u16) -> u16 {
+pub fn seqnum_distance(x: u16, y: u16) -> u16 {
     let diff = x.wrapping_sub(y);
     if diff > 0xFFFF / 2 {
         0xFFFF - diff + 1

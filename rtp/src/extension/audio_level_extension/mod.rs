@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod audio_level_extension_test;
+pub mod audio_level_extension_test;
 
 use bytes::{Buf, BufMut};
 use serde::{Deserialize, Serialize};

@@ -6,10 +6,10 @@ use crate::algorithms::fitness_distance::SettingFitnessDistanceError;
 use crate::errors::OverconstrainedError;
 use crate::{MediaTrackSettings, SanitizedMediaTrackConstraints};
 
-mod apply_advanced;
-mod apply_mandatory;
-mod select_optimal;
-mod tie_breaking;
+pub mod apply_advanced;
+pub mod apply_mandatory;
+pub mod select_optimal;
+pub mod tie_breaking;
 
 use self::apply_advanced::*;
 use self::apply_mandatory::*;
@@ -112,10 +112,10 @@ where
 }
 
 #[derive(Default)]
-pub(crate) struct ConstraintFailureInfo {
-    pub(crate) failures: usize,
-    pub(crate) errors: HashSet<SettingFitnessDistanceError>,
+pub struct ConstraintFailureInfo {
+    pub failures: usize,
+    pub errors: HashSet<SettingFitnessDistanceError>,
 }
 
 #[cfg(test)]
-mod tests;
+pub mod tests;

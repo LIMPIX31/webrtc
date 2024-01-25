@@ -145,7 +145,7 @@ impl ReceiverStreamInternal {
     }
 }
 
-pub(crate) struct ReceiverStream {
+pub struct ReceiverStream {
     parent_rtp_reader: Arc<dyn RTPReader + Send + Sync>,
     now: Option<FnTimeGen>,
 
@@ -153,7 +153,7 @@ pub(crate) struct ReceiverStream {
 }
 
 impl ReceiverStream {
-    pub(crate) fn new(
+    pub fn new(
         ssrc: u32,
         clock_rate: u32,
         reader: Arc<dyn RTPReader + Send + Sync>,
@@ -184,12 +184,12 @@ impl ReceiverStream {
         }
     }
 
-    pub(crate) fn process_rtp(&self, now: SystemTime, pkt: &rtp::packet::Packet) {
+    pub fn process_rtp(&self, now: SystemTime, pkt: &rtp::packet::Packet) {
         let mut internal = self.internal.lock();
         internal.process_rtp(now, pkt);
     }
 
-    pub(crate) fn process_sender_report(
+    pub fn process_sender_report(
         &self,
         now: SystemTime,
         sr: &rtcp::sender_report::SenderReport,
@@ -198,7 +198,7 @@ impl ReceiverStream {
         internal.process_sender_report(now, sr);
     }
 
-    pub(crate) fn generate_report(&self, now: SystemTime) -> rtcp::receiver_report::ReceiverReport {
+    pub fn generate_report(&self, now: SystemTime) -> rtcp::receiver_report::ReceiverReport {
         let mut internal = self.internal.lock();
         internal.generate_report(now)
     }

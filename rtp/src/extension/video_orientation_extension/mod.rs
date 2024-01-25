@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod video_orientation_extension_test;
+pub mod video_orientation_extension_test;
 
 use std::convert::{TryFrom, TryInto};
 

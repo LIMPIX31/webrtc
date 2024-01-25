@@ -69,7 +69,7 @@ impl_from_buffer_info!(Interleaved => Deinterleaved);
 impl_from_buffer_info!(Deinterleaved => Interleaved);
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     #[test]

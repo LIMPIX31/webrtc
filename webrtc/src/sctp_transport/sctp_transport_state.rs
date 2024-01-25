@@ -62,7 +62,7 @@ impl fmt::Display for RTCSctpTransportState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

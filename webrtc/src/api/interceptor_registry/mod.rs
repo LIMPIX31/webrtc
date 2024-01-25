@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod interceptor_registry_test;
+pub mod interceptor_registry_test;
 
 use interceptor::nack::generator::Generator;
 use interceptor::nack::responder::Responder;

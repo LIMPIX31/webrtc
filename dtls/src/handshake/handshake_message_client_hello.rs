@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_client_hello_test;
+pub mod handshake_message_client_hello_test;
 
 use std::fmt;
 use std::io::{BufReader, BufWriter};
@@ -22,13 +22,13 @@ existing connection.
 */
 #[derive(Clone)]
 pub struct HandshakeMessageClientHello {
-    pub(crate) version: ProtocolVersion,
-    pub(crate) random: HandshakeRandom,
-    pub(crate) cookie: Vec<u8>,
+    pub version: ProtocolVersion,
+    pub random: HandshakeRandom,
+    pub cookie: Vec<u8>,
 
-    pub(crate) cipher_suites: Vec<CipherSuiteId>,
-    pub(crate) compression_methods: CompressionMethods,
-    pub(crate) extensions: Vec<Extension>,
+    pub cipher_suites: Vec<CipherSuiteId>,
+    pub compression_methods: CompressionMethods,
+    pub extensions: Vec<Extension>,
 }
 
 impl PartialEq for HandshakeMessageClientHello {

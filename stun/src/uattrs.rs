@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod uattrs_test;
+pub mod uattrs_test;
 
 use std::fmt;
 

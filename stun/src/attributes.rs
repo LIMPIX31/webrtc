@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod attributes_test;
+pub mod attributes_test;
 
 use std::fmt;
 
@@ -180,7 +180,7 @@ impl Setter for RawAttribute {
     }
 }
 
-pub(crate) const PADDING: usize = 4;
+pub const PADDING: usize = 4;
 
 /// STUN aligns attributes on 32-bit boundaries, attributes whose content
 /// is not a multiple of 4 bytes are padded with 1, 2, or 3 bytes of
@@ -188,7 +188,7 @@ pub(crate) const PADDING: usize = 4;
 /// padding bits are ignored, and may be any value.
 ///
 /// https://tools.ietf.org/html/rfc5389#section-15
-pub(crate) fn nearest_padded_value_length(l: usize) -> usize {
+pub fn nearest_padded_value_length(l: usize) -> usize {
     let mut n = PADDING * (l / PADDING);
     if n < l {
         n += PADDING
@@ -199,7 +199,7 @@ pub(crate) fn nearest_padded_value_length(l: usize) -> usize {
 /// This method converts uint16 vlue to AttrType. If it finds an old attribute
 /// type value, it also translates it to the new value to enable backward
 /// compatibility. (See: https://github.com/pion/stun/issues/21)
-pub(crate) fn compat_attr_type(val: u16) -> AttrType {
+pub fn compat_attr_type(val: u16) -> AttrType {
     if val == 0x8020 {
         // draft-ietf-behave-rfc3489bis-02, MS-TURN
         ATTR_XORMAPPED_ADDRESS // new: 0x0020 (from draft-ietf-behave-rfc3489bis-03 on)

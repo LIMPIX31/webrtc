@@ -4,7 +4,7 @@ use std::io::SeekFrom;
 use super::description::session::SessionDescription;
 use super::error::{Error, Result};
 
-pub(crate) const END_LINE: &str = "\r\n";
+pub const END_LINE: &str = "\r\n";
 
 pub struct Lexer<'a, R: io::BufRead + io::Seek> {
     pub desc: SessionDescription,

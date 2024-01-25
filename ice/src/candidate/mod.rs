@@ -1,11 +1,11 @@
 #[cfg(test)]
-mod candidate_pair_test;
+pub mod candidate_pair_test;
 #[cfg(test)]
-mod candidate_relay_test;
+pub mod candidate_relay_test;
 #[cfg(test)]
-mod candidate_server_reflexive_test;
+pub mod candidate_server_reflexive_test;
 #[cfg(test)]
-mod candidate_test;
+pub mod candidate_test;
 
 pub mod candidate_base;
 pub mod candidate_host;
@@ -28,13 +28,13 @@ use crate::error::Result;
 use crate::network_type::*;
 use crate::tcp_type::*;
 
-pub(crate) const RECEIVE_MTU: usize = 8192;
-pub(crate) const DEFAULT_LOCAL_PREFERENCE: u16 = 65535;
+pub const RECEIVE_MTU: usize = 8192;
+pub const DEFAULT_LOCAL_PREFERENCE: u16 = 65535;
 
 /// Indicates that the candidate is used for RTP.
-pub(crate) const COMPONENT_RTP: u16 = 1;
+pub const COMPONENT_RTP: u16 = 1;
 /// Indicates that the candidate is used for RTCP.
-pub(crate) const COMPONENT_RTCP: u16 = 0;
+pub const COMPONENT_RTCP: u16 = 0;
 
 /// Candidate represents an ICE candidate
 #[async_trait]
@@ -140,7 +140,7 @@ impl CandidateType {
     }
 }
 
-pub(crate) fn contains_candidate_type(
+pub fn contains_candidate_type(
     candidate_type: CandidateType,
     candidate_type_list: &[CandidateType],
 ) -> bool {
@@ -227,12 +227,12 @@ impl fmt::Display for CandidatePairState {
 
 /// Represents a combination of a local and remote candidate.
 pub struct CandidatePair {
-    pub(crate) ice_role_controlling: AtomicBool,
+    pub ice_role_controlling: AtomicBool,
     pub remote: Arc<dyn Candidate + Send + Sync>,
     pub local: Arc<dyn Candidate + Send + Sync>,
-    pub(crate) binding_request_count: AtomicU16,
-    pub(crate) state: AtomicU8, // convert it to CandidatePairState,
-    pub(crate) nominated: AtomicBool,
+    pub binding_request_count: AtomicU16,
+    pub state: AtomicU8, // convert it to CandidatePairState,
+    pub nominated: AtomicBool,
 }
 
 impl Default for CandidatePair {

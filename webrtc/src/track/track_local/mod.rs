@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod track_local_static_test;
+pub mod track_local_static_test;
 
 pub mod track_local_static_rtp;
 pub mod track_local_static_sample;
@@ -32,11 +32,11 @@ pub trait TrackLocalWriter: fmt::Debug {
 /// in Interceptors.
 #[derive(Default, Debug, Clone)]
 pub struct TrackLocalContext {
-    pub(crate) id: String,
-    pub(crate) params: RTCRtpParameters,
-    pub(crate) ssrc: SSRC,
-    pub(crate) write_stream: Option<Arc<dyn TrackLocalWriter + Send + Sync>>,
-    pub(crate) paused: Arc<AtomicBool>,
+    pub id: String,
+    pub params: RTCRtpParameters,
+    pub ssrc: SSRC,
+    pub write_stream: Option<Arc<dyn TrackLocalWriter + Send + Sync>>,
+    pub paused: Arc<AtomicBool>,
 }
 
 impl TrackLocalContext {
@@ -101,7 +101,7 @@ pub trait TrackLocal {
 /// Bind can be called multiple times, this stores the
 /// result for a single bind call so that it can be used when writing
 #[derive(Default, Debug)]
-pub(crate) struct TrackBinding {
+pub struct TrackBinding {
     id: String,
     ssrc: SSRC,
     payload_type: PayloadType,
@@ -116,13 +116,13 @@ impl TrackBinding {
     }
 }
 
-pub(crate) struct InterceptorToTrackLocalWriter {
-    pub(crate) interceptor_rtp_writer: Mutex<Option<Arc<dyn RTPWriter + Send + Sync>>>,
+pub struct InterceptorToTrackLocalWriter {
+    pub interceptor_rtp_writer: Mutex<Option<Arc<dyn RTPWriter + Send + Sync>>>,
     sender_paused: Arc<AtomicBool>,
 }
 
 impl InterceptorToTrackLocalWriter {
-    pub(crate) fn new(paused: Arc<AtomicBool>) -> Self {
+    pub fn new(paused: Arc<AtomicBool>) -> Self {
         InterceptorToTrackLocalWriter {
             interceptor_rtp_writer: Mutex::new(None),
             sender_paused: paused,

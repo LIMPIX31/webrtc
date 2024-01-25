@@ -6,8 +6,8 @@ use crate::error::*;
 
 #[derive(Debug, Clone, Default)]
 pub struct Interface {
-    pub(crate) name: String,
-    pub(crate) addrs: Vec<IpNet>,
+    pub name: String,
+    pub addrs: Vec<IpNet>,
 }
 
 impl Interface {

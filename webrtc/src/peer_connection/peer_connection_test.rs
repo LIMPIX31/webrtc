@@ -21,7 +21,7 @@ use crate::stats::StatsReportType;
 use crate::track::track_local::track_local_static_sample::TrackLocalStaticSample;
 use crate::Error;
 
-pub(crate) async fn create_vnet_pair(
+pub async fn create_vnet_pair(
 ) -> Result<(RTCPeerConnection, RTCPeerConnection, Arc<Mutex<Router>>)> {
     // Create a root router
     let wan = Arc::new(Mutex::new(Router::new(RouterConfig {
@@ -108,14 +108,14 @@ pub(crate) async fn create_vnet_pair(
 
 /// new_pair creates two new peer connections (an offerer and an answerer)
 /// *without* using an api (i.e. using the default settings).
-pub(crate) async fn new_pair(api: &API) -> Result<(RTCPeerConnection, RTCPeerConnection)> {
+pub async fn new_pair(api: &API) -> Result<(RTCPeerConnection, RTCPeerConnection)> {
     let pca = api.new_peer_connection(RTCConfiguration::default()).await?;
     let pcb = api.new_peer_connection(RTCConfiguration::default()).await?;
 
     Ok((pca, pcb))
 }
 
-pub(crate) async fn signal_pair(
+pub async fn signal_pair(
     pc_offer: &mut RTCPeerConnection,
     pc_answer: &mut RTCPeerConnection,
 ) -> Result<()> {
@@ -160,7 +160,7 @@ pub(crate) async fn signal_pair(
         .await
 }
 
-pub(crate) async fn close_pair_now(pc1: &RTCPeerConnection, pc2: &RTCPeerConnection) {
+pub async fn close_pair_now(pc1: &RTCPeerConnection, pc2: &RTCPeerConnection) {
     let mut fail = false;
     if let Err(err) = pc1.close().await {
         log::error!("Failed to close PeerConnection: {}", err);
@@ -174,7 +174,7 @@ pub(crate) async fn close_pair_now(pc1: &RTCPeerConnection, pc2: &RTCPeerConnect
     assert!(!fail);
 }
 
-pub(crate) async fn close_pair(
+pub async fn close_pair(
     pc1: &RTCPeerConnection,
     pc2: &RTCPeerConnection,
     mut done_rx: mpsc::Receiver<()>,
@@ -208,7 +208,7 @@ func offerMediaHasDirection(offer SessionDescription, kind RTPCodecType, directi
     return false
 }*/
 
-pub(crate) async fn send_video_until_done(
+pub async fn send_video_until_done(
     mut done_rx: mpsc::Receiver<()>,
     tracks: Vec<Arc<TrackLocalStaticSample>>,
     data: Bytes,
@@ -249,7 +249,7 @@ pub(crate) async fn send_video_until_done(
     }
 }
 
-pub(crate) async fn until_connection_state(
+pub async fn until_connection_state(
     pc: &mut RTCPeerConnection,
     wg: &WaitGroup,
     state: RTCPeerConnectionState,

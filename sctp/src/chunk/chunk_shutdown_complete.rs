@@ -14,7 +14,7 @@ use super::*;
 ///|   Type = 14   |Reserved     |T|      Length = 4               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone)]
-pub(crate) struct ChunkShutdownComplete;
+pub struct ChunkShutdownComplete;
 
 /// makes chunkShutdownComplete printable
 impl fmt::Display for ChunkShutdownComplete {

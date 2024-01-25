@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extension_use_srtp_test;
+pub mod extension_use_srtp_test;
 
 use super::*;
 
@@ -33,7 +33,7 @@ const EXTENSION_USE_SRTPHEADER_SIZE: usize = 6;
 #[allow(non_camel_case_types)]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ExtensionUseSrtp {
-    pub(crate) protection_profiles: Vec<SrtpProtectionProfile>,
+    pub protection_profiles: Vec<SrtpProtectionProfile>,
 }
 
 impl ExtensionUseSrtp {

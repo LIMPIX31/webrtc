@@ -1,7 +1,7 @@
 use super::*;
 use crate::algorithms::SettingFitnessDistanceErrorKind;
 
-mod basic {
+pub mod basic {
     use super::*;
 
     mod zero_distance {
@@ -161,7 +161,7 @@ mod basic {
     }
 }
 
-mod required {
+pub mod required {
     use super::*;
 
     mod zero_distance {

@@ -10,7 +10,7 @@ use crate::{
     key_derivation::*,
 };
 
-pub(crate) struct CipherAesCmHmacSha1 {
+pub struct CipherAesCmHmacSha1 {
     inner: CipherInner,
     rtp_ctx: CipherCtx,
     rtcp_ctx: CipherCtx,

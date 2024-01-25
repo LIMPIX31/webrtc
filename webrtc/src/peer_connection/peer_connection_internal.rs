@@ -17,60 +17,59 @@ use crate::stats::{
 use crate::track::TrackStream;
 use crate::{SDES_REPAIR_RTP_STREAM_ID_URI, SDP_ATTRIBUTE_RID};
 
-pub(crate) struct PeerConnectionInternal {
+pub struct PeerConnectionInternal {
     /// a value containing the last known greater mid value
     /// we internally generate mids as numbers. Needed since JSEP
     /// requires that when reusing a media section a new unique mid
     /// should be defined (see JSEP 3.4.1).
-    pub(super) greater_mid: AtomicIsize,
-    pub(super) sdp_origin: Mutex<::sdp::description::session::Origin>,
-    pub(super) last_offer: Mutex<String>,
-    pub(super) last_answer: Mutex<String>,
+    pub greater_mid: AtomicIsize,
+    pub sdp_origin: Mutex<::sdp::description::session::Origin>,
+    pub last_offer: Mutex<String>,
+    pub last_answer: Mutex<String>,
 
-    pub(super) on_negotiation_needed_handler: Arc<ArcSwapOption<Mutex<OnNegotiationNeededHdlrFn>>>,
-    pub(super) is_closed: Arc<AtomicBool>,
+    pub on_negotiation_needed_handler: Arc<ArcSwapOption<Mutex<OnNegotiationNeededHdlrFn>>>,
+    pub is_closed: Arc<AtomicBool>,
 
     /// ops is an operations queue which will ensure the enqueued actions are
     /// executed in order. It is used for asynchronously, but serially processing
     /// remote and local descriptions
-    pub(crate) ops: Arc<Operations>,
-    pub(super) negotiation_needed_state: Arc<AtomicU8>,
-    pub(super) is_negotiation_needed: Arc<AtomicBool>,
-    pub(super) signaling_state: Arc<AtomicU8>,
-
-    pub(super) ice_transport: Arc<RTCIceTransport>,
-    pub(super) dtls_transport: Arc<RTCDtlsTransport>,
-    pub(super) on_peer_connection_state_change_handler:
+    pub ops: Arc<Operations>,
+    pub negotiation_needed_state: Arc<AtomicU8>,
+    pub is_negotiation_needed: Arc<AtomicBool>,
+    pub signaling_state: Arc<AtomicU8>,
+    pub ice_transport: Arc<RTCIceTransport>,
+    pub dtls_transport: Arc<RTCDtlsTransport>,
+    pub on_peer_connection_state_change_handler:
         Arc<ArcSwapOption<Mutex<OnPeerConnectionStateChangeHdlrFn>>>,
-    pub(super) peer_connection_state: Arc<AtomicU8>,
-    pub(super) ice_connection_state: Arc<AtomicU8>,
+    pub peer_connection_state: Arc<AtomicU8>,
+    pub ice_connection_state: Arc<AtomicU8>,
 
-    pub(super) sctp_transport: Arc<RTCSctpTransport>,
-    pub(super) rtp_transceivers: Arc<Mutex<Vec<Arc<RTCRtpTransceiver>>>>,
+    pub sctp_transport: Arc<RTCSctpTransport>,
+    pub rtp_transceivers: Arc<Mutex<Vec<Arc<RTCRtpTransceiver>>>>,
 
-    pub(super) on_track_handler: Arc<ArcSwapOption<Mutex<OnTrackHdlrFn>>>,
-    pub(super) on_signaling_state_change_handler:
+    pub on_track_handler: Arc<ArcSwapOption<Mutex<OnTrackHdlrFn>>>,
+    pub on_signaling_state_change_handler:
         ArcSwapOption<Mutex<OnSignalingStateChangeHdlrFn>>,
-    pub(super) on_ice_connection_state_change_handler:
+    pub on_ice_connection_state_change_handler:
         Arc<ArcSwapOption<Mutex<OnICEConnectionStateChangeHdlrFn>>>,
-    pub(super) on_data_channel_handler: Arc<ArcSwapOption<Mutex<OnDataChannelHdlrFn>>>,
+    pub on_data_channel_handler: Arc<ArcSwapOption<Mutex<OnDataChannelHdlrFn>>>,
 
-    pub(super) ice_gatherer: Arc<RTCIceGatherer>,
+    pub ice_gatherer: Arc<RTCIceGatherer>,
 
-    pub(super) current_local_description: Arc<Mutex<Option<RTCSessionDescription>>>,
-    pub(super) current_remote_description: Arc<Mutex<Option<RTCSessionDescription>>>,
-    pub(super) pending_local_description: Arc<Mutex<Option<RTCSessionDescription>>>,
-    pub(super) pending_remote_description: Arc<Mutex<Option<RTCSessionDescription>>>,
+    pub current_local_description: Arc<Mutex<Option<RTCSessionDescription>>>,
+    pub current_remote_description: Arc<Mutex<Option<RTCSessionDescription>>>,
+    pub pending_local_description: Arc<Mutex<Option<RTCSessionDescription>>>,
+    pub pending_remote_description: Arc<Mutex<Option<RTCSessionDescription>>>,
 
     // A reference to the associated API state used by this connection
-    pub(super) setting_engine: Arc<SettingEngine>,
-    pub(crate) media_engine: Arc<MediaEngine>,
-    pub(super) interceptor: Weak<dyn Interceptor + Send + Sync>,
-    stats_interceptor: Arc<stats::StatsInterceptor>,
+    pub setting_engine: Arc<SettingEngine>,
+    pub media_engine: Arc<MediaEngine>,
+    pub interceptor: Weak<dyn Interceptor + Send + Sync>,
+    pub stats_interceptor: Arc<stats::StatsInterceptor>,
 }
 
 impl PeerConnectionInternal {
-    pub(super) async fn new(
+    pub async fn new(
         api: &API,
         interceptor: Weak<dyn Interceptor + Send + Sync>,
         stats_interceptor: Arc<stats::StatsInterceptor>,
@@ -148,7 +147,7 @@ impl PeerConnectionInternal {
         Ok((Arc::new(pc), configuration))
     }
 
-    pub(super) async fn start_rtp(
+    pub async fn start_rtp(
         self: &Arc<Self>,
         is_renegotiation: bool,
         remote_desc: Arc<RTCSessionDescription>,
@@ -429,7 +428,7 @@ impl PeerConnectionInternal {
             .fetch_add(opened_dc_count, Ordering::SeqCst);
     }
 
-    pub(super) async fn add_transceiver_from_kind(
+    pub async fn add_transceiver_from_kind(
         &self,
         kind: RTPCodecType,
         init: Option<RTCRtpTransceiverInit>,
@@ -486,7 +485,7 @@ impl PeerConnectionInternal {
         Ok(t)
     }
 
-    pub(super) async fn new_transceiver_from_track(
+    pub async fn new_transceiver_from_track(
         &self,
         direction: RTCRtpTransceiverDirection,
         track: Arc<dyn TrackLocal + Send + Sync>,
@@ -535,7 +534,7 @@ impl PeerConnectionInternal {
     /// add_rtp_transceiver appends t into rtp_transceivers
     /// and fires onNegotiationNeeded;
     /// caller of this method should hold `self.mu` lock
-    pub(super) async fn add_rtp_transceiver(&self, t: Arc<RTCRtpTransceiver>) {
+    pub async fn add_rtp_transceiver(&self, t: Arc<RTCRtpTransceiver>) {
         {
             let mut rtp_transceivers = self.rtp_transceivers.lock().await;
             rtp_transceivers.push(t);
@@ -544,7 +543,7 @@ impl PeerConnectionInternal {
     }
 
     /// Helper to trigger a negotiation needed.
-    pub(crate) async fn trigger_negotiation_needed(&self) {
+    pub async fn trigger_negotiation_needed(&self) {
         RTCPeerConnection::do_negotiation_needed(self.create_negotiation_needed_params()).await;
     }
 
@@ -566,7 +565,7 @@ impl PeerConnectionInternal {
         }
     }
 
-    pub(crate) fn make_negotiation_needed_trigger(
+    pub fn make_negotiation_needed_trigger(
         &self,
     ) -> impl Fn() -> Pin<Box<dyn Future<Output = ()> + Send + Sync>> + Send + Sync {
         let params = self.create_negotiation_needed_params();
@@ -579,7 +578,7 @@ impl PeerConnectionInternal {
         }
     }
 
-    pub(super) async fn remote_description(&self) -> Option<RTCSessionDescription> {
+    pub async fn remote_description(&self) -> Option<RTCSessionDescription> {
         let pending_remote_description = self.pending_remote_description.lock().await;
         if pending_remote_description.is_some() {
             pending_remote_description.clone()
@@ -589,12 +588,12 @@ impl PeerConnectionInternal {
         }
     }
 
-    pub(super) fn set_gather_complete_handler(&self, f: OnGatheringCompleteHdlrFn) {
+    pub fn set_gather_complete_handler(&self, f: OnGatheringCompleteHdlrFn) {
         self.ice_gatherer.on_gathering_complete(f);
     }
 
     /// Start all transports. PeerConnection now has enough state
-    pub(super) async fn start_transports(
+    pub async fn start_transports(
         self: &Arc<Self>,
         ice_role: RTCIceRole,
         dtls_role: DTLSRole,
@@ -646,7 +645,7 @@ impl PeerConnectionInternal {
 
     /// generate_unmatched_sdp generates an SDP that doesn't take remote state into account
     /// This is used for the initial call for CreateOffer
-    pub(super) async fn generate_unmatched_sdp(
+    pub async fn generate_unmatched_sdp(
         &self,
         local_transceivers: Vec<Arc<RTCRtpTransceiver>>,
         use_identity: bool,
@@ -715,7 +714,7 @@ impl PeerConnectionInternal {
 
     /// generate_matched_sdp generates a SDP and takes the remote state into account
     /// this is used everytime we have a remote_description
-    pub(super) async fn generate_matched_sdp(
+    pub async fn generate_matched_sdp(
         &self,
         mut local_transceivers: Vec<Arc<RTCRtpTransceiver>>,
         use_identity: bool,
@@ -829,7 +828,7 @@ impl PeerConnectionInternal {
         .await
     }
 
-    pub(super) fn ice_gathering_state(&self) -> RTCIceGatheringState {
+    pub fn ice_gathering_state(&self) -> RTCIceGatheringState {
         match self.ice_gatherer.state() {
             RTCIceGathererState::New => RTCIceGatheringState::New,
             RTCIceGathererState::Gathering => RTCIceGatheringState::Gathering,
@@ -1106,7 +1105,7 @@ impl PeerConnectionInternal {
         }
     }
 
-    pub(super) async fn create_ice_transport(&self, api: &API) -> Arc<RTCIceTransport> {
+    pub async fn create_ice_transport(&self, api: &API) -> Arc<RTCIceTransport> {
         let ice_transport = Arc::new(api.new_ice_transport(Arc::clone(&self.ice_gatherer)));
 
         let ice_connection_state = Arc::clone(&self.ice_connection_state);
@@ -1165,7 +1164,7 @@ impl PeerConnectionInternal {
 
     /// has_local_description_changed returns whether local media (rtp_transceivers) has changed
     /// caller of this method should hold `pc.mu` lock
-    pub(super) async fn has_local_description_changed(&self, desc: &RTCSessionDescription) -> bool {
+    pub async fn has_local_description_changed(&self, desc: &RTCSessionDescription) -> bool {
         let rtp_transceivers = self.rtp_transceivers.lock().await;
         for t in &*rtp_transceivers {
             let m = match t.mid().and_then(|mid| get_by_mid(mid.as_str(), desc)) {
@@ -1180,7 +1179,7 @@ impl PeerConnectionInternal {
         false
     }
 
-    pub(super) async fn get_stats(&self, stats_id: String) -> StatsCollector {
+    pub async fn get_stats(&self, stats_id: String) -> StatsCollector {
         let collector = StatsCollector::new();
         let transceivers = { self.rtp_transceivers.lock().await.clone() };
 

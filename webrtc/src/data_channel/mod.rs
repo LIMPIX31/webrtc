@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod data_channel_test;
+pub mod data_channel_test;
 
 pub mod data_channel_init;
 pub mod data_channel_message;
@@ -48,17 +48,17 @@ pub type OnCloseHdlrFn =
 /// which can be used for bidirectional peer-to-peer transfers of arbitrary data
 #[derive(Default)]
 pub struct RTCDataChannel {
-    pub(crate) stats_id: String,
-    pub(crate) label: String,
-    pub(crate) ordered: bool,
-    pub(crate) max_packet_lifetime: u16,
-    pub(crate) max_retransmits: u16,
-    pub(crate) protocol: String,
-    pub(crate) negotiated: bool,
-    pub(crate) id: AtomicU16,
-    pub(crate) ready_state: Arc<AtomicU8>, // DataChannelState
-    pub(crate) buffered_amount_low_threshold: AtomicUsize,
-    pub(crate) detach_called: Arc<AtomicBool>,
+    pub stats_id: String,
+    pub label: String,
+    pub ordered: bool,
+    pub max_packet_lifetime: u16,
+    pub max_retransmits: u16,
+    pub protocol: String,
+    pub negotiated: bool,
+    pub id: AtomicU16,
+    pub ready_state: Arc<AtomicU8>, // DataChannelState
+    pub buffered_amount_low_threshold: AtomicUsize,
+    pub detach_called: Arc<AtomicBool>,
 
     // The binaryType represents attribute MUST, on getting, return the value to
     // which it was last set. On setting, if the new value is either the string
@@ -67,25 +67,25 @@ pub struct RTCDataChannel {
     // is created, the binaryType attribute MUST be initialized to the string
     // "blob". This attribute controls how binary data is exposed to scripts.
     // binaryType                 string
-    pub(crate) on_message_handler: Arc<ArcSwapOption<Mutex<OnMessageHdlrFn>>>,
-    pub(crate) on_open_handler: SyncMutex<Option<OnOpenHdlrFn>>,
-    pub(crate) on_close_handler: Arc<ArcSwapOption<Mutex<OnCloseHdlrFn>>>,
-    pub(crate) on_error_handler: Arc<ArcSwapOption<Mutex<OnErrorHdlrFn>>>,
+    pub on_message_handler: Arc<ArcSwapOption<Mutex<OnMessageHdlrFn>>>,
+    pub on_open_handler: SyncMutex<Option<OnOpenHdlrFn>>,
+    pub on_close_handler: Arc<ArcSwapOption<Mutex<OnCloseHdlrFn>>>,
+    pub on_error_handler: Arc<ArcSwapOption<Mutex<OnErrorHdlrFn>>>,
 
-    pub(crate) on_buffered_amount_low: Mutex<Option<OnBufferedAmountLowFn>>,
+    pub on_buffered_amount_low: Mutex<Option<OnBufferedAmountLowFn>>,
 
-    pub(crate) sctp_transport: Mutex<Option<Weak<RTCSctpTransport>>>,
-    pub(crate) data_channel: Mutex<Option<Arc<data::data_channel::DataChannel>>>,
+    pub sctp_transport: Mutex<Option<Weak<RTCSctpTransport>>>,
+    pub data_channel: Mutex<Option<Arc<data::data_channel::DataChannel>>>,
 
-    pub(crate) notify_tx: Arc<Notify>,
+    pub notify_tx: Arc<Notify>,
 
     // A reference to the associated api object used by this datachannel
-    pub(crate) setting_engine: Arc<SettingEngine>,
+    pub setting_engine: Arc<SettingEngine>,
 }
 
 impl RTCDataChannel {
     // create the DataChannel object before the networking is set up.
-    pub(crate) fn new(params: DataChannelParameters, setting_engine: Arc<SettingEngine>) -> Self {
+    pub fn new(params: DataChannelParameters, setting_engine: Arc<SettingEngine>) -> Self {
         // the id value if non-negotiated doesn't matter, since it will be overwritten
         // on opening
         let id = params.negotiated.unwrap_or(0);
@@ -114,7 +114,7 @@ impl RTCDataChannel {
     }
 
     /// open opens the datachannel over the sctp transport
-    pub(crate) async fn open(&self, sctp_transport: Arc<RTCSctpTransport>) -> Result<()> {
+    pub async fn open(&self, sctp_transport: Arc<RTCSctpTransport>) -> Result<()> {
         if let Some(association) = sctp_transport.association().await {
             {
                 let mut st = self.sctp_transport.lock().await;
@@ -255,7 +255,7 @@ impl RTCDataChannel {
         }
     }
 
-    pub(crate) async fn handle_open(&self, dc: Arc<data::data_channel::DataChannel>) {
+    pub async fn handle_open(&self, dc: Arc<data::data_channel::DataChannel>) {
         {
             let mut data_channel = self.data_channel.lock().await;
             *data_channel = Some(Arc::clone(&dc));
@@ -540,16 +540,16 @@ impl RTCDataChannel {
         }
     }
 
-    pub(crate) fn get_stats_id(&self) -> &str {
+    pub fn get_stats_id(&self) -> &str {
         self.stats_id.as_str()
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         let stats = DataChannelStats::from(self).await;
         collector.insert(self.stats_id.clone(), StatsReportType::DataChannel(stats));
     }
 
-    pub(crate) fn set_ready_state(&self, r: RTCDataChannelState) {
+    pub fn set_ready_state(&self, r: RTCDataChannelState) {
         self.ready_state.store(r as u8, Ordering::SeqCst);
     }
 }

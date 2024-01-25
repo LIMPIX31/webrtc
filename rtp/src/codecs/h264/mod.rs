@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod h264_test;
+pub mod h264_test;
 
 use bytes::{BufMut, Bytes, BytesMut};
 

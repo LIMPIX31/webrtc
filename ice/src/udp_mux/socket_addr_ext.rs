@@ -4,7 +4,7 @@ use std::net::SocketAddr;
 
 use util::Error;
 
-pub(super) trait SocketAddrExt {
+pub trait SocketAddrExt {
     ///Encode a representation of `self` into the buffer and return the length of this encoded
     ///version.
     ///
@@ -21,7 +21,7 @@ const IPV4_ADDRESS_SIZE: usize = 7;
 const IPV6_MARKER: u8 = 6;
 const IPV6_ADDRESS_SIZE: usize = 27;
 
-pub(super) const MAX_ADDR_SIZE: usize = IPV6_ADDRESS_SIZE;
+pub const MAX_ADDR_SIZE: usize = IPV6_ADDRESS_SIZE;
 
 impl SocketAddrExt for SocketAddr {
     fn encode(&self, buffer: &mut [u8]) -> Result<usize, Error> {
@@ -119,7 +119,7 @@ impl SocketAddrExt for SocketAddr {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use std::net::{Ipv4Addr, Ipv6Addr, SocketAddrV4, SocketAddrV6};
 
     use super::*;

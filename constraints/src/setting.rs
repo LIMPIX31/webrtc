@@ -67,7 +67,7 @@ impl<'a> From<&'a str> for MediaTrackSetting {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     type Subject = MediaTrackSetting;
@@ -119,7 +119,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::macros::test_serde_symmetry;
 

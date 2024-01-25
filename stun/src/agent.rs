@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod agent_test;
+pub mod agent_test;
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -72,7 +72,7 @@ impl Default for Event {
 
 /// AgentTransaction represents transaction in progress.
 /// Concurrent access is invalid.
-pub(crate) struct AgentTransaction {
+pub struct AgentTransaction {
     id: TransactionId,
     deadline: Instant,
 }
@@ -263,7 +263,7 @@ impl Agent {
         Ok(())
     }
 
-    pub(crate) async fn run(mut agent: Agent, mut rx: mpsc::Receiver<ClientAgent>) {
+    pub async fn run(mut agent: Agent, mut rx: mpsc::Receiver<ClientAgent>) {
         while let Some(client_agent) = rx.recv().await {
             let result = match client_agent {
                 ClientAgent::Process(message) => agent.process(message),

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_hello_verify_request_test;
+pub mod handshake_message_hello_verify_request_test;
 
 use std::io::{Read, Write};
 
@@ -27,8 +27,8 @@ use crate::record_layer::record_layer_header::*;
 */
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageHelloVerifyRequest {
-    pub(crate) version: ProtocolVersion,
-    pub(crate) cookie: Vec<u8>,
+    pub version: ProtocolVersion,
+    pub cookie: Vec<u8>,
 }
 
 impl HandshakeMessageHelloVerifyRequest {

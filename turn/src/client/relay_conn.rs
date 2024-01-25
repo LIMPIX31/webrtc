@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod relay_conn_test;
+pub mod relay_conn_test;
 
 // client implements the API for a TURN client
 use std::io;
@@ -27,9 +27,9 @@ use crate::{proto, Error};
 const PERM_REFRESH_INTERVAL: Duration = Duration::from_secs(120);
 const MAX_RETRY_ATTEMPTS: u16 = 3;
 
-pub(crate) struct InboundData {
-    pub(crate) data: Vec<u8>,
-    pub(crate) from: SocketAddr,
+pub struct InboundData {
+    pub data: Vec<u8>,
+    pub from: SocketAddr,
 }
 
 /// `RelayConnObserver` is an interface to [`RelayConn`] observer.
@@ -48,13 +48,13 @@ pub trait RelayConnObserver {
 }
 
 /// `RelayConnConfig` is a set of configuration params used by [`RelayConn::new()`].
-pub(crate) struct RelayConnConfig {
-    pub(crate) relayed_addr: SocketAddr,
-    pub(crate) integrity: MessageIntegrity,
-    pub(crate) nonce: Nonce,
-    pub(crate) lifetime: Duration,
-    pub(crate) binding_mgr: Arc<Mutex<BindingManager>>,
-    pub(crate) read_ch_rx: Arc<Mutex<mpsc::Receiver<InboundData>>>,
+pub struct RelayConnConfig {
+    pub relayed_addr: SocketAddr,
+    pub integrity: MessageIntegrity,
+    pub nonce: Nonce,
+    pub lifetime: Duration,
+    pub binding_mgr: Arc<Mutex<BindingManager>>,
+    pub read_ch_rx: Arc<Mutex<mpsc::Receiver<InboundData>>>,
 }
 
 pub struct RelayConnInternal<T: 'static + RelayConnObserver + Send + Sync> {
@@ -78,7 +78,7 @@ pub struct RelayConn<T: 'static + RelayConnObserver + Send + Sync> {
 
 impl<T: 'static + RelayConnObserver + Send + Sync> RelayConn<T> {
     /// Creates a new [`RelayConn`].
-    pub(crate) async fn new(obs: Arc<Mutex<T>>, config: RelayConnConfig) -> Self {
+    pub async fn new(obs: Arc<Mutex<T>>, config: RelayConnConfig) -> Self {
         log::debug!("initial lifetime: {} seconds", config.lifetime.as_secs());
 
         let c = RelayConn {

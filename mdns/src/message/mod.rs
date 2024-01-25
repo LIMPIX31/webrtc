@@ -1,10 +1,10 @@
 #[cfg(test)]
-mod message_test;
+pub mod message_test;
 
 pub mod builder;
 pub mod header;
 pub mod name;
-mod packer;
+pub mod packer;
 pub mod parser;
 pub mod question;
 pub mod resource;
@@ -100,17 +100,17 @@ impl fmt::Display for DnsType {
 
 impl DnsType {
     // pack_type appends the wire format of field to msg.
-    pub(crate) fn pack(&self, msg: Vec<u8>) -> Vec<u8> {
+    pub fn pack(&self, msg: Vec<u8>) -> Vec<u8> {
         pack_uint16(msg, *self as u16)
     }
 
-    pub(crate) fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
+    pub fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
         let (t, o) = unpack_uint16(msg, off)?;
         *self = DnsType::from(t);
         Ok(o)
     }
 
-    pub(crate) fn skip(msg: &[u8], off: usize) -> Result<usize> {
+    pub fn skip(msg: &[u8], off: usize) -> Result<usize> {
         skip_uint16(msg, off)
     }
 }
@@ -144,17 +144,17 @@ impl fmt::Display for DnsClass {
 
 impl DnsClass {
     // pack_class appends the wire format of field to msg.
-    pub(crate) fn pack(&self, msg: Vec<u8>) -> Vec<u8> {
+    pub fn pack(&self, msg: Vec<u8>) -> Vec<u8> {
         pack_uint16(msg, self.0)
     }
 
-    pub(crate) fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
+    pub fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
         let (c, o) = unpack_uint16(msg, off)?;
         *self = DnsClass(c);
         Ok(o)
     }
 
-    pub(crate) fn skip(msg: &[u8], off: usize) -> Result<usize> {
+    pub fn skip(msg: &[u8], off: usize) -> Result<usize> {
         skip_uint16(msg, off)
     }
 }

@@ -1,6 +1,6 @@
-mod receiver_stream;
+pub mod receiver_stream;
 #[cfg(test)]
-mod receiver_test;
+pub mod receiver_test;
 
 use std::time::Duration;
 

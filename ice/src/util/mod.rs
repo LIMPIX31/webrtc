@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod util_test;
+pub mod util_test;
 
 use std::collections::HashSet;
 use std::net::{IpAddr, SocketAddr};

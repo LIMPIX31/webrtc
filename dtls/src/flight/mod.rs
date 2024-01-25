@@ -1,10 +1,10 @@
-pub(crate) mod flight0;
-pub(crate) mod flight1;
-pub(crate) mod flight2;
-pub(crate) mod flight3;
-pub(crate) mod flight4;
-pub(crate) mod flight5;
-pub(crate) mod flight6;
+pub mod flight0;
+pub mod flight1;
+pub mod flight2;
+pub mod flight3;
+pub mod flight4;
+pub mod flight5;
+pub mod flight6;
 
 use std::fmt;
 
@@ -52,14 +52,14 @@ use crate::state::*;
 */
 
 #[derive(Clone, Debug)]
-pub(crate) struct Packet {
-    pub(crate) record: RecordLayer,
-    pub(crate) should_encrypt: bool,
-    pub(crate) reset_local_sequence_number: bool,
+pub struct Packet {
+    pub record: RecordLayer,
+    pub should_encrypt: bool,
+    pub reset_local_sequence_number: bool,
 }
 
 #[async_trait]
-pub(crate) trait Flight: fmt::Display + fmt::Debug {
+pub trait Flight: fmt::Display + fmt::Debug {
     fn is_last_send_flight(&self) -> bool {
         false
     }

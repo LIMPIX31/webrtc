@@ -1,8 +1,8 @@
 #[cfg(test)]
-mod association_test;
+pub mod association_test;
 
-mod association_internal;
-mod association_stats;
+pub mod association_internal;
+pub mod association_stats;
 
 use std::collections::{HashMap, VecDeque};
 use std::fmt;
@@ -50,21 +50,21 @@ use crate::timer::ack_timer::*;
 use crate::timer::rtx_timer::*;
 use crate::util::*;
 
-pub(crate) const RECEIVE_MTU: usize = 8192;
+pub const RECEIVE_MTU: usize = 8192;
 /// MTU for inbound packet (from DTLS)
-pub(crate) const INITIAL_MTU: u32 = 1228;
+pub const INITIAL_MTU: u32 = 1228;
 /// initial MTU for outgoing packets (to DTLS)
-pub(crate) const INITIAL_RECV_BUF_SIZE: u32 = 1024 * 1024;
-pub(crate) const COMMON_HEADER_SIZE: u32 = 12;
-pub(crate) const DATA_CHUNK_HEADER_SIZE: u32 = 16;
-pub(crate) const DEFAULT_MAX_MESSAGE_SIZE: u32 = 65536;
+pub const INITIAL_RECV_BUF_SIZE: u32 = 1024 * 1024;
+pub const COMMON_HEADER_SIZE: u32 = 12;
+pub const DATA_CHUNK_HEADER_SIZE: u32 = 16;
+pub const DEFAULT_MAX_MESSAGE_SIZE: u32 = 65536;
 
 /// other constants
-pub(crate) const ACCEPT_CH_SIZE: usize = 16;
+pub const ACCEPT_CH_SIZE: usize = 16;
 
 /// association state enums
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub(crate) enum AssociationState {
+pub enum AssociationState {
     Closed = 0,
     CookieWait = 1,
     CookieEchoed = 2,
@@ -108,7 +108,7 @@ impl fmt::Display for AssociationState {
 
 /// retransmission timer IDs
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum RtxTimerId {
+pub enum RtxTimerId {
     #[default]
     T1Init,
     T1Cookie,
@@ -132,7 +132,7 @@ impl fmt::Display for RtxTimerId {
 
 /// ack mode (for testing)
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum AckMode {
+pub enum AckMode {
     #[default]
     Normal,
     NoDelay,
@@ -152,7 +152,7 @@ impl fmt::Display for AckMode {
 
 /// ack transmission state
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum AckState {
+pub enum AckState {
     #[default]
     Idle, // ack timer is off
     Immediate, // will send ack immediately
@@ -209,7 +209,7 @@ pub struct Association {
     bytes_received: Arc<AtomicUsize>,
     bytes_sent: Arc<AtomicUsize>,
 
-    pub(crate) association_internal: Arc<Mutex<AssociationInternal>>,
+    pub association_internal: Arc<Mutex<AssociationInternal>>,
 }
 
 impl Association {

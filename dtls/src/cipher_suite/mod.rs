@@ -107,7 +107,7 @@ pub enum CipherSuiteHash {
 }
 
 impl CipherSuiteHash {
-    pub(crate) fn size(&self) -> usize {
+    pub fn size(&self) -> usize {
         match *self {
             CipherSuiteHash::Sha256 => 32,
         }
@@ -172,7 +172,7 @@ pub fn cipher_suite_for_id(id: CipherSuiteId) -> Result<Box<dyn CipherSuite + Se
 }
 
 // CipherSuites we support in order of preference
-pub(crate) fn default_cipher_suites() -> Vec<Box<dyn CipherSuite + Send + Sync>> {
+pub fn default_cipher_suites() -> Vec<Box<dyn CipherSuite + Send + Sync>> {
     vec![
         Box::new(CipherSuiteAes128GcmSha256::new(false)),
         Box::new(CipherSuiteAes256CbcSha::new(false)),
@@ -203,7 +203,7 @@ fn cipher_suites_for_ids(ids: &[CipherSuiteId]) -> Result<Vec<Box<dyn CipherSuit
     Ok(cipher_suites)
 }
 
-pub(crate) fn parse_cipher_suites(
+pub fn parse_cipher_suites(
     user_selected_suites: &[CipherSuiteId],
     exclude_psk: bool,
     exclude_non_psk: bool,

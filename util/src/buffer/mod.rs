@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod buffer_test;
+pub mod buffer_test;
 
 use std::sync::Arc;
 

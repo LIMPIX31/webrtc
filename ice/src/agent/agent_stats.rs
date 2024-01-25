@@ -214,7 +214,7 @@ impl Default for CandidateStats {
 
 impl AgentInternal {
     /// Returns a list of candidate pair stats.
-    pub(crate) async fn get_candidate_pairs_stats(&self) -> Vec<CandidatePairStats> {
+    pub async fn get_candidate_pairs_stats(&self) -> Vec<CandidatePairStats> {
         let checklist = self.agent_conn.checklist.lock().await;
         let mut res = Vec::with_capacity(checklist.len());
         for cp in &*checklist {
@@ -232,7 +232,7 @@ impl AgentInternal {
     }
 
     /// Returns a list of local candidates stats.
-    pub(crate) async fn get_local_candidates_stats(&self) -> Vec<CandidateStats> {
+    pub async fn get_local_candidates_stats(&self) -> Vec<CandidateStats> {
         let local_candidates = self.local_candidates.lock().await;
         let mut res = Vec::with_capacity(local_candidates.len());
         for (network_type, local_candidates) in &*local_candidates {
@@ -257,7 +257,7 @@ impl AgentInternal {
     }
 
     /// Returns a list of remote candidates stats.
-    pub(crate) async fn get_remote_candidates_stats(&self) -> Vec<CandidateStats> {
+    pub async fn get_remote_candidates_stats(&self) -> Vec<CandidateStats> {
         let remote_candidates = self.remote_candidates.lock().await;
         let mut res = Vec::with_capacity(remote_candidates.len());
         for (network_type, remote_candidates) in &*remote_candidates {

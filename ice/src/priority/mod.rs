@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod priority_test;
+pub mod priority_test;
 
 use stun::attributes::ATTR_PRIORITY;
 use stun::checks::*;

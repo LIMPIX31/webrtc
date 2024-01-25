@@ -1,15 +1,15 @@
 #[cfg(test)]
-mod agent_gather_test;
+pub mod agent_gather_test;
 #[cfg(test)]
-mod agent_test;
+pub mod agent_test;
 #[cfg(test)]
-mod agent_transport_test;
+pub mod agent_transport_test;
 #[cfg(test)]
-pub(crate) mod agent_vnet_test;
+pub mod agent_vnet_test;
 
 pub mod agent_config;
 pub mod agent_gather;
-pub(crate) mod agent_internal;
+pub mod agent_internal;
 pub mod agent_selector;
 pub mod agent_stats;
 pub mod agent_transport;
@@ -51,11 +51,11 @@ use crate::udp_network::UDPNetwork;
 use crate::url::*;
 
 #[derive(Debug, Clone)]
-pub(crate) struct BindingRequest {
-    pub(crate) timestamp: Instant,
-    pub(crate) transaction_id: TransactionId,
-    pub(crate) destination: SocketAddr,
-    pub(crate) is_use_candidate: bool,
+pub struct BindingRequest {
+    pub timestamp: Instant,
+    pub transaction_id: TransactionId,
+    pub destination: SocketAddr,
+    pub is_use_candidate: bool,
 }
 
 impl Default for BindingRequest {
@@ -99,24 +99,24 @@ struct ChanReceivers {
 
 /// Represents the ICE agent.
 pub struct Agent {
-    pub(crate) internal: Arc<AgentInternal>,
+    pub internal: Arc<AgentInternal>,
 
-    pub(crate) udp_network: UDPNetwork,
-    pub(crate) interface_filter: Arc<Option<InterfaceFilterFn>>,
-    pub(crate) ip_filter: Arc<Option<IpFilterFn>>,
-    pub(crate) mdns_mode: MulticastDnsMode,
-    pub(crate) mdns_name: String,
-    pub(crate) mdns_conn: Option<Arc<DnsConn>>,
-    pub(crate) net: Arc<Net>,
+    pub udp_network: UDPNetwork,
+    pub interface_filter: Arc<Option<InterfaceFilterFn>>,
+    pub ip_filter: Arc<Option<IpFilterFn>>,
+    pub mdns_mode: MulticastDnsMode,
+    pub mdns_name: String,
+    pub mdns_conn: Option<Arc<DnsConn>>,
+    pub net: Arc<Net>,
 
     // 1:1 D-NAT IP address mapping
-    pub(crate) ext_ip_mapper: Arc<Option<ExternalIpMapper>>,
-    pub(crate) gathering_state: Arc<AtomicU8>, //GatheringState,
-    pub(crate) candidate_types: Vec<CandidateType>,
-    pub(crate) urls: Vec<Url>,
-    pub(crate) network_types: Vec<NetworkType>,
+    pub ext_ip_mapper: Arc<Option<ExternalIpMapper>>,
+    pub gathering_state: Arc<AtomicU8>, //GatheringState,
+    pub candidate_types: Vec<CandidateType>,
+    pub urls: Vec<Url>,
+    pub network_types: Vec<NetworkType>,
 
-    pub(crate) gather_candidate_cancel: Option<GatherCandidateCancelFn>,
+    pub gather_candidate_cancel: Option<GatherCandidateCancelFn>,
 }
 
 impl Agent {

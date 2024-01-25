@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extension_supported_elliptic_curves_test;
+pub mod extension_supported_elliptic_curves_test;
 
 use super::*;
 use crate::curve::named_curve::*;

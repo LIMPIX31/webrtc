@@ -14,16 +14,16 @@ pub struct RTCIceServer {
 }
 
 impl RTCIceServer {
-    pub(crate) fn parse_url(&self, url_str: &str) -> Result<ice::url::Url> {
+    pub fn parse_url(&self, url_str: &str) -> Result<ice::url::Url> {
         Ok(ice::url::Url::parse_url(url_str)?)
     }
 
-    pub(crate) fn validate(&self) -> Result<()> {
+    pub fn validate(&self) -> Result<()> {
         self.urls()?;
         Ok(())
     }
 
-    pub(crate) fn urls(&self) -> Result<Vec<ice::url::Url>> {
+    pub fn urls(&self) -> Result<Vec<ice::url::Url>> {
         let mut urls = vec![];
 
         for url_str in &self.urls {
@@ -61,7 +61,7 @@ impl RTCIceServer {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

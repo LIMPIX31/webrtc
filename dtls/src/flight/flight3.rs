@@ -28,7 +28,7 @@ use crate::record_layer::*;
 use crate::{find_matching_cipher_suite, find_matching_srtp_profile};
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct Flight3;
+pub struct Flight3;
 
 impl fmt::Display for Flight3 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -411,7 +411,7 @@ impl Flight for Flight3 {
     }
 }
 
-pub(crate) fn handle_server_key_exchange(
+pub fn handle_server_key_exchange(
     state: &mut State,
     cfg: &HandshakeConfig,
     h: &HandshakeMessageServerKeyExchange,

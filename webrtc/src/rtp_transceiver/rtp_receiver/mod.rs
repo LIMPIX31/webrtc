@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod rtp_receiver_test;
+pub mod rtp_receiver_test;
 
 use std::fmt;
 use std::sync::Arc;
@@ -145,7 +145,7 @@ impl State {
 }
 
 pub struct RTPReceiverInternal {
-    pub(crate) kind: RTPCodecType,
+    pub kind: RTPCodecType,
 
     // State is stored within the channel
     state_tx: watch::Sender<State>,
@@ -253,7 +253,7 @@ impl RTPReceiverInternal {
         Ok((pkts, attributes))
     }
 
-    pub(crate) async fn read_rtp(
+    pub async fn read_rtp(
         &self,
         b: &mut [u8],
         tid: usize,
@@ -331,7 +331,7 @@ impl RTPReceiverInternal {
         parameters
     }
 
-    pub(crate) fn get_codecs(
+    pub fn get_codecs(
         codecs: &mut [RTCRtpCodecParameters],
         kind: RTPCodecType,
         media_engine: &Arc<MediaEngine>,
@@ -357,15 +357,15 @@ impl RTPReceiverInternal {
     // State
 
     /// Get the current state and a receiver for the next state change.
-    pub(crate) fn current_state(&self) -> State {
+    pub fn current_state(&self) -> State {
         *self.state_rx.borrow()
     }
 
-    pub(crate) fn start(&self) -> Result<()> {
+    pub fn start(&self) -> Result<()> {
         State::transition(State::Started, &self.state_tx)
     }
 
-    pub(crate) fn pause(&self) -> Result<()> {
+    pub fn pause(&self) -> Result<()> {
         let current = self.current_state();
 
         match current {
@@ -375,7 +375,7 @@ impl RTPReceiverInternal {
         }
     }
 
-    pub(crate) fn resume(&self) -> Result<()> {
+    pub fn resume(&self) -> Result<()> {
         let current = self.current_state();
 
         match current {
@@ -385,7 +385,7 @@ impl RTPReceiverInternal {
         }
     }
 
-    pub(crate) fn close(&self) -> Result<()> {
+    pub fn close(&self) -> Result<()> {
         State::transition(State::Stopped, &self.state_tx)
     }
 }
@@ -442,7 +442,7 @@ impl RTCRtpReceiver {
         self.kind
     }
 
-    pub(crate) fn set_transceiver_codecs(
+    pub fn set_transceiver_codecs(
         &self,
         codecs: Option<Arc<Mutex<Vec<RTCRtpCodecParameters>>>>,
     ) {
@@ -653,11 +653,11 @@ impl RTCRtpReceiver {
             .await
     }
 
-    pub(crate) async fn have_received(&self) -> bool {
+    pub async fn have_received(&self) -> bool {
         self.internal.current_state().is_started()
     }
 
-    pub(crate) async fn start(&self, incoming: &TrackDetails) {
+    pub async fn start(&self, incoming: &TrackDetails) {
         let mut encoding_size = incoming.ssrcs.len();
         if incoming.rids.len() >= encoding_size {
             encoding_size = incoming.rids.len();
@@ -747,7 +747,7 @@ impl RTCRtpReceiver {
     }
 
     /// read_rtp should only be called by a track, this only exists so we can keep state in one place
-    pub(crate) async fn read_rtp(
+    pub async fn read_rtp(
         &self,
         b: &mut [u8],
         tid: usize,
@@ -757,7 +757,7 @@ impl RTCRtpReceiver {
 
     /// receive_for_rid is the sibling of Receive expect for RIDs instead of SSRCs
     /// It populates all the internal state for the given RID
-    pub(crate) async fn receive_for_rid(
+    pub async fn receive_for_rid(
         &self,
         rid: SmolStr,
         params: RTCRtpParameters,
@@ -784,7 +784,7 @@ impl RTCRtpReceiver {
     /// receiveForRtx starts a routine that processes the repair stream
     /// These packets aren't exposed to the user yet, but we need to process them for
     /// TWCC
-    pub(crate) async fn receive_for_rtx(
+    pub async fn receive_for_rtx(
         &self,
         ssrc: SSRC,
         rsid: String,
@@ -819,11 +819,11 @@ impl RTCRtpReceiver {
 
     // State
 
-    pub(crate) fn current_state(&self) -> State {
+    pub fn current_state(&self) -> State {
         self.internal.current_state()
     }
 
-    pub(crate) async fn pause(&self) -> Result<()> {
+    pub async fn pause(&self) -> Result<()> {
         self.internal.pause()?;
 
         if !self.internal.current_state().is_started() {
@@ -841,7 +841,7 @@ impl RTCRtpReceiver {
         Ok(())
     }
 
-    pub(crate) async fn resume(&self) -> Result<()> {
+    pub async fn resume(&self) -> Result<()> {
         self.internal.resume()?;
 
         if !self.internal.current_state().is_started() {

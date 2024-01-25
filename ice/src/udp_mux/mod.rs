@@ -8,13 +8,13 @@ use tokio::sync::{watch, Mutex};
 use util::sync::RwLock;
 use util::{Conn, Error};
 
-mod udp_mux_conn;
+pub mod udp_mux_conn;
 pub use udp_mux_conn::{UDPMuxConn, UDPMuxConnParams, UDPMuxWriter};
 
 #[cfg(test)]
-mod udp_mux_test;
+pub mod udp_mux_test;
 
-mod socket_addr_ext;
+pub mod socket_addr_ext;
 
 use stun::attributes::ATTR_USERNAME;
 use stun::message::{is_message as is_stun_message, Message as STUNMessage};

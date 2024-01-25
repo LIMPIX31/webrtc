@@ -30,7 +30,7 @@ pub struct RTCIceCandidate {
 }
 
 /// Conversion for ice_candidates
-pub(crate) fn rtc_ice_candidates_from_ice_candidates(
+pub fn rtc_ice_candidates_from_ice_candidates(
     ice_candidates: &[Arc<dyn Candidate + Send + Sync>],
 ) -> Vec<RTCIceCandidate> {
     ice_candidates.iter().map(|c| c.into()).collect()
@@ -63,7 +63,7 @@ impl From<&Arc<dyn Candidate + Send + Sync>> for RTCIceCandidate {
 }
 
 impl RTCIceCandidate {
-    pub(crate) fn to_ice(&self) -> Result<impl Candidate> {
+    pub fn to_ice(&self) -> Result<impl Candidate> {
         let candidate_id = self.stats_id.clone();
         let c = match self.typ {
             RTCIceCandidateType::Host => {
@@ -177,7 +177,7 @@ pub struct RTCIceCandidateInit {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

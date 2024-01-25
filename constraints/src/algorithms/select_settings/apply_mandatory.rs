@@ -10,7 +10,7 @@ use crate::{MediaTrackProperty, MediaTrackSettings, SanitizedMediaTrackConstrain
 ///
 /// Implements step 5 of the `SelectSettings` algorithm:
 /// <https://www.w3.org/TR/mediacapture-streams/#dfn-selectsettings>
-pub(super) fn apply_mandatory_constraints<'a, I>(
+pub fn apply_mandatory_constraints<'a, I>(
     candidates: I,
     mandatory_constraints: &SanitizedMediaTrackConstraintSet,
     exposure_mode: DeviceInformationExposureMode,
@@ -59,7 +59,7 @@ where
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::iter::FromIterator;
 
     use super::*;

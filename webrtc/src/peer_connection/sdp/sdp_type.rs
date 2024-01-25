@@ -66,7 +66,7 @@ impl fmt::Display for RTCSdpType {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

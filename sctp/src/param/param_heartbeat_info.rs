@@ -5,8 +5,8 @@ use super::param_type::*;
 use super::*;
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamHeartbeatInfo {
-    pub(crate) heartbeat_information: Bytes,
+pub struct ParamHeartbeatInfo {
+    pub heartbeat_information: Bytes,
 }
 
 impl fmt::Display for ParamHeartbeatInfo {

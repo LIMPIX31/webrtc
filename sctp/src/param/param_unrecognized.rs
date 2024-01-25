@@ -15,7 +15,7 @@ pub struct ParamUnrecognized {
 }
 
 impl ParamUnrecognized {
-    pub(crate) fn wrap(param: Box<dyn Param + Send + Sync>) -> Self {
+    pub fn wrap(param: Box<dyn Param + Send + Sync>) -> Self {
         Self { param }
     }
 }

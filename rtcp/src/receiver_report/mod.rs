@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod receiver_report_test;
+pub mod receiver_report_test;
 
 use std::any::Any;
 use std::fmt;
@@ -15,8 +15,8 @@ use crate::util::*;
 
 type Result<T> = std::result::Result<T, util::Error>;
 
-pub(super) const RR_SSRC_OFFSET: usize = HEADER_LENGTH;
-pub(super) const RR_REPORT_OFFSET: usize = RR_SSRC_OFFSET + SSRC_LENGTH;
+pub const RR_SSRC_OFFSET: usize = HEADER_LENGTH;
+pub const RR_REPORT_OFFSET: usize = RR_SSRC_OFFSET + SSRC_LENGTH;
 
 /// A ReceiverReport (RR) packet provides reception quality feedback for an RTP stream
 #[derive(Debug, PartialEq, Eq, Default, Clone)]

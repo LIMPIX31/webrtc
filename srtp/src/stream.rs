@@ -15,7 +15,7 @@ pub const SRTCP_BUFFER_SIZE: usize = 100 * 1000;
 pub struct Stream {
     ssrc: u32,
     tx: mpsc::Sender<u32>,
-    pub(crate) buffer: Buffer,
+    pub buffer: Buffer,
     is_rtp: bool,
 }
 

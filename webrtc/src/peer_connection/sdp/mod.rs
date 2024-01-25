@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod sdp_test;
+pub mod sdp_test;
 
 use crate::api::media_engine::MediaEngine;
 use crate::dtls_transport::dtls_fingerprint::RTCDtlsFingerprint;
@@ -38,36 +38,36 @@ use crate::{SDP_ATTRIBUTE_RID, SDP_ATTRIBUTE_SIMULCAST};
 /// TrackDetails represents any media source that can be represented in a SDP
 /// This isn't keyed by SSRC because it also needs to support rid based sources
 #[derive(Default, Debug, Clone)]
-pub(crate) struct TrackDetails {
-    pub(crate) mid: SmolStr,
-    pub(crate) kind: RTPCodecType,
-    pub(crate) stream_id: String,
-    pub(crate) id: String,
-    pub(crate) ssrcs: Vec<SSRC>,
-    pub(crate) repair_ssrc: SSRC,
-    pub(crate) rids: Vec<SmolStr>,
+pub struct TrackDetails {
+    pub mid: SmolStr,
+    pub kind: RTPCodecType,
+    pub stream_id: String,
+    pub id: String,
+    pub ssrcs: Vec<SSRC>,
+    pub repair_ssrc: SSRC,
+    pub rids: Vec<SmolStr>,
 }
 
-pub(crate) fn track_details_for_ssrc(
+pub fn track_details_for_ssrc(
     track_details: &[TrackDetails],
     ssrc: SSRC,
 ) -> Option<&TrackDetails> {
     track_details.iter().find(|x| x.ssrcs.contains(&ssrc))
 }
 
-pub(crate) fn track_details_for_rid(
+pub fn track_details_for_rid(
     track_details: &[TrackDetails],
     rid: SmolStr,
 ) -> Option<&TrackDetails> {
     track_details.iter().find(|x| x.rids.contains(&rid))
 }
 
-pub(crate) fn filter_track_with_ssrc(incoming_tracks: &mut Vec<TrackDetails>, ssrc: SSRC) {
+pub fn filter_track_with_ssrc(incoming_tracks: &mut Vec<TrackDetails>, ssrc: SSRC) {
     incoming_tracks.retain(|x| !x.ssrcs.contains(&ssrc));
 }
 
 /// extract all TrackDetails from an SDP.
-pub(crate) fn track_details_from_sdp(
+pub fn track_details_from_sdp(
     s: &SessionDescription,
     exclude_inactive: bool,
 ) -> Vec<TrackDetails> {
@@ -239,7 +239,7 @@ pub(crate) fn track_details_from_sdp(
     incoming_tracks
 }
 
-pub(crate) fn get_rids(media: &MediaDescription) -> HashMap<String, SimulcastRid> {
+pub fn get_rids(media: &MediaDescription) -> HashMap<String, SimulcastRid> {
     let mut rids = HashMap::new();
     let mut simulcast_attr: Option<String> = None;
     for attr in &media.attributes {
@@ -285,7 +285,7 @@ pub(crate) fn get_rids(media: &MediaDescription) -> HashMap<String, SimulcastRid
     rids
 }
 
-pub(crate) async fn add_candidates_to_media_descriptions(
+pub async fn add_candidates_to_media_descriptions(
     candidates: &[RTCIceCandidate],
     mut m: MediaDescription,
     ice_gathering_state: RTCIceGatheringState,
@@ -325,7 +325,7 @@ pub(crate) async fn add_candidates_to_media_descriptions(
     Ok(m.with_property_attribute("end-of-candidates".to_owned()))
 }
 
-pub(crate) struct AddDataMediaSectionParams {
+pub struct AddDataMediaSectionParams {
     should_add_candidates: bool,
     mid_value: String,
     ice_params: RTCIceParameters,
@@ -333,7 +333,7 @@ pub(crate) struct AddDataMediaSectionParams {
     ice_gathering_state: RTCIceGatheringState,
 }
 
-pub(crate) async fn add_data_media_section(
+pub async fn add_data_media_section(
     d: SessionDescription,
     dtls_fingerprints: &[RTCDtlsFingerprint],
     candidates: &[RTCIceCandidate],
@@ -387,7 +387,7 @@ pub(crate) async fn add_data_media_section(
     Ok(d.with_media(media))
 }
 
-pub(crate) async fn populate_local_candidates(
+pub async fn populate_local_candidates(
     session_description: Option<&session_description::RTCSessionDescription>,
     ice_gatherer: Option<&Arc<RTCIceGatherer>>,
     ice_gathering_state: RTCIceGatheringState,
@@ -428,7 +428,7 @@ pub(crate) async fn populate_local_candidates(
     }
 }
 
-pub(crate) struct AddTransceiverSdpParams {
+pub struct AddTransceiverSdpParams {
     should_add_candidates: bool,
     mid_value: String,
     dtls_role: ConnectionRole,
@@ -436,7 +436,7 @@ pub(crate) struct AddTransceiverSdpParams {
     offered_direction: Option<RTCRtpTransceiverDirection>,
 }
 
-pub(crate) async fn add_transceiver_sdp(
+pub async fn add_transceiver_sdp(
     mut d: SessionDescription,
     dtls_fingerprints: &[RTCDtlsFingerprint],
     media_engine: &Arc<MediaEngine>,
@@ -686,7 +686,7 @@ pub(crate) async fn add_transceiver_sdp(
 }
 
 #[derive(thiserror::Error, Debug, PartialEq)]
-pub(crate) enum SimulcastRidParseError {
+pub enum SimulcastRidParseError {
     /// SyntaxIdDirSplit indicates rid-syntax could not be parsed.
     #[error("RFC8851 mandates rid-syntax        = %s\"a=rid:\" rid-id SP rid-dir")]
     SyntaxIdDirSplit,
@@ -696,7 +696,7 @@ pub(crate) enum SimulcastRidParseError {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub(crate) enum SimulcastDirection {
+pub enum SimulcastDirection {
     Send,
     Recv,
 }
@@ -713,11 +713,11 @@ impl TryFrom<&str> for SimulcastDirection {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct SimulcastRid {
-    pub(crate) id: String,
-    pub(crate) direction: SimulcastDirection,
-    pub(crate) params: String,
-    pub(crate) paused: bool,
+pub struct SimulcastRid {
+    pub id: String,
+    pub direction: SimulcastDirection,
+    pub params: String,
+    pub paused: bool,
 }
 
 impl TryFrom<&String> for SimulcastRid {
@@ -745,23 +745,23 @@ impl TryFrom<&String> for SimulcastRid {
 }
 
 #[derive(Default)]
-pub(crate) struct MediaSection {
-    pub(crate) id: String,
-    pub(crate) transceivers: Vec<Arc<RTCRtpTransceiver>>,
-    pub(crate) data: bool,
-    pub(crate) rid_map: HashMap<String, SimulcastRid>,
-    pub(crate) offered_direction: Option<RTCRtpTransceiverDirection>,
+pub struct MediaSection {
+    pub id: String,
+    pub transceivers: Vec<Arc<RTCRtpTransceiver>>,
+    pub data: bool,
+    pub rid_map: HashMap<String, SimulcastRid>,
+    pub offered_direction: Option<RTCRtpTransceiverDirection>,
 }
 
-pub(crate) struct PopulateSdpParams {
-    pub(crate) media_description_fingerprint: bool,
-    pub(crate) is_icelite: bool,
-    pub(crate) connection_role: ConnectionRole,
-    pub(crate) ice_gathering_state: RTCIceGatheringState,
+pub struct PopulateSdpParams {
+    pub media_description_fingerprint: bool,
+    pub is_icelite: bool,
+    pub connection_role: ConnectionRole,
+    pub ice_gathering_state: RTCIceGatheringState,
 }
 
 /// populate_sdp serializes a PeerConnections state into an SDP
-pub(crate) async fn populate_sdp(
+pub async fn populate_sdp(
     mut d: SessionDescription,
     dtls_fingerprints: &[RTCDtlsFingerprint],
     media_engine: &Arc<MediaEngine>,
@@ -846,7 +846,7 @@ pub(crate) async fn populate_sdp(
     Ok(d.with_value_attribute(ATTR_KEY_GROUP.to_owned(), bundle_value))
 }
 
-pub(crate) fn get_mid_value(media: &MediaDescription) -> Option<&String> {
+pub fn get_mid_value(media: &MediaDescription) -> Option<&String> {
     for attr in &media.attributes {
         if attr.key == "mid" {
             return attr.value.as_ref();
@@ -855,7 +855,7 @@ pub(crate) fn get_mid_value(media: &MediaDescription) -> Option<&String> {
     None
 }
 
-pub(crate) fn get_peer_direction(media: &MediaDescription) -> RTCRtpTransceiverDirection {
+pub fn get_peer_direction(media: &MediaDescription) -> RTCRtpTransceiverDirection {
     for a in &media.attributes {
         let direction = RTCRtpTransceiverDirection::from(a.key.as_str());
         if direction != RTCRtpTransceiverDirection::Unspecified {
@@ -865,7 +865,7 @@ pub(crate) fn get_peer_direction(media: &MediaDescription) -> RTCRtpTransceiverD
     RTCRtpTransceiverDirection::Unspecified
 }
 
-pub(crate) fn extract_fingerprint(desc: &SessionDescription) -> Result<(String, String)> {
+pub fn extract_fingerprint(desc: &SessionDescription) -> Result<(String, String)> {
     let mut fingerprints = vec![];
 
     if let Some(fingerprint) = desc.attribute("fingerprint") {
@@ -896,7 +896,7 @@ pub(crate) fn extract_fingerprint(desc: &SessionDescription) -> Result<(String, 
     Ok((parts[1].to_owned(), parts[0].to_owned()))
 }
 
-pub(crate) async fn extract_ice_details(
+pub async fn extract_ice_details(
     desc: &SessionDescription,
 ) -> Result<(String, String, Vec<RTCIceCandidate>)> {
     let mut candidates = vec![];
@@ -950,7 +950,7 @@ pub(crate) async fn extract_ice_details(
     Ok((remote_ufrags[0].clone(), remote_pwds[0].clone(), candidates))
 }
 
-pub(crate) fn have_application_media_section(desc: &SessionDescription) -> bool {
+pub fn have_application_media_section(desc: &SessionDescription) -> bool {
     for m in &desc.media_descriptions {
         if m.media_name.media == MEDIA_SECTION_APPLICATION {
             return true;
@@ -960,7 +960,7 @@ pub(crate) fn have_application_media_section(desc: &SessionDescription) -> bool 
     false
 }
 
-pub(crate) fn get_by_mid<'a>(
+pub fn get_by_mid<'a>(
     search_mid: &str,
     desc: &'a session_description::RTCSessionDescription,
 ) -> Option<&'a MediaDescription> {
@@ -977,7 +977,7 @@ pub(crate) fn get_by_mid<'a>(
 }
 
 /// have_data_channel return MediaDescription with MediaName equal application
-pub(crate) fn have_data_channel(
+pub fn have_data_channel(
     desc: &session_description::RTCSessionDescription,
 ) -> Option<&MediaDescription> {
     if let Some(parsed) = &desc.parsed {
@@ -990,7 +990,7 @@ pub(crate) fn have_data_channel(
     None
 }
 
-pub(crate) fn codecs_from_media_description(
+pub fn codecs_from_media_description(
     m: &MediaDescription,
 ) -> Result<Vec<RTCRtpCodecParameters>> {
     let s = SessionDescription {
@@ -1048,7 +1048,7 @@ pub(crate) fn codecs_from_media_description(
     Ok(out)
 }
 
-pub(crate) fn rtp_extensions_from_media_description(
+pub fn rtp_extensions_from_media_description(
     m: &MediaDescription,
 ) -> Result<HashMap<String, isize>> {
     let mut out = HashMap::new();
@@ -1072,7 +1072,7 @@ pub(crate) fn rtp_extensions_from_media_description(
 /// for subsequent calling, it updates Origin for SessionDescription from saved one
 /// and increments session version by one.
 /// <https://tools.ietf.org/html/draft-ietf-rtcweb-jsep-25#section-5.2.2>
-pub(crate) fn update_sdp_origin(origin: &mut Origin, d: &mut SessionDescription) {
+pub fn update_sdp_origin(origin: &mut Origin, d: &mut SessionDescription) {
     //TODO: if atomic.CompareAndSwapUint64(&origin.SessionVersion, 0, d.Origin.SessionVersion)
     if origin.session_version == 0 {
         // store

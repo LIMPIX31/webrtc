@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod request_test;
+pub mod request_test;
 
 use std::collections::HashMap;
 use std::marker::{Send, Sync};
@@ -43,8 +43,8 @@ use crate::proto::reqtrans::RequestedTransport;
 use crate::proto::rsrvtoken::ReservationToken;
 use crate::proto::*;
 
-pub(crate) const MAXIMUM_ALLOCATION_LIFETIME: Duration = Duration::from_secs(3600); // https://tools.ietf.org/html/rfc5766#section-6.2 defines 3600 seconds recommendation
-pub(crate) const NONCE_LIFETIME: Duration = Duration::from_secs(3600); // https://tools.ietf.org/html/rfc5766#section-4
+pub const MAXIMUM_ALLOCATION_LIFETIME: Duration = Duration::from_secs(3600); // https://tools.ietf.org/html/rfc5766#section-6.2 defines 3600 seconds recommendation
+pub const NONCE_LIFETIME: Duration = Duration::from_secs(3600); // https://tools.ietf.org/html/rfc5766#section-4
 
 /// Request contains all the state needed to process a single incoming datagram
 pub struct Request {
@@ -139,7 +139,7 @@ impl Request {
         }
     }
 
-    pub(crate) async fn authenticate_request(
+    pub async fn authenticate_request(
         &mut self,
         m: &Message,
         calling_method: Method,
@@ -261,7 +261,7 @@ impl Request {
         build_and_send(&self.conn, self.src_addr, msg).await
     }
 
-    pub(crate) async fn handle_binding_request(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_binding_request(&mut self, m: &Message) -> Result<()> {
         log::debug!("received BindingRequest from {}", self.src_addr);
 
         let (ip, port) = (self.src_addr.ip(), self.src_addr.port());
@@ -279,7 +279,7 @@ impl Request {
     }
 
     /// https://tools.ietf.org/html/rfc5766#section-6.2
-    pub(crate) async fn handle_allocate_request(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_allocate_request(&mut self, m: &Message) -> Result<()> {
         log::debug!("received AllocateRequest from {}", self.src_addr);
 
         // 1. The server MUST require that the request be authenticated.  This
@@ -614,7 +614,7 @@ impl Request {
         build_and_send(&self.conn, self.src_addr, msg).await
     }
 
-    pub(crate) async fn handle_refresh_request(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_refresh_request(&mut self, m: &Message) -> Result<()> {
         log::debug!("received RefreshRequest from {}", self.src_addr);
 
         let (_, message_integrity) =
@@ -680,7 +680,7 @@ impl Request {
         build_and_send(&self.conn, self.src_addr, msg).await
     }
 
-    pub(crate) async fn handle_create_permission_request(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_create_permission_request(&mut self, m: &Message) -> Result<()> {
         log::debug!("received CreatePermission from {}", self.src_addr);
 
         let a = self
@@ -771,7 +771,7 @@ impl Request {
         }
     }
 
-    pub(crate) async fn handle_send_indication(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_send_indication(&mut self, m: &Message) -> Result<()> {
         log::debug!("received SendIndication from {}", self.src_addr);
 
         let a = self
@@ -812,7 +812,7 @@ impl Request {
         }
     }
 
-    pub(crate) async fn handle_channel_bind_request(&mut self, m: &Message) -> Result<()> {
+    pub async fn handle_channel_bind_request(&mut self, m: &Message) -> Result<()> {
         log::debug!("received ChannelBindRequest from {}", self.src_addr);
 
         let a = self
@@ -913,7 +913,7 @@ impl Request {
         }
     }
 
-    pub(crate) async fn handle_channel_data(&mut self, c: &ChannelData) -> Result<()> {
+    pub async fn handle_channel_data(&mut self, c: &ChannelData) -> Result<()> {
         log::debug!("received ChannelData from {}", self.src_addr);
 
         let a = self
@@ -946,7 +946,7 @@ impl Request {
     }
 }
 
-pub(crate) fn rand_seq(n: usize) -> String {
+pub fn rand_seq(n: usize) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes();
     let mut buf = vec![0u8; n];
     for b in &mut buf {
@@ -959,7 +959,7 @@ pub(crate) fn rand_seq(n: usize) -> String {
     }
 }
 
-pub(crate) fn build_nonce() -> Result<String> {
+pub fn build_nonce() -> Result<String> {
     /* #nosec */
     let mut s = String::new();
     s.push_str(
@@ -978,7 +978,7 @@ pub(crate) fn build_nonce() -> Result<String> {
     Ok(format!("{:x}", h.finalize()))
 }
 
-pub(crate) async fn build_and_send(
+pub async fn build_and_send(
     conn: &Arc<dyn Conn + Send + Sync>,
     dst: SocketAddr,
     msg: Message,
@@ -988,7 +988,7 @@ pub(crate) async fn build_and_send(
 }
 
 /// Send a STUN packet and return the original error to the caller
-pub(crate) async fn build_and_send_err(
+pub async fn build_and_send_err(
     conn: &Arc<dyn Conn + Send + Sync>,
     dst: SocketAddr,
     msg: Message,
@@ -999,7 +999,7 @@ pub(crate) async fn build_and_send_err(
     Err(err)
 }
 
-pub(crate) fn build_msg(
+pub fn build_msg(
     transaction_id: TransactionId,
     msg_type: MessageType,
     mut additional: Vec<Box<dyn Setter>>,
@@ -1019,7 +1019,7 @@ pub(crate) fn build_msg(
     Ok(msg)
 }
 
-pub(crate) fn allocation_lifetime(m: &Message) -> Duration {
+pub fn allocation_lifetime(m: &Message) -> Duration {
     let mut lifetime_duration = DEFAULT_LIFETIME;
 
     let mut lifetime = Lifetime::default();

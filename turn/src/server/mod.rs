@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod server_test;
+pub mod server_test;
 
 pub mod config;
 pub mod request;
@@ -29,7 +29,7 @@ pub struct Server {
     auth_handler: Arc<dyn AuthHandler + Send + Sync>,
     realm: String,
     channel_bind_timeout: Duration,
-    pub(crate) nonces: Arc<Mutex<HashMap<String, Instant>>>,
+    pub nonces: Arc<Mutex<HashMap<String, Instant>>>,
     command_tx: Mutex<Option<broadcast::Sender<Command>>>,
 }
 

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod addr_test;
+pub mod addr_test;
 
 use std::fmt;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
@@ -8,10 +8,10 @@ use crate::attributes::*;
 use crate::error::*;
 use crate::message::*;
 
-pub(crate) const FAMILY_IPV4: u16 = 0x01;
-pub(crate) const FAMILY_IPV6: u16 = 0x02;
-pub(crate) const IPV4LEN: usize = 4;
-pub(crate) const IPV6LEN: usize = 16;
+pub const FAMILY_IPV4: u16 = 0x01;
+pub const FAMILY_IPV6: u16 = 0x02;
+pub const IPV4LEN: usize = 4;
+pub const IPV6LEN: usize = 16;
 
 /// MappedAddress represents MAPPED-ADDRESS attribute.
 ///

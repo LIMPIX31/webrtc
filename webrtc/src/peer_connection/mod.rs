@@ -1,11 +1,11 @@
 #[cfg(test)]
-pub(crate) mod peer_connection_test;
+pub mod peer_connection_test;
 
 pub mod certificate;
 pub mod configuration;
 pub mod offer_answer_options;
-pub(crate) mod operation;
-mod peer_connection_internal;
+pub mod operation;
+pub mod peer_connection_internal;
 pub mod peer_connection_state;
 pub mod policy;
 pub mod sdp;
@@ -89,13 +89,13 @@ use crate::track::track_remote::TrackRemote;
 /// SIMULCAST_PROBE_COUNT is the amount of RTP Packets
 /// that handleUndeclaredSSRC will read and try to dispatch from
 /// mid and rid values
-pub(crate) const SIMULCAST_PROBE_COUNT: usize = 10;
+pub const SIMULCAST_PROBE_COUNT: usize = 10;
 
 /// SIMULCAST_MAX_PROBE_ROUTINES is how many active routines can be used to probe
 /// If the total amount of incoming SSRCes exceeds this new requests will be ignored
-pub(crate) const SIMULCAST_MAX_PROBE_ROUTINES: u64 = 25;
+pub const SIMULCAST_MAX_PROBE_ROUTINES: u64 = 25;
 
-pub(crate) const MEDIA_SECTION_APPLICATION: &str = "application";
+pub const MEDIA_SECTION_APPLICATION: &str = "application";
 
 const RUNES_ALPHA: &[u8] = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -192,7 +192,7 @@ pub struct RTCPeerConnection {
 
     interceptor: Arc<dyn Interceptor + Send + Sync>,
 
-    pub(crate) internal: Arc<PeerConnectionInternal>,
+    pub internal: Arc<PeerConnectionInternal>,
 }
 
 impl std::fmt::Debug for RTCPeerConnection {
@@ -219,7 +219,7 @@ impl RTCPeerConnection {
     /// If you wish to customize the set of available codecs or the set of
     /// active interceptors, create a MediaEngine and call api.new_peer_connection
     /// instead of this function.
-    pub(crate) async fn new(api: &API, mut configuration: RTCConfiguration) -> Result<Self> {
+    pub async fn new(api: &API, mut configuration: RTCConfiguration) -> Result<Self> {
         RTCPeerConnection::init_configuration(&mut configuration)?;
 
         let (interceptor, stats_interceptor): (Arc<dyn Interceptor + Send + Sync>, _) = {
@@ -975,7 +975,7 @@ impl RTCPeerConnection {
     }
 
     // 4.4.1.6 Set the SessionDescription
-    pub(crate) async fn set_description(
+    pub async fn set_description(
         &self,
         sd: &RTCSessionDescription,
         op: StateChangeOp,
@@ -1601,7 +1601,7 @@ impl RTCPeerConnection {
     }
 
     /// start_rtp_senders starts all outbound RTP streams
-    pub(crate) async fn start_rtp_senders(&self) -> Result<()> {
+    pub async fn start_rtp_senders(&self) -> Result<()> {
         let current_transceivers = self.internal.rtp_transceivers.lock().await;
         for transceiver in &*current_transceivers {
             let sender = transceiver.sender().await;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod change_cipher_spec_test;
+pub mod change_cipher_spec_test;
 
 use std::io::{Read, Write};
 

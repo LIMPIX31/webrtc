@@ -141,7 +141,7 @@ impl<'de> Visitor<'de> for SerdeVisitor {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
     use crate::property::all::name::*;
 
@@ -197,7 +197,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::macros::test_serde_symmetry;
     use crate::property::all::name::*;

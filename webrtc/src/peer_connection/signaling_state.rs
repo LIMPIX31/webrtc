@@ -4,7 +4,7 @@ use crate::error::{Error, Result};
 use crate::peer_connection::sdp::sdp_type::RTCSdpType;
 
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum StateChangeOp {
+pub enum StateChangeOp {
     #[default]
     SetLocal,
     SetRemote,
@@ -110,7 +110,7 @@ impl From<u8> for RTCSignalingState {
     }
 }
 
-pub(crate) fn check_next_signaling_state(
+pub fn check_next_signaling_state(
     cur: RTCSignalingState,
     next: RTCSignalingState,
     op: StateChangeOp,
@@ -215,7 +215,7 @@ pub(crate) fn check_next_signaling_state(
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

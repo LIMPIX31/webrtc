@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod slice_loss_indication_test;
+pub mod slice_loss_indication_test;
 
 use std::any::Any;
 use std::fmt;

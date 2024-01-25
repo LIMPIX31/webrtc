@@ -18,7 +18,7 @@ use crate::message::resource::a::*;
 use crate::message::resource::*;
 use crate::message::*;
 
-mod conn_test;
+pub mod conn_test;
 
 pub const DEFAULT_DEST_ADDR: &str = "224.0.0.251:5353";
 

@@ -121,26 +121,26 @@ impl GeneratorStreamInternal {
     }
 }
 
-pub(super) struct GeneratorStream {
+pub struct GeneratorStream {
     parent_rtp_reader: Arc<dyn RTPReader + Send + Sync>,
 
     internal: Mutex<GeneratorStreamInternal>,
 }
 
 impl GeneratorStream {
-    pub(super) fn new(log2_size_minus_6: u8, reader: Arc<dyn RTPReader + Send + Sync>) -> Self {
+    pub fn new(log2_size_minus_6: u8, reader: Arc<dyn RTPReader + Send + Sync>) -> Self {
         GeneratorStream {
             parent_rtp_reader: reader,
             internal: Mutex::new(GeneratorStreamInternal::new(log2_size_minus_6)),
         }
     }
 
-    pub(super) fn missing_seq_numbers(&self, skip_last_n: u16) -> Vec<u16> {
+    pub fn missing_seq_numbers(&self, skip_last_n: u16) -> Vec<u16> {
         let internal = self.internal.lock();
         internal.missing_seq_numbers(skip_last_n)
     }
 
-    pub(super) fn add(&self, seq: u16) {
+    pub fn add(&self, seq: u16) {
         let mut internal = self.internal.lock();
         internal.add(seq);
     }
@@ -164,7 +164,7 @@ impl RTPReader for GeneratorStream {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod xoraddr_test;
+pub mod xoraddr_test;
 
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use std::{fmt, mem};

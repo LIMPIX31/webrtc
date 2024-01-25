@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_server_hello_done_test;
+pub mod handshake_message_server_hello_done_test;
 
 use std::io::{Read, Write};
 

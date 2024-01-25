@@ -30,7 +30,7 @@ use crate::error::Result;
 
 /// Cipher represents a implementation of one
 /// of the SRTP Specific ciphers.
-pub(crate) trait Cipher {
+pub trait Cipher {
     /// Get authenticated tag length.
     fn auth_tag_len(&self) -> usize;
 

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod message_test;
+pub mod message_test;
 
 pub mod message_channel_ack;
 pub mod message_channel_open;

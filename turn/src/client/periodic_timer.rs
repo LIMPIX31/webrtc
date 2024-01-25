@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod periodic_timer_test;
+pub mod periodic_timer_test;
 
 use std::sync::Arc;
 

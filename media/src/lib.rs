@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 
 pub mod audio;
-mod error;
+pub mod error;
 pub mod io;
 pub mod video;
 

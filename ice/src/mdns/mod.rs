@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod mdns_test;
+pub mod mdns_test;
 
 use std::net::SocketAddr;
 use std::str::FromStr;
@@ -30,14 +30,14 @@ impl Default for MulticastDnsMode {
     }
 }
 
-pub(crate) fn generate_multicast_dns_name() -> String {
+pub fn generate_multicast_dns_name() -> String {
     // https://tools.ietf.org/id/draft-ietf-rtcweb-mdns-ice-candidates-02.html#gathering
     // The unique name MUST consist of a version 4 UUID as defined in [RFC4122], followed by “.local”.
     let u = Uuid::new_v4();
     format!("{u}.local")
 }
 
-pub(crate) fn create_multicast_dns(
+pub fn create_multicast_dns(
     mdns_mode: MulticastDnsMode,
     mdns_name: &str,
     dest_addr: &str,

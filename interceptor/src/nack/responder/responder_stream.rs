@@ -62,13 +62,13 @@ impl ResponderStreamInternal {
     }
 }
 
-pub(super) struct ResponderStream {
+pub struct ResponderStream {
     internal: Mutex<ResponderStreamInternal>,
-    pub(super) next_rtp_writer: Arc<dyn RTPWriter + Send + Sync>,
+    pub next_rtp_writer: Arc<dyn RTPWriter + Send + Sync>,
 }
 
 impl ResponderStream {
-    pub(super) fn new(log2_size: u8, writer: Arc<dyn RTPWriter + Send + Sync>) -> Self {
+    pub fn new(log2_size: u8, writer: Arc<dyn RTPWriter + Send + Sync>) -> Self {
         ResponderStream {
             internal: Mutex::new(ResponderStreamInternal::new(log2_size)),
             next_rtp_writer: writer,
@@ -80,7 +80,7 @@ impl ResponderStream {
         internal.add(pkt);
     }
 
-    pub(super) async fn get(&self, seq: u16) -> Option<rtp::packet::Packet> {
+    pub async fn get(&self, seq: u16) -> Option<rtp::packet::Packet> {
         let internal = self.internal.lock().await;
         internal.get(seq).cloned()
     }
@@ -98,7 +98,7 @@ impl RTPWriter for ResponderStream {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

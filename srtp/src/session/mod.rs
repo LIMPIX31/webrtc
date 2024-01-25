@@ -1,7 +1,7 @@
 #[cfg(test)]
-mod session_rtcp_test;
+pub mod session_rtcp_test;
 #[cfg(test)]
-mod session_rtp_test;
+pub mod session_rtp_test;
 
 use std::collections::{HashMap, HashSet};
 use std::marker::{Send, Sync};
@@ -31,7 +31,7 @@ pub struct Session {
     new_stream_rx: Arc<Mutex<mpsc::Receiver<Arc<Stream>>>>,
     close_stream_tx: mpsc::Sender<u32>,
     close_session_tx: mpsc::Sender<()>,
-    pub(crate) udp_tx: Arc<dyn Conn + Send + Sync>,
+    pub udp_tx: Arc<dyn Conn + Send + Sync>,
     is_rtp: bool,
 }
 

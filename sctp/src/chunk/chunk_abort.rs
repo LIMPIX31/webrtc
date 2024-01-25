@@ -27,8 +27,8 @@ use crate::error_cause::*;
 ///|                                                               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone)]
-pub(crate) struct ChunkAbort {
-    pub(crate) error_causes: Vec<ErrorCause>,
+pub struct ChunkAbort {
+    pub error_causes: Vec<ErrorCause>,
 }
 
 /// String makes chunkAbort printable

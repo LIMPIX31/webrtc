@@ -8,7 +8,7 @@ use super::*;
 
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
 #[repr(C)]
-pub(crate) enum ReconfigResult {
+pub enum ReconfigResult {
     SuccessNop = 0,
     SuccessPerformed = 1,
     Denied = 2,
@@ -70,13 +70,13 @@ impl From<u32> for ReconfigResult {
 ///|                  Receiver's Next TSN (optional)               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamReconfigResponse {
+pub struct ParamReconfigResponse {
     /// This value is copied from the request parameter and is used by the
     /// receiver of the Re-configuration Response Parameter to tie the
     /// response to the request.
-    pub(crate) reconfig_response_sequence_number: u32,
+    pub reconfig_response_sequence_number: u32,
     /// This value describes the result of the processing of the request.
-    pub(crate) result: ReconfigResult,
+    pub result: ReconfigResult,
 }
 
 impl fmt::Display for ParamReconfigResponse {

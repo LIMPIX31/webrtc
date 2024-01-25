@@ -6,21 +6,21 @@ use crate::error::{Error, Result};
 
 /// errorCauseCode is a cause code that appears in either a ERROR or ABORT chunk
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
-pub(crate) struct ErrorCauseCode(pub(crate) u16);
+pub struct ErrorCauseCode(pub u16);
 
-pub(crate) const INVALID_STREAM_IDENTIFIER: ErrorCauseCode = ErrorCauseCode(1);
-pub(crate) const MISSING_MANDATORY_PARAMETER: ErrorCauseCode = ErrorCauseCode(2);
-pub(crate) const STALE_COOKIE_ERROR: ErrorCauseCode = ErrorCauseCode(3);
-pub(crate) const OUT_OF_RESOURCE: ErrorCauseCode = ErrorCauseCode(4);
-pub(crate) const UNRESOLVABLE_ADDRESS: ErrorCauseCode = ErrorCauseCode(5);
-pub(crate) const UNRECOGNIZED_CHUNK_TYPE: ErrorCauseCode = ErrorCauseCode(6);
-pub(crate) const INVALID_MANDATORY_PARAMETER: ErrorCauseCode = ErrorCauseCode(7);
-pub(crate) const UNRECOGNIZED_PARAMETERS: ErrorCauseCode = ErrorCauseCode(8);
-pub(crate) const NO_USER_DATA: ErrorCauseCode = ErrorCauseCode(9);
-pub(crate) const COOKIE_RECEIVED_WHILE_SHUTTING_DOWN: ErrorCauseCode = ErrorCauseCode(10);
-pub(crate) const RESTART_OF_AN_ASSOCIATION_WITH_NEW_ADDRESSES: ErrorCauseCode = ErrorCauseCode(11);
-pub(crate) const USER_INITIATED_ABORT: ErrorCauseCode = ErrorCauseCode(12);
-pub(crate) const PROTOCOL_VIOLATION: ErrorCauseCode = ErrorCauseCode(13);
+pub const INVALID_STREAM_IDENTIFIER: ErrorCauseCode = ErrorCauseCode(1);
+pub const MISSING_MANDATORY_PARAMETER: ErrorCauseCode = ErrorCauseCode(2);
+pub const STALE_COOKIE_ERROR: ErrorCauseCode = ErrorCauseCode(3);
+pub const OUT_OF_RESOURCE: ErrorCauseCode = ErrorCauseCode(4);
+pub const UNRESOLVABLE_ADDRESS: ErrorCauseCode = ErrorCauseCode(5);
+pub const UNRECOGNIZED_CHUNK_TYPE: ErrorCauseCode = ErrorCauseCode(6);
+pub const INVALID_MANDATORY_PARAMETER: ErrorCauseCode = ErrorCauseCode(7);
+pub const UNRECOGNIZED_PARAMETERS: ErrorCauseCode = ErrorCauseCode(8);
+pub const NO_USER_DATA: ErrorCauseCode = ErrorCauseCode(9);
+pub const COOKIE_RECEIVED_WHILE_SHUTTING_DOWN: ErrorCauseCode = ErrorCauseCode(10);
+pub const RESTART_OF_AN_ASSOCIATION_WITH_NEW_ADDRESSES: ErrorCauseCode = ErrorCauseCode(11);
+pub const USER_INITIATED_ABORT: ErrorCauseCode = ErrorCauseCode(12);
+pub const PROTOCOL_VIOLATION: ErrorCauseCode = ErrorCauseCode(13);
 
 impl fmt::Display for ErrorCauseCode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -49,16 +49,16 @@ impl fmt::Display for ErrorCauseCode {
 
 /// ErrorCauseHeader represents the shared header that is shared by all error causes
 #[derive(Debug, Clone, Default)]
-pub(crate) struct ErrorCause {
-    pub(crate) code: ErrorCauseCode,
-    pub(crate) raw: Bytes,
+pub struct ErrorCause {
+    pub code: ErrorCauseCode,
+    pub raw: Bytes,
 }
 
 /// ErrorCauseInvalidMandatoryParameter represents an SCTP error cause
-pub(crate) type ErrorCauseInvalidMandatoryParameter = ErrorCause;
+pub type ErrorCauseInvalidMandatoryParameter = ErrorCause;
 
 /// ErrorCauseUnrecognizedChunkType represents an SCTP error cause
-pub(crate) type ErrorCauseUnrecognizedChunkType = ErrorCause;
+pub type ErrorCauseUnrecognizedChunkType = ErrorCause;
 
 ///
 /// This error cause MAY be included in ABORT chunks that are sent
@@ -76,9 +76,9 @@ pub(crate) type ErrorCauseUnrecognizedChunkType = ErrorCause;
 ///     \                                                               \
 ///     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ///
-pub(crate) type ErrorCauseProtocolViolation = ErrorCause;
+pub type ErrorCauseProtocolViolation = ErrorCause;
 
-pub(crate) const ERROR_CAUSE_HEADER_LENGTH: usize = 4;
+pub const ERROR_CAUSE_HEADER_LENGTH: usize = 4;
 
 /// makes ErrorCauseHeader printable
 impl fmt::Display for ErrorCause {
@@ -88,7 +88,7 @@ impl fmt::Display for ErrorCause {
 }
 
 impl ErrorCause {
-    pub(crate) fn unmarshal(buf: &Bytes) -> Result<Self> {
+    pub fn unmarshal(buf: &Bytes) -> Result<Self> {
         if buf.len() < ERROR_CAUSE_HEADER_LENGTH {
             return Err(Error::ErrErrorCauseTooSmall);
         }
@@ -112,13 +112,13 @@ impl ErrorCause {
         Ok(ErrorCause { code, raw })
     }
 
-    pub(crate) fn marshal(&self) -> Bytes {
+    pub fn marshal(&self) -> Bytes {
         let mut buf = BytesMut::with_capacity(self.length());
         let _ = self.marshal_to(&mut buf);
         buf.freeze()
     }
 
-    pub(crate) fn marshal_to(&self, writer: &mut BytesMut) -> usize {
+    pub fn marshal_to(&self, writer: &mut BytesMut) -> usize {
         let len = self.raw.len() + ERROR_CAUSE_HEADER_LENGTH;
         writer.put_u16(self.code.0);
         writer.put_u16(len as u16);
@@ -126,11 +126,11 @@ impl ErrorCause {
         writer.len()
     }
 
-    pub(crate) fn length(&self) -> usize {
+    pub fn length(&self) -> usize {
         self.raw.len() + ERROR_CAUSE_HEADER_LENGTH
     }
 
-    pub(crate) fn error_cause_code(&self) -> ErrorCauseCode {
+    pub fn error_cause_code(&self) -> ErrorCauseCode {
         self.code
     }
 }

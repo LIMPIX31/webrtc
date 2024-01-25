@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod description_test;
+pub mod description_test;
 
 pub mod common;
 pub mod media;

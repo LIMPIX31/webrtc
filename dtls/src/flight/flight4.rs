@@ -33,7 +33,7 @@ use crate::record_layer::*;
 use crate::signature_hash_algorithm::*;
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct Flight4;
+pub struct Flight4;
 
 impl fmt::Display for Flight4 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -725,7 +725,7 @@ impl Flight for Flight4 {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::sync::Arc;
 
     use tokio::sync::Mutex;

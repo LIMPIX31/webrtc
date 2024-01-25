@@ -1,6 +1,6 @@
-mod value;
-mod value_range;
-mod value_sequence;
+pub mod value;
+pub mod value_range;
+pub mod value_sequence;
 
 use std::ops::RangeInclusive;
 
@@ -97,7 +97,7 @@ impl From<Vec<&str>> for MediaTrackCapability {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     type Subject = MediaTrackCapability;
@@ -157,7 +157,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::macros::test_serde_symmetry;
 

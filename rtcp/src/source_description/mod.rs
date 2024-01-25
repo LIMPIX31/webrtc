@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod source_description_test;
+pub mod source_description_test;
 
 use std::any::Any;
 use std::fmt;

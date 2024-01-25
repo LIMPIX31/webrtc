@@ -2,9 +2,9 @@ use super::*;
 use crate::error::Error;
 
 // The first byte in a `Message` that specifies its type:
-pub(crate) const MESSAGE_TYPE_ACK: u8 = 0x02;
-pub(crate) const MESSAGE_TYPE_OPEN: u8 = 0x03;
-pub(crate) const MESSAGE_TYPE_LEN: usize = 1;
+pub const MESSAGE_TYPE_ACK: u8 = 0x02;
+pub const MESSAGE_TYPE_OPEN: u8 = 0x03;
+pub const MESSAGE_TYPE_LEN: usize = 1;
 
 type Result<T> = std::result::Result<T, util::Error>;
 
@@ -59,7 +59,7 @@ impl Unmarshal for MessageType {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use bytes::{Bytes, BytesMut};
 
     use super::*;

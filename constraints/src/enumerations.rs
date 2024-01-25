@@ -96,7 +96,7 @@ impl std::fmt::Display for ResizeMode {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     mod facing_mode {

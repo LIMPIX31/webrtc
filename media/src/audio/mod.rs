@@ -1,8 +1,8 @@
 pub mod buffer;
-mod sample;
+pub mod sample;
 
 pub use sample::Sample;
 
-mod sealed {
+pub mod sealed {
     pub trait Sealed {}
 }

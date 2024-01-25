@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod lifetime_test;
+pub mod lifetime_test;
 
 use std::fmt;
 use std::time::Duration;

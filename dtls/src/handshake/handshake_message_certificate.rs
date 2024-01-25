@@ -5,13 +5,13 @@ use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 use super::*;
 
 #[cfg(test)]
-mod handshake_message_certificate_test;
+pub mod handshake_message_certificate_test;
 
 const HANDSHAKE_MESSAGE_CERTIFICATE_LENGTH_FIELD_SIZE: usize = 3;
 
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub struct HandshakeMessageCertificate {
-    pub(crate) certificate: Vec<Vec<u8>>,
+    pub certificate: Vec<Vec<u8>>,
 }
 
 impl HandshakeMessageCertificate {

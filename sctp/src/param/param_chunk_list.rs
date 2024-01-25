@@ -6,8 +6,8 @@ use super::*;
 use crate::chunk::chunk_type::*;
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamChunkList {
-    pub(crate) chunk_types: Vec<ChunkType>,
+pub struct ParamChunkList {
+    pub chunk_types: Vec<ChunkType>,
 }
 
 impl fmt::Display for ParamChunkList {

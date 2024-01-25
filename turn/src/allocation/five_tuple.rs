@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod five_tuple_test;
+pub mod five_tuple_test;
 
 use std::fmt;
 use std::net::{Ipv4Addr, SocketAddr};

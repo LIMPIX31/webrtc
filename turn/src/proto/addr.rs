@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod addr_test;
+pub mod addr_test;
 
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 

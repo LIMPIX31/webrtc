@@ -8,10 +8,10 @@ use crate::codecs::av1::packetizer::{
 use crate::packetizer::Payloader;
 
 #[cfg(test)]
-mod av1_test;
-mod leb128;
-mod obu;
-mod packetizer;
+pub mod av1_test;
+pub mod leb128;
+pub mod obu;
+pub mod packetizer;
 
 #[derive(Default, Clone, Debug)]
 pub struct Av1Payloader {}

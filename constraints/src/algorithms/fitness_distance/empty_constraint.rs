@@ -17,7 +17,7 @@ impl<'a, T> FitnessDistance<Option<&'a T>> for EmptyConstraint {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     type Constraint = EmptyConstraint;

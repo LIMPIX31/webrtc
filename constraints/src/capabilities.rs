@@ -1,5 +1,5 @@
-mod stream;
-mod track;
+pub mod stream;
+pub mod track;
 
-pub(crate) use self::stream::MediaStreamCapabilities;
+pub use self::stream::MediaStreamCapabilities;
 pub use self::track::MediaTrackCapabilities;

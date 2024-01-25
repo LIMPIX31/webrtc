@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod allocation_manager_test;
+pub mod allocation_manager_test;
 
 use std::collections::HashMap;
 

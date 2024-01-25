@@ -17,8 +17,8 @@ use super::*;
 /// |                                                               |
 /// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone)]
-pub(crate) struct ChunkCookieEcho {
-    pub(crate) cookie: Bytes,
+pub struct ChunkCookieEcho {
+    pub cookie: Bytes,
 }
 
 /// makes ChunkCookieEcho printable

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod rapid_resynchronization_request_test;
+pub mod rapid_resynchronization_request_test;
 
 use std::any::Any;
 use std::fmt;

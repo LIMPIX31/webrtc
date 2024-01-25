@@ -8,22 +8,22 @@ use crate::key_derivation::*;
 use crate::protection_profile::*;
 
 #[cfg(not(feature = "openssl"))]
-mod ctrcipher;
+pub mod ctrcipher;
 
 #[cfg(feature = "openssl")]
-mod opensslcipher;
+pub mod opensslcipher;
 
 #[cfg(not(feature = "openssl"))]
-pub(crate) use ctrcipher::CipherAesCmHmacSha1;
+pub use ctrcipher::CipherAesCmHmacSha1;
 
 #[cfg(feature = "openssl")]
-pub(crate) use opensslcipher::CipherAesCmHmacSha1;
+pub use opensslcipher::CipherAesCmHmacSha1;
 
 type HmacSha1 = Hmac<Sha1>;
 
 pub const CIPHER_AES_CM_HMAC_SHA1AUTH_TAG_LEN: usize = 10;
 
-pub(crate) struct CipherInner {
+pub struct CipherInner {
     srtp_session_salt: Vec<u8>,
     srtp_session_auth: HmacSha1,
     srtcp_session_salt: Vec<u8>,

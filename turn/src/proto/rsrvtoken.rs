@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod rsrvtoken_test;
+pub mod rsrvtoken_test;
 
 use stun::attributes::*;
 use stun::checks::*;

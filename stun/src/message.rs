@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod message_test;
+pub mod message_test;
 
 use std::fmt;
 use std::io::{Read, Write};

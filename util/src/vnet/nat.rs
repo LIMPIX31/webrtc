@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod nat_test;
+pub mod nat_test;
 
 use std::collections::{HashMap, HashSet};
 use std::net::IpAddr;
@@ -59,15 +59,15 @@ pub struct NatType {
 }
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct NatConfig {
-    pub(crate) name: String,
-    pub(crate) nat_type: NatType,
-    pub(crate) mapped_ips: Vec<IpAddr>, // mapped IPv4
-    pub(crate) local_ips: Vec<IpAddr>,  // local IPv4, required only when the mode is NATModeNAT1To1
+pub struct NatConfig {
+    pub name: String,
+    pub nat_type: NatType,
+    pub mapped_ips: Vec<IpAddr>, // mapped IPv4
+    pub local_ips: Vec<IpAddr>,  // local IPv4, required only when the mode is NATModeNAT1To1
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct Mapping {
+pub struct Mapping {
     proto: String,                        // "udp" or "tcp"
     local: String,                        // "<local-ip>:<local-port>"
     mapped: String,                       // "<mapped-ip>:<mapped-port>"
@@ -90,18 +90,18 @@ impl Default for Mapping {
 }
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct NetworkAddressTranslator {
-    pub(crate) name: String,
-    pub(crate) nat_type: NatType,
-    pub(crate) mapped_ips: Vec<IpAddr>, // mapped IPv4
-    pub(crate) local_ips: Vec<IpAddr>,  // local IPv4, required only when the mode is NATModeNAT1To1
-    pub(crate) outbound_map: Arc<Mutex<HashMap<String, Arc<Mapping>>>>, // key: "<proto>:<local-ip>:<local-port>[:remote-ip[:remote-port]]
-    pub(crate) inbound_map: Arc<Mutex<HashMap<String, Arc<Mapping>>>>, // key: "<proto>:<mapped-ip>:<mapped-port>"
-    pub(crate) udp_port_counter: Arc<AtomicU16>,
+pub struct NetworkAddressTranslator {
+    pub name: String,
+    pub nat_type: NatType,
+    pub mapped_ips: Vec<IpAddr>, // mapped IPv4
+    pub local_ips: Vec<IpAddr>,  // local IPv4, required only when the mode is NATModeNAT1To1
+    pub outbound_map: Arc<Mutex<HashMap<String, Arc<Mapping>>>>, // key: "<proto>:<local-ip>:<local-port>[:remote-ip[:remote-port]]
+    pub inbound_map: Arc<Mutex<HashMap<String, Arc<Mapping>>>>, // key: "<proto>:<mapped-ip>:<mapped-port>"
+    pub udp_port_counter: Arc<AtomicU16>,
 }
 
 impl NetworkAddressTranslator {
-    pub(crate) fn new(config: NatConfig) -> Result<Self> {
+    pub fn new(config: NatConfig) -> Result<Self> {
         let mut nat_type = config.nat_type;
 
         if nat_type.mode == NatMode::Nat1To1 {
@@ -136,7 +136,7 @@ impl NetworkAddressTranslator {
         })
     }
 
-    pub(crate) fn get_paired_mapped_ip(&self, loc_ip: &IpAddr) -> Option<&IpAddr> {
+    pub fn get_paired_mapped_ip(&self, loc_ip: &IpAddr) -> Option<&IpAddr> {
         for (i, ip) in self.local_ips.iter().enumerate() {
             if ip == loc_ip {
                 return self.mapped_ips.get(i);
@@ -145,7 +145,7 @@ impl NetworkAddressTranslator {
         None
     }
 
-    pub(crate) fn get_paired_local_ip(&self, mapped_ip: &IpAddr) -> Option<&IpAddr> {
+    pub fn get_paired_local_ip(&self, mapped_ip: &IpAddr) -> Option<&IpAddr> {
         for (i, ip) in self.mapped_ips.iter().enumerate() {
             if ip == mapped_ip {
                 return self.local_ips.get(i);
@@ -154,7 +154,7 @@ impl NetworkAddressTranslator {
         None
     }
 
-    pub(crate) async fn translate_outbound(
+    pub async fn translate_outbound(
         &self,
         from: &(dyn Chunk + Send + Sync),
     ) -> Result<Option<Box<dyn Chunk + Send + Sync>>> {
@@ -285,7 +285,7 @@ impl NetworkAddressTranslator {
         Err(Error::ErrNonUdpTranslationNotSupported)
     }
 
-    pub(crate) async fn translate_inbound(
+    pub async fn translate_inbound(
         &self,
         from: &(dyn Chunk + Send + Sync),
     ) -> Result<Option<Box<dyn Chunk + Send + Sync>>> {
@@ -362,7 +362,7 @@ impl NetworkAddressTranslator {
     }
 
     // caller must hold the mutex
-    pub(crate) async fn find_outbound_mapping(&self, o_key: &str) -> Option<Arc<Mapping>> {
+    pub async fn find_outbound_mapping(&self, o_key: &str) -> Option<Arc<Mapping>> {
         let mapping_life_time = self.nat_type.mapping_life_time;
         let mut expired = false;
         let (in_key, out_key) = {
@@ -404,7 +404,7 @@ impl NetworkAddressTranslator {
     }
 
     // caller must hold the mutex
-    pub(crate) async fn find_inbound_mapping(&self, i_key: &str) -> Option<Arc<Mapping>> {
+    pub async fn find_inbound_mapping(&self, i_key: &str) -> Option<Arc<Mapping>> {
         let mut expired = false;
         let (in_key, out_key) = {
             let inbound_map = self.inbound_map.lock().await;

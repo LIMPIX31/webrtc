@@ -1,6 +1,6 @@
-mod sender_stream;
+pub mod sender_stream;
 #[cfg(test)]
-mod sender_test;
+pub mod sender_test;
 
 use std::collections::HashMap;
 use std::time::{Duration, SystemTime};
@@ -13,19 +13,19 @@ use super::*;
 use crate::error::Error;
 use crate::*;
 
-pub(crate) struct SenderReportInternal {
-    pub(crate) interval: Duration,
-    pub(crate) now: Option<FnTimeGen>,
-    pub(crate) streams: Mutex<HashMap<u32, Arc<SenderStream>>>,
-    pub(crate) close_rx: Mutex<Option<mpsc::Receiver<()>>>,
+pub struct SenderReportInternal {
+    pub interval: Duration,
+    pub now: Option<FnTimeGen>,
+    pub streams: Mutex<HashMap<u32, Arc<SenderStream>>>,
+    pub close_rx: Mutex<Option<mpsc::Receiver<()>>>,
 }
 
 /// SenderReport interceptor generates sender reports.
 pub struct SenderReport {
-    pub(crate) internal: Arc<SenderReportInternal>,
+    pub internal: Arc<SenderReportInternal>,
 
-    pub(crate) wg: Mutex<Option<WaitGroup>>,
-    pub(crate) close_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub wg: Mutex<Option<WaitGroup>>,
+    pub close_tx: Mutex<Option<mpsc::Sender<()>>>,
 }
 
 impl SenderReport {

@@ -122,7 +122,7 @@ impl From<ConnectionState> for RTCIceTransportState {
 }
 
 impl RTCIceTransportState {
-    pub(crate) fn to_ice(self) -> ConnectionState {
+    pub fn to_ice(self) -> ConnectionState {
         match self {
             RTCIceTransportState::New => ConnectionState::New,
             RTCIceTransportState::Checking => ConnectionState::Checking,
@@ -137,7 +137,7 @@ impl RTCIceTransportState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

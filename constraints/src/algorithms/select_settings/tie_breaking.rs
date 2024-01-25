@@ -100,7 +100,7 @@ impl TieBreakingPolicy for ClosestToIdealPolicy {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::iter::FromIterator;
 
     use super::*;

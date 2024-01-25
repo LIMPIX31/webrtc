@@ -291,7 +291,7 @@ impl RTPReader for MockStream {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use tokio::time::Duration;
 
     use super::*;

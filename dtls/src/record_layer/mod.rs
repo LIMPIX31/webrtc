@@ -1,7 +1,7 @@
 pub mod record_layer_header;
 
 #[cfg(test)]
-mod record_layer_test;
+pub mod record_layer_test;
 
 use std::io::{Read, Write};
 
@@ -83,7 +83,7 @@ impl RecordLayer {
 // two DTLS messages into the same datagram: in the same record or in
 // separate records.
 // https://tools.ietf.org/html/rfc6347#section-4.2.3
-pub(crate) fn unpack_datagram(buf: &[u8]) -> Result<Vec<Vec<u8>>> {
+pub fn unpack_datagram(buf: &[u8]) -> Result<Vec<Vec<u8>>> {
     let mut out = vec![];
 
     let mut offset = 0;

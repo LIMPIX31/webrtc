@@ -167,7 +167,7 @@ impl ResolvedMandatoryMediaTrackConstraints {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
     use crate::property::all::name::*;
     use crate::{
@@ -254,7 +254,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::property::all::name::*;
     use crate::MediaTrackConstraintSet;

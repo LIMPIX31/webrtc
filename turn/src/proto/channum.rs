@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod channnum_test;
+pub mod channnum_test;
 
 use std::fmt;
 

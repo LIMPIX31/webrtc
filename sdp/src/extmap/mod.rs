@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extmap_test;
+pub mod extmap_test;
 
 use std::{fmt, io};
 

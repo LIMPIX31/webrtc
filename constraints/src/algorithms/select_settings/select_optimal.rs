@@ -1,6 +1,6 @@
 use crate::MediaTrackSettings;
 
-pub(super) fn select_optimal_candidates<'a, I>(candidates: I) -> Vec<&'a MediaTrackSettings>
+pub fn select_optimal_candidates<'a, I>(candidates: I) -> Vec<&'a MediaTrackSettings>
 where
     I: IntoIterator<Item = (&'a MediaTrackSettings, f64)>,
 {
@@ -43,7 +43,7 @@ where
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::select_optimal_candidates;
     use crate::MediaTrackSettings;
 

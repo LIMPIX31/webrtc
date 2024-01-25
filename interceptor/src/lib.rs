@@ -11,7 +11,7 @@ use error::Result;
 use stream_info::StreamInfo;
 
 pub mod chain;
-mod error;
+pub mod error;
 pub mod mock;
 pub mod nack;
 pub mod noop;
@@ -213,7 +213,7 @@ impl RTCPReader for RTCPReaderFn {
 
 /// Helper for the tests.
 #[cfg(test)]
-mod test {
+pub mod test {
     use std::future::Future;
     use std::time::Duration;
 

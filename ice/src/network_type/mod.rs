@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod network_type_test;
+pub mod network_type_test;
 
 use std::fmt;
 use std::net::IpAddr;
@@ -8,8 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::*;
 
-pub(crate) const UDP: &str = "udp";
-pub(crate) const TCP: &str = "tcp";
+pub const UDP: &str = "udp";
+pub const TCP: &str = "tcp";
 
 #[must_use]
 pub fn supported_network_types() -> Vec<NetworkType> {
@@ -127,7 +127,7 @@ impl NetworkType {
 }
 
 /// Determines the type of network based on the short network string and an IP address.
-pub(crate) fn determine_network_type(network: &str, ip: &IpAddr) -> Result<NetworkType> {
+pub fn determine_network_type(network: &str, ip: &IpAddr) -> Result<NetworkType> {
     let ipv4 = ip.is_ipv4();
     let net = network.to_lowercase();
     if net.starts_with(UDP) {

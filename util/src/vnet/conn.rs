@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod conn_test;
+pub mod conn_test;
 
 use std::net::{IpAddr, SocketAddr};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -17,17 +17,17 @@ const MAX_READ_QUEUE_SIZE: usize = 1024;
 
 /// vNet implements this
 #[async_trait]
-pub(crate) trait ConnObserver {
+pub trait ConnObserver {
     async fn write(&self, c: Box<dyn Chunk + Send + Sync>) -> Result<()>;
     async fn on_closed(&self, addr: SocketAddr);
     fn determine_source_ip(&self, loc_ip: IpAddr, dst_ip: IpAddr) -> Option<IpAddr>;
 }
 
-pub(crate) type ChunkChTx = mpsc::Sender<Box<dyn Chunk + Send + Sync>>;
+pub type ChunkChTx = mpsc::Sender<Box<dyn Chunk + Send + Sync>>;
 
 /// UDPConn is the implementation of the Conn and PacketConn interfaces for UDP network connections.
 /// compatible with net.PacketConn and net.Conn
-pub(crate) struct UdpConn {
+pub struct UdpConn {
     loc_addr: SocketAddr,
     rem_addr: RwLock<Option<SocketAddr>>,
     read_ch_tx: Arc<Mutex<Option<ChunkChTx>>>,
@@ -37,7 +37,7 @@ pub(crate) struct UdpConn {
 }
 
 impl UdpConn {
-    pub(crate) fn new(
+    pub fn new(
         loc_addr: SocketAddr,
         rem_addr: Option<SocketAddr>,
         obs: Arc<Mutex<dyn ConnObserver + Send + Sync>>,
@@ -54,7 +54,7 @@ impl UdpConn {
         }
     }
 
-    pub(crate) fn get_inbound_ch(&self) -> Arc<Mutex<Option<ChunkChTx>>> {
+    pub fn get_inbound_ch(&self) -> Arc<Mutex<Option<ChunkChTx>>> {
         Arc::clone(&self.read_ch_tx)
     }
 }

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod uri_test;
+pub mod uri_test;
 
 use std::fmt;
 

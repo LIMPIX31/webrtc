@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod vp9_test;
+pub mod vp9_test;
 
 use std::fmt;
 use std::sync::Arc;

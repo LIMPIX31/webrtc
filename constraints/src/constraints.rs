@@ -1,8 +1,8 @@
-mod advanced;
-mod constraint_set;
-mod mandatory;
-mod stream;
-mod track;
+pub mod advanced;
+pub mod constraint_set;
+pub mod mandatory;
+pub mod stream;
+pub mod track;
 
 pub use self::advanced::{
     AdvancedMediaTrackConstraints, ResolvedAdvancedMediaTrackConstraints,

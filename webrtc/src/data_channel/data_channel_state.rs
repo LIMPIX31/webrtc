@@ -74,7 +74,7 @@ impl fmt::Display for RTCDataChannelState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

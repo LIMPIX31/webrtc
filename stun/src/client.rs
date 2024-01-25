@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod client_test;
+pub mod client_test;
 
 use std::collections::HashMap;
 use std::io::BufReader;
@@ -89,7 +89,7 @@ pub struct ClientTransaction {
 }
 
 impl ClientTransaction {
-    pub(crate) fn handle(&mut self, e: Event) -> Result<()> {
+    pub fn handle(&mut self, e: Event) -> Result<()> {
         self.calls += 1;
         if self.calls == 1 {
             if let Some(handler) = &self.handler {
@@ -99,7 +99,7 @@ impl ClientTransaction {
         Ok(())
     }
 
-    pub(crate) fn next_timeout(&self, now: Instant) -> Instant {
+    pub fn next_timeout(&self, now: Instant) -> Instant {
         now.add((self.attempt + 1) * self.rto)
     }
 }

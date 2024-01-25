@@ -15,7 +15,7 @@ use tokio::time::{sleep, Duration};
 ///////////////////////////////////////////////////////////////////
 use super::ack_timer::*;
 
-mod test_ack_timer {
+pub mod test_ack_timer {
     use super::*;
     use crate::error::Result;
 
@@ -75,7 +75,7 @@ mod test_ack_timer {
 ///////////////////////////////////////////////////////////////////
 use super::rtx_timer::*;
 
-mod test_rto_manager {
+pub mod test_rto_manager {
     use super::*;
     use crate::error::Result;
 
@@ -159,7 +159,7 @@ mod test_rto_manager {
 
 //TODO: remove this conditional test
 #[cfg(not(any(target_os = "macos", target_os = "windows")))]
-mod test_rtx_timer {
+pub mod test_rtx_timer {
     use std::time::SystemTime;
 
     use tokio::sync::mpsc;

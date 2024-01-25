@@ -38,7 +38,7 @@ pub struct GenericMediaStreamConstraints<T> {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::iter::FromIterator;
 
     use super::*;

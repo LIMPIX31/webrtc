@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod dontfrag_test;
+pub mod dontfrag_test;
 
 use stun::attributes::*;
 use stun::message::*;

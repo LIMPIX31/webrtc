@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod full_intra_request_test;
+pub mod full_intra_request_test;
 
 use std::any::Any;
 use std::fmt;

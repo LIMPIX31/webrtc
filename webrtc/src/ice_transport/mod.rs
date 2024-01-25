@@ -24,7 +24,7 @@ use crate::stats::ICETransportStats;
 use crate::stats::StatsReportType::Transport;
 
 #[cfg(test)]
-mod ice_transport_test;
+pub mod ice_transport_test;
 
 pub mod ice_candidate;
 pub mod ice_candidate_pair;
@@ -64,7 +64,7 @@ struct ICETransportInternal {
 /// transport over which packets are sent and received.
 #[derive(Default)]
 pub struct RTCIceTransport {
-    pub(crate) gatherer: Arc<RTCIceGatherer>,
+    pub gatherer: Arc<RTCIceGatherer>,
     on_connection_state_change_handler: Arc<ArcSwapOption<Mutex<OnConnectionStateChangeHdlrFn>>>,
     on_selected_candidate_pair_change_handler:
         Arc<ArcSwapOption<Mutex<OnSelectedCandidatePairChangeHdlrFn>>>,
@@ -74,7 +74,7 @@ pub struct RTCIceTransport {
 
 impl RTCIceTransport {
     /// creates a new new_icetransport.
-    pub(crate) fn new(gatherer: Arc<RTCIceGatherer>) -> Self {
+    pub fn new(gatherer: Arc<RTCIceGatherer>) -> Self {
         RTCIceTransport {
             state: Arc::new(AtomicU8::new(RTCIceTransportState::New as u8)),
             gatherer,
@@ -197,7 +197,7 @@ impl RTCIceTransport {
 
     /// restart is not exposed currently because ORTC has users create a whole new ICETransport
     /// so for now lets keep it private so we don't cause ORTC users to depend on non-standard APIs
-    pub(crate) async fn restart(&self) -> Result<()> {
+    pub async fn restart(&self) -> Result<()> {
         if let Some(agent) = self.gatherer.get_agent().await {
             agent
                 .restart(
@@ -299,11 +299,11 @@ impl RTCIceTransport {
         RTCIceTransportState::from(self.state.load(Ordering::SeqCst))
     }
 
-    pub(crate) fn set_state(&self, s: RTCIceTransportState) {
+    pub fn set_state(&self, s: RTCIceTransportState) {
         self.state.store(s as u8, Ordering::SeqCst)
     }
 
-    pub(crate) async fn new_endpoint(&self, f: MatchFunc) -> Option<Arc<Endpoint>> {
+    pub async fn new_endpoint(&self, f: MatchFunc) -> Option<Arc<Endpoint>> {
         let internal = self.internal.lock().await;
         if let Some(mux) = &internal.mux {
             Some(mux.new_endpoint(f).await)
@@ -312,7 +312,7 @@ impl RTCIceTransport {
         }
     }
 
-    pub(crate) async fn ensure_gatherer(&self) -> Result<()> {
+    pub async fn ensure_gatherer(&self) -> Result<()> {
         if self.gatherer.get_agent().await.is_none() {
             self.gatherer.create_agent().await
         } else {
@@ -320,7 +320,7 @@ impl RTCIceTransport {
         }
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         if let Some(agent) = self.gatherer.get_agent().await {
             let stats = ICETransportStats::new("ice_transport".to_string(), agent);
 
@@ -328,7 +328,7 @@ impl RTCIceTransport {
         }
     }
 
-    pub(crate) async fn have_remote_credentials_change(
+    pub async fn have_remote_credentials_change(
         &self,
         new_ufrag: &str,
         new_pwd: &str,
@@ -341,7 +341,7 @@ impl RTCIceTransport {
         }
     }
 
-    pub(crate) async fn set_remote_credentials(
+    pub async fn set_remote_credentials(
         &self,
         new_ufrag: String,
         new_pwd: String,

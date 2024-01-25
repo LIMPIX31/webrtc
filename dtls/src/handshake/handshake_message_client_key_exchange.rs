@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_client_key_exchange_test;
+pub mod handshake_message_client_key_exchange_test;
 
 use std::io::{Read, Write};
 
@@ -9,8 +9,8 @@ use super::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageClientKeyExchange {
-    pub(crate) identity_hint: Vec<u8>,
-    pub(crate) public_key: Vec<u8>,
+    pub identity_hint: Vec<u8>,
+    pub public_key: Vec<u8>,
 }
 
 impl HandshakeMessageClientKeyExchange {

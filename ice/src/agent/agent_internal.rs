@@ -13,78 +13,78 @@ pub type ChanCandidateTx =
     Arc<Mutex<Option<mpsc::Sender<Option<Arc<dyn Candidate + Send + Sync>>>>>>;
 
 #[derive(Default)]
-pub(crate) struct UfragPwd {
-    pub(crate) local_ufrag: String,
-    pub(crate) local_pwd: String,
-    pub(crate) remote_ufrag: String,
-    pub(crate) remote_pwd: String,
+pub struct UfragPwd {
+    pub local_ufrag: String,
+    pub local_pwd: String,
+    pub remote_ufrag: String,
+    pub remote_pwd: String,
 }
 
 pub struct AgentInternal {
     // State owned by the taskLoop
-    pub(crate) on_connected_tx: Mutex<Option<mpsc::Sender<()>>>,
-    pub(crate) on_connected_rx: Mutex<Option<mpsc::Receiver<()>>>,
+    pub on_connected_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub on_connected_rx: Mutex<Option<mpsc::Receiver<()>>>,
 
     // State for closing
-    pub(crate) done_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub done_tx: Mutex<Option<mpsc::Sender<()>>>,
     // force candidate to be contacted immediately (instead of waiting for task ticker)
-    pub(crate) force_candidate_contact_tx: mpsc::Sender<bool>,
-    pub(crate) done_and_force_candidate_contact_rx:
+    pub force_candidate_contact_tx: mpsc::Sender<bool>,
+    pub done_and_force_candidate_contact_rx:
         Mutex<Option<(mpsc::Receiver<()>, mpsc::Receiver<bool>)>>,
 
-    pub(crate) chan_candidate_tx: ChanCandidateTx,
-    pub(crate) chan_candidate_pair_tx: Mutex<Option<mpsc::Sender<()>>>,
-    pub(crate) chan_state_tx: Mutex<Option<mpsc::Sender<ConnectionState>>>,
+    pub chan_candidate_tx: ChanCandidateTx,
+    pub chan_candidate_pair_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub chan_state_tx: Mutex<Option<mpsc::Sender<ConnectionState>>>,
 
-    pub(crate) on_connection_state_change_hdlr: ArcSwapOption<Mutex<OnConnectionStateChangeHdlrFn>>,
-    pub(crate) on_selected_candidate_pair_change_hdlr:
+    pub on_connection_state_change_hdlr: ArcSwapOption<Mutex<OnConnectionStateChangeHdlrFn>>,
+    pub on_selected_candidate_pair_change_hdlr:
         ArcSwapOption<Mutex<OnSelectedCandidatePairChangeHdlrFn>>,
-    pub(crate) on_candidate_hdlr: ArcSwapOption<Mutex<OnCandidateHdlrFn>>,
+    pub on_candidate_hdlr: ArcSwapOption<Mutex<OnCandidateHdlrFn>>,
 
-    pub(crate) tie_breaker: AtomicU64,
-    pub(crate) is_controlling: AtomicBool,
-    pub(crate) lite: AtomicBool,
+    pub tie_breaker: AtomicU64,
+    pub is_controlling: AtomicBool,
+    pub lite: AtomicBool,
 
-    pub(crate) start_time: SyncMutex<Instant>,
-    pub(crate) nominated_pair: Mutex<Option<Arc<CandidatePair>>>,
+    pub start_time: SyncMutex<Instant>,
+    pub nominated_pair: Mutex<Option<Arc<CandidatePair>>>,
 
-    pub(crate) connection_state: AtomicU8, //ConnectionState,
+    pub connection_state: AtomicU8, //ConnectionState,
 
-    pub(crate) started_ch_tx: Mutex<Option<broadcast::Sender<()>>>,
+    pub started_ch_tx: Mutex<Option<broadcast::Sender<()>>>,
 
-    pub(crate) ufrag_pwd: Mutex<UfragPwd>,
+    pub ufrag_pwd: Mutex<UfragPwd>,
 
-    pub(crate) local_candidates: Mutex<HashMap<NetworkType, Vec<Arc<dyn Candidate + Send + Sync>>>>,
-    pub(crate) remote_candidates:
+    pub local_candidates: Mutex<HashMap<NetworkType, Vec<Arc<dyn Candidate + Send + Sync>>>>,
+    pub remote_candidates:
         Mutex<HashMap<NetworkType, Vec<Arc<dyn Candidate + Send + Sync>>>>,
 
     // LRU of outbound Binding request Transaction IDs
-    pub(crate) pending_binding_requests: Mutex<Vec<BindingRequest>>,
+    pub pending_binding_requests: Mutex<Vec<BindingRequest>>,
 
-    pub(crate) agent_conn: Arc<AgentConn>,
+    pub agent_conn: Arc<AgentConn>,
 
     // the following variables won't be changed after init_with_defaults()
-    pub(crate) insecure_skip_verify: bool,
-    pub(crate) max_binding_requests: u16,
-    pub(crate) host_acceptance_min_wait: Duration,
-    pub(crate) srflx_acceptance_min_wait: Duration,
-    pub(crate) prflx_acceptance_min_wait: Duration,
-    pub(crate) relay_acceptance_min_wait: Duration,
+    pub insecure_skip_verify: bool,
+    pub max_binding_requests: u16,
+    pub host_acceptance_min_wait: Duration,
+    pub srflx_acceptance_min_wait: Duration,
+    pub prflx_acceptance_min_wait: Duration,
+    pub relay_acceptance_min_wait: Duration,
     // How long connectivity checks can fail before the ICE Agent
     // goes to disconnected
-    pub(crate) disconnected_timeout: Duration,
+    pub disconnected_timeout: Duration,
     // How long connectivity checks can fail before the ICE Agent
     // goes to failed
-    pub(crate) failed_timeout: Duration,
+    pub failed_timeout: Duration,
     // How often should we send keepalive packets?
     // 0 means never
-    pub(crate) keepalive_interval: Duration,
+    pub keepalive_interval: Duration,
     // How often should we run our internal taskLoop to check for state changes when connecting
-    pub(crate) check_interval: Duration,
+    pub check_interval: Duration,
 }
 
 impl AgentInternal {
-    pub(super) fn new(config: &AgentConfig) -> (Self, ChanReceivers) {
+    pub fn new(config: &AgentConfig) -> (Self, ChanReceivers) {
         let (chan_state_tx, chan_state_rx) = mpsc::channel(1);
         let (chan_candidate_tx, chan_candidate_rx) = mpsc::channel(1);
         let (chan_candidate_pair_tx, chan_candidate_pair_rx) = mpsc::channel(1);
@@ -166,7 +166,7 @@ impl AgentInternal {
         };
         (ai, chan_receivers)
     }
-    pub(crate) async fn start_connectivity_checks(
+    pub async fn start_connectivity_checks(
         self: &Arc<Self>,
         is_controlling: bool,
         remote_ufrag: String,
@@ -302,7 +302,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) async fn update_connection_state(&self, new_state: ConnectionState) {
+    pub async fn update_connection_state(&self, new_state: ConnectionState) {
         if self.connection_state.load(Ordering::SeqCst) != new_state as u8 {
             // Connection has gone to failed, release all gathered candidates
             if new_state == ConnectionState::Failed {
@@ -328,7 +328,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) async fn set_selected_pair(&self, p: Option<Arc<CandidatePair>>) {
+    pub async fn set_selected_pair(&self, p: Option<Arc<CandidatePair>>) {
         log::trace!(
             "[{}]: Set selected candidate pair: {:?}",
             self.get_name(),
@@ -360,7 +360,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) async fn ping_all_candidates(&self) {
+    pub async fn ping_all_candidates(&self) {
         log::trace!("[{}]: pinging all candidates", self.get_name(),);
 
         let mut pairs: Vec<(
@@ -407,7 +407,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) async fn add_pair(
+    pub async fn add_pair(
         &self,
         local: Arc<dyn Candidate + Send + Sync>,
         remote: Arc<dyn Candidate + Send + Sync>,
@@ -421,7 +421,7 @@ impl AgentInternal {
         checklist.push(p);
     }
 
-    pub(crate) async fn find_pair(
+    pub async fn find_pair(
         &self,
         local: &Arc<dyn Candidate + Send + Sync>,
         remote: &Arc<dyn Candidate + Send + Sync>,
@@ -437,7 +437,7 @@ impl AgentInternal {
 
     /// Checks if the selected pair is (still) valid.
     /// Note: the caller should hold the agent lock.
-    pub(crate) async fn validate_selected_pair(&self) -> bool {
+    pub async fn validate_selected_pair(&self) -> bool {
         let (valid, disconnected_time) = {
             let selected_pair = self.agent_conn.selected_pair.load();
             (*selected_pair).as_ref().map_or_else(
@@ -479,7 +479,7 @@ impl AgentInternal {
     /// Sends STUN Binding Indications to the selected pair.
     /// if no packet has been sent on that pair in the last keepaliveInterval.
     /// Note: the caller should hold the agent lock.
-    pub(crate) async fn check_keepalive(&self) {
+    pub async fn check_keepalive(&self) {
         let (local, remote) = {
             let selected_pair = self.agent_conn.selected_pair.load();
             (*selected_pair)
@@ -517,7 +517,7 @@ impl AgentInternal {
     }
 
     /// Assumes you are holding the lock (must be execute using a.run).
-    pub(crate) async fn add_remote_candidate(&self, c: &Arc<dyn Candidate + Send + Sync>) {
+    pub async fn add_remote_candidate(&self, c: &Arc<dyn Candidate + Send + Sync>) {
         let network_type = c.network_type();
 
         {
@@ -552,7 +552,7 @@ impl AgentInternal {
         self.request_connectivity_check();
     }
 
-    pub(crate) async fn add_candidate(
+    pub async fn add_candidate(
         self: &Arc<Self>,
         c: &Arc<dyn Candidate + Send + Sync>,
     ) -> Result<()> {
@@ -612,7 +612,7 @@ impl AgentInternal {
         Ok(())
     }
 
-    pub(crate) async fn close(&self) -> Result<()> {
+    pub async fn close(&self) -> Result<()> {
         {
             let mut done_tx = self.done_tx.lock().await;
             if done_tx.is_none() {
@@ -652,7 +652,7 @@ impl AgentInternal {
     /// This closes any listening sockets and removes both the local and remote candidate lists.
     ///
     /// This is used for restarts, failures and on close.
-    pub(crate) async fn delete_all_candidates(&self) {
+    pub async fn delete_all_candidates(&self) {
         {
             let mut local_candidates = self.local_candidates.lock().await;
             for cs in local_candidates.values_mut() {
@@ -688,7 +688,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) async fn find_remote_candidate(
+    pub async fn find_remote_candidate(
         &self,
         network_type: NetworkType,
         addr: SocketAddr,
@@ -706,7 +706,7 @@ impl AgentInternal {
         None
     }
 
-    pub(crate) async fn send_binding_request(
+    pub async fn send_binding_request(
         &self,
         m: &Message,
         local: &Arc<dyn Candidate + Send + Sync>,
@@ -734,7 +734,7 @@ impl AgentInternal {
         self.send_stun(m, local, remote).await;
     }
 
-    pub(crate) async fn send_binding_success(
+    pub async fn send_binding_success(
         &self,
         m: &Message,
         local: &Arc<dyn Candidate + Send + Sync>,
@@ -776,7 +776,7 @@ impl AgentInternal {
     /// transaction timeout, which SHOULD be 2*RTT if RTT is known or 500 ms otherwise.
     ///
     /// reference: (IETF ref-8445)[https://tools.ietf.org/html/rfc8445#appendix-B.1].
-    pub(crate) async fn invalidate_pending_binding_requests(&self, filter_time: Instant) {
+    pub async fn invalidate_pending_binding_requests(&self, filter_time: Instant) {
         let mut pending_binding_requests = self.pending_binding_requests.lock().await;
         let initial_size = pending_binding_requests.len();
 
@@ -804,7 +804,7 @@ impl AgentInternal {
 
     /// Assert that the passed `TransactionID` is in our `pendingBindingRequests` and returns the
     /// destination, If the bindingRequest was valid remove it from our pending cache.
-    pub(crate) async fn handle_inbound_binding_success(
+    pub async fn handle_inbound_binding_success(
         &self,
         id: TransactionId,
     ) -> Option<BindingRequest> {
@@ -822,7 +822,7 @@ impl AgentInternal {
     }
 
     /// Processes STUN traffic from a remote candidate.
-    pub(crate) async fn handle_inbound(
+    pub async fn handle_inbound(
         &self,
         m: &mut Message,
         local: &Arc<dyn Candidate + Send + Sync>,
@@ -977,7 +977,7 @@ impl AgentInternal {
 
     /// Processes non STUN traffic from a remote candidate, and returns true if it is an actual
     /// remote candidate.
-    pub(crate) async fn validate_non_stun_traffic(
+    pub async fn validate_non_stun_traffic(
         &self,
         local: &Arc<dyn Candidate + Send + Sync>,
         remote: SocketAddr,
@@ -991,7 +991,7 @@ impl AgentInternal {
     }
 
     /// Sets the credentials of the remote agent.
-    pub(crate) async fn set_remote_credentials(
+    pub async fn set_remote_credentials(
         &self,
         remote_ufrag: String,
         remote_pwd: String,
@@ -1008,7 +1008,7 @@ impl AgentInternal {
         Ok(())
     }
 
-    pub(crate) async fn send_stun(
+    pub async fn send_stun(
         &self,
         msg: &Message,
         local: &Arc<dyn Candidate + Send + Sync>,
@@ -1051,7 +1051,7 @@ impl AgentInternal {
         }
     }
 
-    pub(super) fn start_on_connection_state_change_routine(
+    pub fn start_on_connection_state_change_routine(
         self: &Arc<Self>,
         mut chan_state_rx: mpsc::Receiver<ConnectionState>,
         mut chan_candidate_rx: mpsc::Receiver<Option<Arc<dyn Candidate + Send + Sync>>>,
@@ -1188,7 +1188,7 @@ impl AgentInternal {
         }
     }
 
-    pub(crate) fn get_name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         if self.is_controlling.load(Ordering::SeqCst) {
             "controlling"
         } else {

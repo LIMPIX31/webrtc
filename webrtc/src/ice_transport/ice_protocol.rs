@@ -45,7 +45,7 @@ impl fmt::Display for RTCIceProtocol {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

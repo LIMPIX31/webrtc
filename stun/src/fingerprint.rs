@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod fingerprint_test;
+pub mod fingerprint_test;
 
 use crc::{Crc, CRC_32_ISO_HDLC};
 

@@ -8,9 +8,9 @@ pub use self::value_range::{ResolvedValueRangeConstraint, ValueRangeConstraint};
 pub use self::value_sequence::{ResolvedValueSequenceConstraint, ValueSequenceConstraint};
 use crate::MediaTrackSetting;
 
-mod value;
-mod value_range;
-mod value_sequence;
+pub mod value;
+pub mod value_range;
+pub mod value_sequence;
 
 /// An empty [constraint][media_track_constraints] value for a [`MediaStreamTrack`][media_stream_track] object.
 ///
@@ -455,7 +455,7 @@ impl SanitizedMediaTrackConstraint {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use MediaTrackConstraintResolutionStrategy::*;
 
     use super::*;
@@ -683,7 +683,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::macros::test_serde_symmetry;
 

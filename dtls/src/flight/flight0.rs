@@ -15,7 +15,7 @@ use crate::record_layer::record_layer_header::*;
 use crate::*;
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct Flight0;
+pub struct Flight0;
 
 impl fmt::Display for Flight0 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

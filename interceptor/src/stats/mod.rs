@@ -4,7 +4,7 @@ use std::time::SystemTime;
 
 use tokio::time::Duration;
 
-mod interceptor;
+pub mod interceptor;
 
 pub use self::interceptor::StatsInterceptor;
 
@@ -13,7 +13,7 @@ pub fn make_stats_interceptor(id: &str) -> Arc<StatsInterceptor> {
 }
 
 /// Types related to inbound RTP streams.
-mod inbound {
+pub mod inbound {
     use std::time::SystemTime;
 
     use tokio::time::{Duration, Instant};
@@ -24,11 +24,11 @@ mod inbound {
     /// Stats collected for an inbound RTP stream.
     /// Contains both stats relating to the inbound stream and remote stats for the corresponding
     /// outbound stream at the remote end.
-    pub(super) struct StreamStats {
+    pub struct StreamStats {
         /// Received RTP stats.
-        pub(super) rtp_stats: RTPStats,
+        pub rtp_stats: RTPStats,
         /// Common RTCP stats derived from inbound and outbound RTCP packets.
-        pub(super) rtcp_stats: RTCPStats,
+        pub rtcp_stats: RTCPStats,
 
         /// The last time any stats where update, used for garbage collection to remove obsolete stats.
         last_update: Instant,
@@ -70,25 +70,25 @@ mod inbound {
     }
 
     impl StreamStats {
-        pub(super) fn snapshot(&self) -> StatsSnapshot {
+        pub fn snapshot(&self) -> StatsSnapshot {
             self.into()
         }
 
-        pub(super) fn mark_updated(&mut self) {
+        pub fn mark_updated(&mut self) {
             self.last_update = Instant::now();
         }
 
-        pub(super) fn duration_since_last_update(&self) -> Duration {
+        pub fn duration_since_last_update(&self) -> Duration {
             self.last_update.elapsed()
         }
 
-        pub(super) fn record_sender_report(&mut self, packets_sent: u32, bytes_sent: u32) {
+        pub fn record_sender_report(&mut self, packets_sent: u32, bytes_sent: u32) {
             self.remote_reports_sent += 1;
             self.remote_packets_sent = packets_sent;
             self.remote_bytes_sent = bytes_sent;
         }
 
-        pub(super) fn record_remote_round_trip_time(&mut self, round_trip_time: Option<f64>) {
+        pub fn record_remote_round_trip_time(&mut self, round_trip_time: Option<f64>) {
             // Store the latest measurement, even if it's None.
             self.remote_round_trip_time = round_trip_time;
 
@@ -201,7 +201,7 @@ mod inbound {
 }
 
 /// Types related to outbound RTP streams.
-mod outbound {
+pub mod outbound {
     use std::time::SystemTime;
 
     use tokio::time::{Duration, Instant};
@@ -212,11 +212,11 @@ mod outbound {
     /// Stats collected for an outbound RTP stream.
     /// Contains both stats relating to the outbound stream and remote stats for the corresponding
     /// inbound stream.
-    pub(super) struct StreamStats {
+    pub struct StreamStats {
         /// Sent RTP stats.
-        pub(super) rtp_stats: RTPStats,
+        pub rtp_stats: RTPStats,
         /// Common RTCP stats derived from inbound and outbound RTCP packets.
-        pub(super) rtcp_stats: RTCPStats,
+        pub rtcp_stats: RTCPStats,
 
         /// The last time any stats where update, used for garbage collection to remove obsolete stats.
         last_update: Instant,
@@ -269,19 +269,19 @@ mod outbound {
     }
 
     impl StreamStats {
-        pub(super) fn snapshot(&self) -> StatsSnapshot {
+        pub fn snapshot(&self) -> StatsSnapshot {
             self.into()
         }
 
-        pub(super) fn mark_updated(&mut self) {
+        pub fn mark_updated(&mut self) {
             self.last_update = Instant::now();
         }
 
-        pub(super) fn duration_since_last_update(&self) -> Duration {
+        pub fn duration_since_last_update(&self) -> Duration {
             self.last_update.elapsed()
         }
 
-        pub(super) fn update_remote_inbound_packets_received(
+        pub fn update_remote_inbound_packets_received(
             &mut self,
             rr_ext_seq_num: u32,
             rr_total_lost: u32,
@@ -302,14 +302,14 @@ mod outbound {
         }
 
         #[inline(always)]
-        pub(super) fn record_sr_ext_seq_num(&mut self, seq_num: u32) {
+        pub fn record_sr_ext_seq_num(&mut self, seq_num: u32) {
             // Only record the initial value
             if self.initial_outbound_ext_seq_num.is_none() {
                 self.initial_outbound_ext_seq_num = Some(seq_num);
             }
         }
 
-        pub(super) fn record_remote_round_trip_time(&mut self, round_trip_time: Option<f64>) {
+        pub fn record_remote_round_trip_time(&mut self, round_trip_time: Option<f64>) {
             // Store the latest measurement, even if it's None.
             self.remote_round_trip_time = round_trip_time;
 
@@ -320,15 +320,15 @@ mod outbound {
             }
         }
 
-        pub(super) fn update_remote_fraction_lost(&mut self, fraction_lost: u8) {
+        pub fn update_remote_fraction_lost(&mut self, fraction_lost: u8) {
             self.remote_fraction_lost = Some(fraction_lost);
         }
 
-        pub(super) fn update_remote_jitter(&mut self, jitter: u32) {
+        pub fn update_remote_jitter(&mut self, jitter: u32) {
             self.remote_jitter = jitter;
         }
 
-        pub(super) fn update_remote_total_lost(&mut self, lost: u32) {
+        pub fn update_remote_total_lost(&mut self, lost: u32) {
             self.remote_total_lost = lost;
         }
     }
@@ -568,7 +568,7 @@ impl RTCPStats {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

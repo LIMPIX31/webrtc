@@ -13,7 +13,7 @@ pub mod handshake_message_server_key_exchange;
 pub mod handshake_random;
 
 #[cfg(test)]
-mod handshake_test;
+pub mod handshake_test;
 
 use std::fmt;
 use std::io::{Read, Write};
@@ -161,8 +161,8 @@ impl HandshakeMessage {
 // https://tools.ietf.org/html/rfc5246#section-7.3
 #[derive(PartialEq, Debug, Clone)]
 pub struct Handshake {
-    pub(crate) handshake_header: HandshakeHeader,
-    pub(crate) handshake_message: HandshakeMessage,
+    pub handshake_header: HandshakeHeader,
+    pub handshake_message: HandshakeMessage,
 }
 
 impl Handshake {

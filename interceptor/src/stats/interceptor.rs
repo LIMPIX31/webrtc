@@ -821,7 +821,7 @@ fn calculate_rtt_ms(now: u32, delay: u32, last_report: u32) -> Option<f64> {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     // Silence warning on `..Default::default()` with no effect:
     #![allow(clippy::needless_update)]
 

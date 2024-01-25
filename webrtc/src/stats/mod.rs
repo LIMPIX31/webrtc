@@ -19,7 +19,7 @@ use crate::rtp_transceiver::rtp_codec::RTCRtpCodecParameters;
 use crate::rtp_transceiver::{PayloadType, SSRC};
 use crate::sctp_transport::RTCSctpTransport;
 
-mod serialize;
+pub mod serialize;
 pub mod stats_collector;
 
 #[derive(Debug, Serialize)]
@@ -272,7 +272,7 @@ pub struct ICETransportStats {
 }
 
 impl ICETransportStats {
-    pub(crate) fn new(id: String, agent: Arc<Agent>) -> Self {
+    pub fn new(id: String, agent: Arc<Agent>) -> Self {
         ICETransportStats {
             id,
             bytes_received: agent.get_bytes_received(),
@@ -300,7 +300,7 @@ pub struct CertificateStats {
 }
 
 impl CertificateStats {
-    pub(crate) fn new(cert: &RTCCertificate, fingerprint: RTCDtlsFingerprint) -> Self {
+    pub fn new(cert: &RTCCertificate, fingerprint: RTCDtlsFingerprint) -> Self {
         CertificateStats {
             // TODO: base64_certificate
             fingerprint: fingerprint.value,
@@ -369,7 +369,7 @@ pub struct DataChannelStats {
 }
 
 impl DataChannelStats {
-    pub(crate) async fn from(data_channel: &RTCDataChannel) -> Self {
+    pub async fn from(data_channel: &RTCDataChannel) -> Self {
         let state = data_channel.ready_state();
 
         let mut bytes_received = 0;

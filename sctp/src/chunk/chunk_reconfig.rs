@@ -26,9 +26,9 @@ use crate::util::get_padding_size;
 ///|                                                               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug)]
-pub(crate) struct ChunkReconfig {
-    pub(crate) param_a: Option<Box<dyn Param + Send + Sync>>,
-    pub(crate) param_b: Option<Box<dyn Param + Send + Sync>>,
+pub struct ChunkReconfig {
+    pub param_a: Option<Box<dyn Param + Send + Sync>>,
+    pub param_b: Option<Box<dyn Param + Send + Sync>>,
 }
 
 impl Clone for ChunkReconfig {

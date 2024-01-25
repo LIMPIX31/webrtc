@@ -4,7 +4,7 @@ use super::param_header::*;
 use super::param_type::*;
 use super::*;
 
-pub(crate) const PARAM_OUTGOING_RESET_REQUEST_STREAM_IDENTIFIERS_OFFSET: usize = 12;
+pub const PARAM_OUTGOING_RESET_REQUEST_STREAM_IDENTIFIERS_OFFSET: usize = 12;
 
 ///This parameter is used by the sender to request the reset of some or
 ///all outgoing streams.
@@ -26,26 +26,26 @@ pub(crate) const PARAM_OUTGOING_RESET_REQUEST_STREAM_IDENTIFIERS_OFFSET: usize =
 ///|  Stream Number N-1 (optional) |    Stream Number N (optional) |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamOutgoingResetRequest {
+pub struct ParamOutgoingResetRequest {
     /// reconfig_request_sequence_number is used to identify the request.  It is a monotonically
     /// increasing number that is initialized to the same value as the
     /// initial TSN.  It is increased by 1 whenever sending a new Re-
     /// configuration Request Parameter.
-    pub(crate) reconfig_request_sequence_number: u32,
+    pub reconfig_request_sequence_number: u32,
     /// When this Outgoing SSN Reset Request Parameter is sent in response
     /// to an Incoming SSN Reset Request Parameter, this parameter is also
     /// an implicit response to the incoming request.  This field then
     /// holds the Re-configuration Request Sequence Number of the incoming
     /// request.  In other cases, it holds the next expected
     /// Re-configuration Request Sequence Number minus 1.
-    pub(crate) reconfig_response_sequence_number: u32,
+    pub reconfig_response_sequence_number: u32,
     /// This value holds the next TSN minus 1 -- in other words, the last
     /// TSN that this sender assigned.
-    pub(crate) sender_last_tsn: u32,
+    pub sender_last_tsn: u32,
     /// This optional field, if included, is used to indicate specific
     /// streams that are to be reset.  If no streams are listed, then all
     /// streams are to be reset.
-    pub(crate) stream_identifiers: Vec<u16>,
+    pub stream_identifiers: Vec<u16>,
 }
 
 impl fmt::Display for ParamOutgoingResetRequest {

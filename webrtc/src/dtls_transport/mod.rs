@@ -33,14 +33,14 @@ use crate::rtp_transceiver::SSRC;
 use crate::stats::stats_collector::StatsCollector;
 
 #[cfg(test)]
-mod dtls_transport_test;
+pub mod dtls_transport_test;
 
 pub mod dtls_fingerprint;
 pub mod dtls_parameters;
 pub mod dtls_role;
 pub mod dtls_transport_state;
 
-pub(crate) fn default_srtp_protection_profiles() -> Vec<SrtpProtectionProfile> {
+pub fn default_srtp_protection_profiles() -> Vec<SrtpProtectionProfile> {
     vec![
         SrtpProtectionProfile::Srtp_Aead_Aes_128_Gcm,
         SrtpProtectionProfile::Srtp_Aes128_Cm_Hmac_Sha1_80,
@@ -59,33 +59,33 @@ pub type OnDTLSTransportStateChangeHdlrFn = Box<
 /// and received by data channels.
 #[derive(Default)]
 pub struct RTCDtlsTransport {
-    pub(crate) ice_transport: Arc<RTCIceTransport>,
-    pub(crate) certificates: Vec<RTCCertificate>,
-    pub(crate) setting_engine: Arc<SettingEngine>,
+    pub ice_transport: Arc<RTCIceTransport>,
+    pub certificates: Vec<RTCCertificate>,
+    pub setting_engine: Arc<SettingEngine>,
 
-    pub(crate) remote_parameters: Mutex<DTLSParameters>,
-    pub(crate) remote_certificate: Mutex<Bytes>,
-    pub(crate) state: AtomicU8, //DTLSTransportState,
-    pub(crate) srtp_protection_profile: Mutex<ProtectionProfile>,
-    pub(crate) on_state_change_handler: ArcSwapOption<Mutex<OnDTLSTransportStateChangeHdlrFn>>,
-    pub(crate) conn: Mutex<Option<Arc<DTLSConn>>>,
+    pub remote_parameters: Mutex<DTLSParameters>,
+    pub remote_certificate: Mutex<Bytes>,
+    pub state: AtomicU8, //DTLSTransportState,
+    pub srtp_protection_profile: Mutex<ProtectionProfile>,
+    pub on_state_change_handler: ArcSwapOption<Mutex<OnDTLSTransportStateChangeHdlrFn>>,
+    pub conn: Mutex<Option<Arc<DTLSConn>>>,
 
-    pub(crate) srtp_session: Mutex<Option<Arc<Session>>>,
-    pub(crate) srtcp_session: Mutex<Option<Arc<Session>>>,
-    pub(crate) srtp_endpoint: Mutex<Option<Arc<Endpoint>>>,
-    pub(crate) srtcp_endpoint: Mutex<Option<Arc<Endpoint>>>,
+    pub srtp_session: Mutex<Option<Arc<Session>>>,
+    pub srtcp_session: Mutex<Option<Arc<Session>>>,
+    pub srtp_endpoint: Mutex<Option<Arc<Endpoint>>>,
+    pub srtcp_endpoint: Mutex<Option<Arc<Endpoint>>>,
 
-    pub(crate) simulcast_streams: Mutex<HashMap<SSRC, Arc<Stream>>>,
+    pub simulcast_streams: Mutex<HashMap<SSRC, Arc<Stream>>>,
 
-    pub(crate) srtp_ready_signal: Arc<AtomicBool>,
-    pub(crate) srtp_ready_tx: Mutex<Option<mpsc::Sender<()>>>,
-    pub(crate) srtp_ready_rx: Mutex<Option<mpsc::Receiver<()>>>,
+    pub srtp_ready_signal: Arc<AtomicBool>,
+    pub srtp_ready_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub srtp_ready_rx: Mutex<Option<mpsc::Receiver<()>>>,
 
-    pub(crate) dtls_matcher: Option<MatchFunc>,
+    pub dtls_matcher: Option<MatchFunc>,
 }
 
 impl RTCDtlsTransport {
-    pub(crate) fn new(
+    pub fn new(
         ice_transport: Arc<RTCIceTransport>,
         certificates: Vec<RTCCertificate>,
         setting_engine: Arc<SettingEngine>,
@@ -104,7 +104,7 @@ impl RTCDtlsTransport {
         }
     }
 
-    pub(crate) async fn conn(&self) -> Option<Arc<DTLSConn>> {
+    pub async fn conn(&self) -> Option<Arc<DTLSConn>> {
         let conn = self.conn.lock().await;
         conn.clone()
     }
@@ -172,7 +172,7 @@ impl RTCDtlsTransport {
         remote_certificate.clone()
     }
 
-    pub(crate) async fn start_srtp(&self) -> Result<()> {
+    pub async fn start_srtp(&self) -> Result<()> {
         let profile = {
             let srtp_protection_profile = self.srtp_protection_profile.lock().await;
             *srtp_protection_profile
@@ -270,17 +270,17 @@ impl RTCDtlsTransport {
         Ok(())
     }
 
-    pub(crate) async fn get_srtp_session(&self) -> Option<Arc<Session>> {
+    pub async fn get_srtp_session(&self) -> Option<Arc<Session>> {
         let srtp_session = self.srtp_session.lock().await;
         srtp_session.clone()
     }
 
-    pub(crate) async fn get_srtcp_session(&self) -> Option<Arc<Session>> {
+    pub async fn get_srtcp_session(&self) -> Option<Arc<Session>> {
         let srtcp_session = self.srtcp_session.lock().await;
         srtcp_session.clone()
     }
 
-    pub(crate) async fn role(&self) -> DTLSRole {
+    pub async fn role(&self) -> DTLSRole {
         // If remote has an explicit role use the inverse
         {
             let remote_parameters = self.remote_parameters.lock().await;
@@ -306,7 +306,7 @@ impl RTCDtlsTransport {
         DEFAULT_DTLS_ROLE_ANSWER
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         for cert in &self.certificates {
             cert.collect_stats(collector).await;
         }
@@ -536,7 +536,7 @@ impl RTCDtlsTransport {
         flatten_errs(close_errs)
     }
 
-    pub(crate) async fn validate_fingerprint(&self, remote_cert: &[u8]) -> Result<()> {
+    pub async fn validate_fingerprint(&self, remote_cert: &[u8]) -> Result<()> {
         let remote_parameters = self.remote_parameters.lock().await;
         for fp in &remote_parameters.fingerprints {
             if fp.algorithm != "sha-256" {
@@ -557,7 +557,7 @@ impl RTCDtlsTransport {
         Err(Error::ErrNoMatchingCertificateFingerprint)
     }
 
-    pub(crate) fn ensure_ice_conn(&self) -> Result<()> {
+    pub fn ensure_ice_conn(&self) -> Result<()> {
         if self.ice_transport.state() == RTCIceTransportState::New {
             Err(Error::ErrICEConnectionNotStarted)
         } else {
@@ -565,17 +565,17 @@ impl RTCDtlsTransport {
         }
     }
 
-    pub(crate) async fn store_simulcast_stream(&self, ssrc: SSRC, stream: Arc<Stream>) {
+    pub async fn store_simulcast_stream(&self, ssrc: SSRC, stream: Arc<Stream>) {
         let mut simulcast_streams = self.simulcast_streams.lock().await;
         simulcast_streams.insert(ssrc, stream);
     }
 
-    pub(crate) async fn remove_simulcast_stream(&self, ssrc: SSRC) {
+    pub async fn remove_simulcast_stream(&self, ssrc: SSRC) {
         let mut simulcast_streams = self.simulcast_streams.lock().await;
         simulcast_streams.remove(&ssrc);
     }
 
-    pub(crate) async fn streams_for_ssrc(
+    pub async fn streams_for_ssrc(
         &self,
         ssrc: SSRC,
         stream_info: &StreamInfo,

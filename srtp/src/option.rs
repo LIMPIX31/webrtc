@@ -2,8 +2,8 @@ use util::replay_detector::*;
 
 pub type ContextOption = Box<dyn (Fn() -> Box<dyn ReplayDetector + Send + 'static>) + Send + Sync>;
 
-pub(crate) const MAX_SEQUENCE_NUMBER: u16 = 65535;
-pub(crate) const MAX_SRTCP_INDEX: usize = 0x7FFFFFFF;
+pub const MAX_SEQUENCE_NUMBER: u16 = 65535;
+pub const MAX_SRTCP_INDEX: usize = 0x7FFFFFFF;
 
 /// srtp_replay_protection sets SRTP replay protection window size.
 pub fn srtp_replay_protection(window_size: usize) -> ContextOption {

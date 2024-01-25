@@ -99,7 +99,7 @@ impl Unmarshal for RawPacket {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

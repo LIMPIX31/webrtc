@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod receiver_estimated_maximum_bitrate_test;
+pub mod receiver_estimated_maximum_bitrate_test;
 
 use std::any::Any;
 use std::fmt;

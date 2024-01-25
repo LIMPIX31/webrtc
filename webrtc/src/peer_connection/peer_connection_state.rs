@@ -87,7 +87,7 @@ impl fmt::Display for RTCPeerConnectionState {
 }
 
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum NegotiationNeededState {
+pub enum NegotiationNeededState {
     /// NegotiationNeededStateEmpty not running and queue is empty
     #[default]
     Empty,
@@ -108,7 +108,7 @@ impl From<u8> for NegotiationNeededState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

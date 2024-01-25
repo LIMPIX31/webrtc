@@ -11,11 +11,11 @@ use crate::mux::mux_func::MatchFunc;
 
 /// Endpoint implements net.Conn. It is used to read muxed packets.
 pub struct Endpoint {
-    pub(crate) id: usize,
-    pub(crate) buffer: Buffer,
-    pub(crate) match_fn: MatchFunc,
-    pub(crate) next_conn: Arc<dyn Conn + Send + Sync>,
-    pub(crate) endpoints: Arc<Mutex<HashMap<usize, Arc<Endpoint>>>>,
+    pub id: usize,
+    pub buffer: Buffer,
+    pub match_fn: MatchFunc,
+    pub next_conn: Arc<dyn Conn + Send + Sync>,
+    pub endpoints: Arc<Mutex<HashMap<usize, Arc<Endpoint>>>>,
 }
 
 impl Endpoint {

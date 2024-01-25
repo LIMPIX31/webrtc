@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod conn_test;
+pub mod conn_test;
 
 use std::io::{BufReader, BufWriter};
 use std::marker::{Send, Sync};
@@ -37,12 +37,12 @@ use crate::record_layer::*;
 use crate::signature_hash_algorithm::parse_signature_schemes;
 use crate::state::*;
 
-pub(crate) const INITIAL_TICKER_INTERVAL: Duration = Duration::from_secs(1);
-pub(crate) const COOKIE_LENGTH: usize = 20;
-pub(crate) const DEFAULT_NAMED_CURVE: NamedCurve = NamedCurve::X25519;
-pub(crate) const INBOUND_BUFFER_SIZE: usize = 8192;
+pub const INITIAL_TICKER_INTERVAL: Duration = Duration::from_secs(1);
+pub const COOKIE_LENGTH: usize = 20;
+pub const DEFAULT_NAMED_CURVE: NamedCurve = NamedCurve::X25519;
+pub const INBOUND_BUFFER_SIZE: usize = 8192;
 // Default replay protection window is specified by RFC 6347 Section 4.1.2.6
-pub(crate) const DEFAULT_REPLAY_PROTECTION_WINDOW: usize = 64;
+pub const DEFAULT_REPLAY_PROTECTION_WINDOW: usize = 64;
 
 pub static INVALID_KEYING_LABELS: &[&str] = &[
     "client finished",
@@ -71,9 +71,9 @@ struct ConnReaderContext {
 // Conn represents a DTLS connection
 pub struct DTLSConn {
     conn: Arc<dyn Conn + Send + Sync>,
-    pub(crate) cache: HandshakeCache, // caching of handshake messages for verifyData generation
+    pub cache: HandshakeCache, // caching of handshake messages for verifyData generation
     decrypted_rx: Mutex<mpsc::Receiver<Result<Vec<u8>>>>, // Decrypted Application Data or error, pull by calling `Read`
-    pub(crate) state: State,                              // Internal state
+    pub state: State,                              // Internal state
 
     handshake_completed_successfully: Arc<AtomicBool>,
     connection_closed_by_user: bool,
@@ -91,15 +91,15 @@ pub struct DTLSConn {
     cancelHandshaker      func()
     cancelHandshakeReader func()
     */
-    pub(crate) current_flight: Box<dyn Flight + Send + Sync>,
-    pub(crate) flights: Option<Vec<Packet>>,
-    pub(crate) cfg: HandshakeConfig,
-    pub(crate) retransmit: bool,
-    pub(crate) handshake_rx: mpsc::Receiver<mpsc::Sender<()>>,
+    pub current_flight: Box<dyn Flight + Send + Sync>,
+    pub flights: Option<Vec<Packet>>,
+    pub cfg: HandshakeConfig,
+    pub retransmit: bool,
+    pub handshake_rx: mpsc::Receiver<mpsc::Sender<()>>,
 
-    pub(crate) packet_tx: Arc<mpsc::Sender<PacketSendRequest>>,
-    pub(crate) handle_queue_tx: mpsc::Sender<mpsc::Sender<()>>,
-    pub(crate) handshake_done_tx: Option<mpsc::Sender<()>>,
+    pub packet_tx: Arc<mpsc::Sender<PacketSendRequest>>,
+    pub handle_queue_tx: mpsc::Sender<mpsc::Sender<()>>,
+    pub handshake_done_tx: Option<mpsc::Sender<()>>,
 
     reader_close_tx: Mutex<Option<mpsc::Sender<()>>>,
 }
@@ -498,7 +498,7 @@ impl DTLSConn {
         self.state.srtp_protection_profile
     }
 
-    pub(crate) async fn notify(&self, level: AlertLevel, desc: AlertDescription) -> Result<()> {
+    pub async fn notify(&self, level: AlertLevel, desc: AlertDescription) -> Result<()> {
         self.write_packets(vec![Packet {
             record: RecordLayer::new(
                 PROTOCOL_VERSION1_2,
@@ -514,7 +514,7 @@ impl DTLSConn {
         .await
     }
 
-    pub(crate) async fn write_packets(&self, pkts: Vec<Packet>) -> Result<()> {
+    pub async fn write_packets(&self, pkts: Vec<Packet>) -> Result<()> {
         let (tx, mut rx) = mpsc::channel(1);
 
         self.packet_tx.send((pkts, Some(tx))).await?;
@@ -740,12 +740,12 @@ impl DTLSConn {
         Ok(fragmented_handshakes)
     }
 
-    pub(crate) fn set_handshake_completed_successfully(&mut self) {
+    pub fn set_handshake_completed_successfully(&mut self) {
         self.handshake_completed_successfully
             .store(true, Ordering::SeqCst);
     }
 
-    pub(crate) fn is_handshake_completed_successfully(&self) -> bool {
+    pub fn is_handshake_completed_successfully(&self) -> bool {
         self.handshake_completed_successfully.load(Ordering::SeqCst)
     }
 
@@ -1149,11 +1149,11 @@ impl DTLSConn {
         self.closed.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn set_local_epoch(&mut self, epoch: u16) {
+    pub fn set_local_epoch(&mut self, epoch: u16) {
         self.state.local_epoch.store(epoch, Ordering::SeqCst);
     }
 
-    pub(crate) fn get_local_epoch(&self) -> u16 {
+    pub fn get_local_epoch(&self) -> u16 {
         self.state.local_epoch.load(Ordering::SeqCst)
     }
 }

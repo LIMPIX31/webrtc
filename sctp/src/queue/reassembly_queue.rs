@@ -26,15 +26,15 @@ fn sort_chunks_by_ssn(c: &mut [ChunkSet]) {
 
 /// chunkSet is a set of chunks that share the same SSN
 #[derive(Debug, Clone)]
-pub(crate) struct ChunkSet {
+pub struct ChunkSet {
     /// used only with the ordered chunks
-    pub(crate) ssn: u16,
-    pub(crate) ppi: PayloadProtocolIdentifier,
-    pub(crate) chunks: Vec<ChunkPayloadData>,
+    pub ssn: u16,
+    pub ppi: PayloadProtocolIdentifier,
+    pub chunks: Vec<ChunkPayloadData>,
 }
 
 impl ChunkSet {
-    pub(crate) fn new(ssn: u16, ppi: PayloadProtocolIdentifier) -> Self {
+    pub fn new(ssn: u16, ppi: PayloadProtocolIdentifier) -> Self {
         ChunkSet {
             ssn,
             ppi,
@@ -42,7 +42,7 @@ impl ChunkSet {
         }
     }
 
-    pub(crate) fn push(&mut self, chunk: ChunkPayloadData) -> bool {
+    pub fn push(&mut self, chunk: ChunkPayloadData) -> bool {
         // check if dup
         for c in &self.chunks {
             if c.tsn == chunk.tsn {
@@ -58,7 +58,7 @@ impl ChunkSet {
         self.is_complete()
     }
 
-    pub(crate) fn is_complete(&self) -> bool {
+    pub fn is_complete(&self) -> bool {
         // Condition for complete set
         //   0. Has at least one chunk.
         //   1. Begins with beginningFragment set to true
@@ -105,14 +105,14 @@ impl ChunkSet {
 }
 
 #[derive(Default, Debug)]
-pub(crate) struct ReassemblyQueue {
-    pub(crate) si: u16,
-    pub(crate) next_ssn: u16,
+pub struct ReassemblyQueue {
+    pub si: u16,
+    pub next_ssn: u16,
     /// expected SSN for next ordered chunk
-    pub(crate) ordered: Vec<ChunkSet>,
-    pub(crate) unordered: Vec<ChunkSet>,
-    pub(crate) unordered_chunks: Vec<ChunkPayloadData>,
-    pub(crate) n_bytes: usize,
+    pub ordered: Vec<ChunkSet>,
+    pub unordered: Vec<ChunkSet>,
+    pub unordered_chunks: Vec<ChunkPayloadData>,
+    pub n_bytes: usize,
 }
 
 impl ReassemblyQueue {
@@ -121,7 +121,7 @@ impl ReassemblyQueue {
     ///   the association is Established.  Also, when the Stream Sequence
     ///   Number reaches the value 65535 the next Stream Sequence Number MUST
     ///   be set to 0.
-    pub(crate) fn new(si: u16) -> Self {
+    pub fn new(si: u16) -> Self {
         ReassemblyQueue {
             si,
             next_ssn: 0, // From RFC 4960 Sec 6.5:
@@ -132,7 +132,7 @@ impl ReassemblyQueue {
         }
     }
 
-    pub(crate) fn push(&mut self, chunk: ChunkPayloadData) -> bool {
+    pub fn push(&mut self, chunk: ChunkPayloadData) -> bool {
         if chunk.stream_identifier != self.si {
             return false;
         }
@@ -180,7 +180,7 @@ impl ReassemblyQueue {
         }
     }
 
-    pub(crate) fn find_complete_unordered_chunk_set(&mut self) -> Option<ChunkSet> {
+    pub fn find_complete_unordered_chunk_set(&mut self) -> Option<ChunkSet> {
         let mut start_idx = -1isize;
         let mut n_chunks = 0usize;
         let mut last_tsn = 0u32;
@@ -235,7 +235,7 @@ impl ReassemblyQueue {
         Some(chunk_set)
     }
 
-    pub(crate) fn is_readable(&self) -> bool {
+    pub fn is_readable(&self) -> bool {
         // Check unordered first
         if !self.unordered.is_empty() {
             // The chunk sets in r.unordered should all be complete.
@@ -252,7 +252,7 @@ impl ReassemblyQueue {
         false
     }
 
-    pub(crate) fn read(&mut self, buf: &mut [u8]) -> Result<(usize, PayloadProtocolIdentifier)> {
+    pub fn read(&mut self, buf: &mut [u8]) -> Result<(usize, PayloadProtocolIdentifier)> {
         // Check unordered first
         let cset = if !self.unordered.is_empty() {
             self.unordered.remove(0)
@@ -299,7 +299,7 @@ impl ReassemblyQueue {
 
     /// Use last_ssn to locate a chunkSet then remove it if the set has
     /// not been complete
-    pub(crate) fn forward_tsn_for_ordered(&mut self, last_ssn: u16) {
+    pub fn forward_tsn_for_ordered(&mut self, last_ssn: u16) {
         let num_bytes = self
             .ordered
             .iter()
@@ -323,7 +323,7 @@ impl ReassemblyQueue {
     /// We know all sets in the r.unordered are complete ones.
     /// Just remove chunks that are equal to or older than new_cumulative_tsn
     /// from the unordered_chunks
-    pub(crate) fn forward_tsn_for_unordered(&mut self, new_cumulative_tsn: u32) {
+    pub fn forward_tsn_for_unordered(&mut self, new_cumulative_tsn: u32) {
         let mut last_idx: isize = -1;
         for (i, c) in self.unordered_chunks.iter().enumerate() {
             if sna32gt(c.tsn, new_cumulative_tsn) {
@@ -339,7 +339,7 @@ impl ReassemblyQueue {
         }
     }
 
-    pub(crate) fn subtract_num_bytes(&mut self, n_bytes: usize) {
+    pub fn subtract_num_bytes(&mut self, n_bytes: usize) {
         if self.n_bytes >= n_bytes {
             self.n_bytes -= n_bytes;
         } else {
@@ -347,7 +347,7 @@ impl ReassemblyQueue {
         }
     }
 
-    pub(crate) fn get_num_bytes(&self) -> usize {
+    pub fn get_num_bytes(&self) -> usize {
         self.n_bytes
     }
 }

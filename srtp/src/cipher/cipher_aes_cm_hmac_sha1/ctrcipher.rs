@@ -11,7 +11,7 @@ use crate::key_derivation::*;
 
 type Aes128Ctr = ctr::Ctr128BE<aes::Aes128>;
 
-pub(crate) struct CipherAesCmHmacSha1 {
+pub struct CipherAesCmHmacSha1 {
     inner: CipherInner,
     srtp_session_key: Vec<u8>,
     srtcp_session_key: Vec<u8>,

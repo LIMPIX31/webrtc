@@ -21,13 +21,13 @@ use super::*;
 ///|                                                               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Debug, Clone)]
-pub(crate) struct ChunkHeader {
-    pub(crate) typ: ChunkType,
-    pub(crate) flags: u8,
-    pub(crate) value_length: u16,
+pub struct ChunkHeader {
+    pub typ: ChunkType,
+    pub flags: u8,
+    pub value_length: u16,
 }
 
-pub(crate) const CHUNK_HEADER_SIZE: usize = 4;
+pub const CHUNK_HEADER_SIZE: usize = 4;
 
 /// makes ChunkHeader printable
 impl fmt::Display for ChunkHeader {

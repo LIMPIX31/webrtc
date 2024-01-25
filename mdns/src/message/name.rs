@@ -192,7 +192,7 @@ impl Name {
         Ok(new_off)
     }
 
-    pub(crate) fn skip(msg: &[u8], off: usize) -> Result<usize> {
+    pub fn skip(msg: &[u8], off: usize) -> Result<usize> {
         // new_off is the offset where the next record will start. Pointers lead
         // to data that belongs to other names and thus doesn't count towards to
         // the usage of this name.

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod chandata_test;
+pub mod chandata_test;
 
 use super::channum::*;
 use crate::error::*;

@@ -2,12 +2,12 @@ use super::*;
 use crate::error::*;
 
 // pack_bytes appends the wire format of field to msg.
-pub(crate) fn pack_bytes(mut msg: Vec<u8>, field: &[u8]) -> Vec<u8> {
+pub fn pack_bytes(mut msg: Vec<u8>, field: &[u8]) -> Vec<u8> {
     msg.extend_from_slice(field);
     msg
 }
 
-pub(crate) fn unpack_bytes(msg: &[u8], off: usize, field: &mut [u8]) -> Result<usize> {
+pub fn unpack_bytes(msg: &[u8], off: usize, field: &mut [u8]) -> Result<usize> {
     let new_off = off + field.len();
     if new_off > msg.len() {
         return Err(Error::ErrBaseLen);
@@ -17,12 +17,12 @@ pub(crate) fn unpack_bytes(msg: &[u8], off: usize, field: &mut [u8]) -> Result<u
 }
 
 // pack_uint16 appends the wire format of field to msg.
-pub(crate) fn pack_uint16(mut msg: Vec<u8>, field: u16) -> Vec<u8> {
+pub fn pack_uint16(mut msg: Vec<u8>, field: u16) -> Vec<u8> {
     msg.extend_from_slice(&field.to_be_bytes());
     msg
 }
 
-pub(crate) fn unpack_uint16(msg: &[u8], off: usize) -> Result<(u16, usize)> {
+pub fn unpack_uint16(msg: &[u8], off: usize) -> Result<(u16, usize)> {
     if off + UINT16LEN > msg.len() {
         return Err(Error::ErrBaseLen);
     }
@@ -33,7 +33,7 @@ pub(crate) fn unpack_uint16(msg: &[u8], off: usize) -> Result<(u16, usize)> {
     ))
 }
 
-pub(crate) fn skip_uint16(msg: &[u8], off: usize) -> Result<usize> {
+pub fn skip_uint16(msg: &[u8], off: usize) -> Result<usize> {
     if off + UINT16LEN > msg.len() {
         return Err(Error::ErrBaseLen);
     }
@@ -41,12 +41,12 @@ pub(crate) fn skip_uint16(msg: &[u8], off: usize) -> Result<usize> {
 }
 
 // pack_uint32 appends the wire format of field to msg.
-pub(crate) fn pack_uint32(mut msg: Vec<u8>, field: u32) -> Vec<u8> {
+pub fn pack_uint32(mut msg: Vec<u8>, field: u32) -> Vec<u8> {
     msg.extend_from_slice(&field.to_be_bytes());
     msg
 }
 
-pub(crate) fn unpack_uint32(msg: &[u8], off: usize) -> Result<(u32, usize)> {
+pub fn unpack_uint32(msg: &[u8], off: usize) -> Result<(u32, usize)> {
     if off + UINT32LEN > msg.len() {
         return Err(Error::ErrBaseLen);
     }
@@ -57,7 +57,7 @@ pub(crate) fn unpack_uint32(msg: &[u8], off: usize) -> Result<(u32, usize)> {
     Ok((v, off + UINT32LEN))
 }
 
-pub(crate) fn skip_uint32(msg: &[u8], off: usize) -> Result<usize> {
+pub fn skip_uint32(msg: &[u8], off: usize) -> Result<usize> {
     if off + UINT32LEN > msg.len() {
         return Err(Error::ErrBaseLen);
     }
@@ -65,7 +65,7 @@ pub(crate) fn skip_uint32(msg: &[u8], off: usize) -> Result<usize> {
 }
 
 // pack_text appends the wire format of field to msg.
-pub(crate) fn pack_str(mut msg: Vec<u8>, field: &str) -> Result<Vec<u8>> {
+pub fn pack_str(mut msg: Vec<u8>, field: &str) -> Result<Vec<u8>> {
     let l = field.len();
     if l > 255 {
         return Err(Error::ErrStringTooLong);
@@ -75,7 +75,7 @@ pub(crate) fn pack_str(mut msg: Vec<u8>, field: &str) -> Result<Vec<u8>> {
     Ok(msg)
 }
 
-pub(crate) fn unpack_str(msg: &[u8], off: usize) -> Result<(String, usize)> {
+pub fn unpack_str(msg: &[u8], off: usize) -> Result<(String, usize)> {
     if off >= msg.len() {
         return Err(Error::ErrBaseLen);
     }

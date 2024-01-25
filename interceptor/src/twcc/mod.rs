@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod twcc_test;
+pub mod twcc_test;
 
 pub mod receiver;
 pub mod sender;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extended_report_test;
+pub mod extended_report_test;
 
 pub mod dlrr;
 pub mod prt;

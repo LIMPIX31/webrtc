@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod resolver_test;
+pub mod resolver_test;
 
 use std::collections::HashMap;
 use std::future::Future;
@@ -13,13 +13,13 @@ use tokio::sync::Mutex;
 use crate::error::*;
 
 #[derive(Default)]
-pub(crate) struct Resolver {
+pub struct Resolver {
     parent: Option<Arc<Mutex<Resolver>>>,
     hosts: HashMap<String, IpAddr>,
 }
 
 impl Resolver {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         let mut r = Resolver {
             parent: None,
             hosts: HashMap::new(),
@@ -31,11 +31,11 @@ impl Resolver {
         r
     }
 
-    pub(crate) fn set_parent(&mut self, p: Arc<Mutex<Resolver>>) {
+    pub fn set_parent(&mut self, p: Arc<Mutex<Resolver>>) {
         self.parent = Some(p);
     }
 
-    pub(crate) fn add_host(&mut self, name: String, ip_addr: String) -> Result<()> {
+    pub fn add_host(&mut self, name: String, ip_addr: String) -> Result<()> {
         if name.is_empty() {
             return Err(Error::ErrHostnameEmpty);
         }
@@ -45,7 +45,7 @@ impl Resolver {
         Ok(())
     }
 
-    pub(crate) fn lookup(
+    pub fn lookup(
         &self,
         host_name: String,
     ) -> Pin<Box<dyn Future<Output = Option<IpAddr>> + Send + 'static>> {

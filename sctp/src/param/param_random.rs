@@ -5,8 +5,8 @@ use super::param_type::*;
 use super::*;
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamRandom {
-    pub(crate) random_data: Bytes,
+pub struct ParamRandom {
+    pub random_data: Bytes,
 }
 
 impl fmt::Display for ParamRandom {

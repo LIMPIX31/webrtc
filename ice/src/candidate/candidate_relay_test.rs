@@ -11,7 +11,7 @@ use crate::agent::Agent;
 use crate::error::Error;
 use crate::url::{ProtoType, SchemeType, Url};
 
-pub(crate) struct OptimisticAuthHandler;
+pub struct OptimisticAuthHandler;
 
 impl AuthHandler for OptimisticAuthHandler {
     fn auth_handle(

@@ -159,10 +159,10 @@ macro_rules! test_serde_symmetry {
 
 #[allow(unused_imports)]
 #[cfg(test)]
-pub(crate) use test_serde_symmetry;
+pub use test_serde_symmetry;
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use crate::property::all::name::*;
     use crate::{
         AdvancedMediaTrackConstraints, FacingMode, MandatoryMediaTrackConstraints,

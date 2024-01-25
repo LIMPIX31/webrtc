@@ -127,11 +127,11 @@ impl Default for Config {
     }
 }
 
-pub(crate) const DEFAULT_MTU: usize = 1200; // bytes
+pub const DEFAULT_MTU: usize = 1200; // bytes
 
 // PSKCallback is called once we have the remote's psk_identity_hint.
 // If the remote provided none it will be nil
-pub(crate) type PskCallback = Arc<dyn (Fn(&[u8]) -> Result<Vec<u8>>) + Send + Sync>;
+pub type PskCallback = Arc<dyn (Fn(&[u8]) -> Result<Vec<u8>>) + Send + Sync>;
 
 // ClientAuthType declares the policy the server will follow for
 // TLS Client Authentication.
@@ -155,7 +155,7 @@ pub enum ExtendedMasterSecretType {
     Disable = 2,
 }
 
-pub(crate) fn validate_config(is_client: bool, config: &Config) -> Result<()> {
+pub fn validate_config(is_client: bool, config: &Config) -> Result<()> {
     if is_client && config.psk.is_some() && config.psk_identity_hint.is_none() {
         return Err(Error::ErrPskAndIdentityMustBeSetForClient);
     }

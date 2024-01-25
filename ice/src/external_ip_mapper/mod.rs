@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod external_ip_mapper_test;
+pub mod external_ip_mapper_test;
 
 use std::collections::HashMap;
 use std::net::IpAddr;
@@ -7,7 +7,7 @@ use std::net::IpAddr;
 use crate::candidate::*;
 use crate::error::*;
 
-pub(crate) fn validate_ip_string(ip_str: &str) -> Result<IpAddr> {
+pub fn validate_ip_string(ip_str: &str) -> Result<IpAddr> {
     match ip_str.parse() {
         Ok(ip) => Ok(ip),
         Err(_) => Err(Error::ErrInvalidNat1to1IpMapping),
@@ -16,13 +16,13 @@ pub(crate) fn validate_ip_string(ip_str: &str) -> Result<IpAddr> {
 
 /// Holds the mapping of local and external IP address for a particular IP family.
 #[derive(Default, PartialEq, Debug)]
-pub(crate) struct IpMapping {
+pub struct IpMapping {
     ip_sole: Option<IpAddr>, // when non-nil, this is the sole external IP for one local IP assumed
     ip_map: HashMap<String, IpAddr>, // local-to-external IP mapping (k: local, v: external)
 }
 
 impl IpMapping {
-    pub(crate) fn set_sole_ip(&mut self, ip: IpAddr) -> Result<()> {
+    pub fn set_sole_ip(&mut self, ip: IpAddr) -> Result<()> {
         if self.ip_sole.is_some() || !self.ip_map.is_empty() {
             return Err(Error::ErrInvalidNat1to1IpMapping);
         }
@@ -32,7 +32,7 @@ impl IpMapping {
         Ok(())
     }
 
-    pub(crate) fn add_ip_mapping(&mut self, loc_ip: IpAddr, ext_ip: IpAddr) -> Result<()> {
+    pub fn add_ip_mapping(&mut self, loc_ip: IpAddr, ext_ip: IpAddr) -> Result<()> {
         if self.ip_sole.is_some() {
             return Err(Error::ErrInvalidNat1to1IpMapping);
         }
@@ -49,7 +49,7 @@ impl IpMapping {
         Ok(())
     }
 
-    pub(crate) fn find_external_ip(&self, loc_ip: IpAddr) -> Result<IpAddr> {
+    pub fn find_external_ip(&self, loc_ip: IpAddr) -> Result<IpAddr> {
         if let Some(ip_sole) = &self.ip_sole {
             return Ok(*ip_sole);
         }
@@ -62,14 +62,14 @@ impl IpMapping {
 }
 
 #[derive(Default)]
-pub(crate) struct ExternalIpMapper {
-    pub(crate) ipv4_mapping: IpMapping,
-    pub(crate) ipv6_mapping: IpMapping,
-    pub(crate) candidate_type: CandidateType,
+pub struct ExternalIpMapper {
+    pub ipv4_mapping: IpMapping,
+    pub ipv6_mapping: IpMapping,
+    pub candidate_type: CandidateType,
 }
 
 impl ExternalIpMapper {
-    pub(crate) fn new(mut candidate_type: CandidateType, ips: &[String]) -> Result<Option<Self>> {
+    pub fn new(mut candidate_type: CandidateType, ips: &[String]) -> Result<Option<Self>> {
         if ips.is_empty() {
             return Ok(None);
         }
@@ -121,7 +121,7 @@ impl ExternalIpMapper {
         Ok(Some(m))
     }
 
-    pub(crate) fn find_external_ip(&self, local_ip_str: &str) -> Result<IpAddr> {
+    pub fn find_external_ip(&self, local_ip_str: &str) -> Result<IpAddr> {
         let loc_ip = validate_ip_string(local_ip_str)?;
 
         if loc_ip.is_ipv4() {

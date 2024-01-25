@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod ogg_reader_test;
+pub mod ogg_reader_test;
 
 use std::io::{Cursor, Read};
 
@@ -185,7 +185,7 @@ impl<R: Read> OggReader<R> {
     }
 }
 
-pub(crate) fn generate_checksum_table() -> [u32; 256] {
+pub fn generate_checksum_table() -> [u32; 256] {
     let mut table = [0u32; 256];
     const POLY: u32 = 0x04c11db7;
 

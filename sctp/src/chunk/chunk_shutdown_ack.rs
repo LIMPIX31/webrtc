@@ -14,7 +14,7 @@ use super::*;
 ///|   Type = 8    | Chunk  Flags  |      Length = 4               |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone)]
-pub(crate) struct ChunkShutdownAck;
+pub struct ChunkShutdownAck;
 
 /// makes chunkShutdownAck printable
 impl fmt::Display for ChunkShutdownAck {

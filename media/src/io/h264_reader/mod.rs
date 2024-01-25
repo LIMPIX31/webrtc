@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod h264_reader_test;
+pub mod h264_reader_test;
 
 use std::fmt;
 use std::io::Read;
@@ -160,7 +160,7 @@ impl ReadBuffer {
         result
     }
 
-    pub(crate) fn fill_buffer(&mut self, reader: &mut impl Read) -> Result<()> {
+    pub fn fill_buffer(&mut self, reader: &mut impl Read) -> Result<()> {
         debug_assert_eq!(self.read_end, self.filled_end);
 
         self.read_end = 0;

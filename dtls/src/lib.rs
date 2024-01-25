@@ -12,7 +12,7 @@ pub mod conn;
 pub mod content;
 pub mod crypto;
 pub mod curve;
-mod error;
+pub mod error;
 pub mod extension;
 pub mod flight;
 pub mod fragment_buffer;
@@ -28,7 +28,7 @@ use cipher_suite::*;
 pub use error::Error;
 use extension::extension_use_srtp::SrtpProtectionProfile;
 
-pub(crate) fn find_matching_srtp_profile(
+pub fn find_matching_srtp_profile(
     a: &[SrtpProtectionProfile],
     b: &[SrtpProtectionProfile],
 ) -> Result<SrtpProtectionProfile, ()> {
@@ -42,7 +42,7 @@ pub(crate) fn find_matching_srtp_profile(
     Err(())
 }
 
-pub(crate) fn find_matching_cipher_suite(
+pub fn find_matching_cipher_suite(
     a: &[CipherSuiteId],
     b: &[CipherSuiteId],
 ) -> Result<CipherSuiteId, ()> {

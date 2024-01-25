@@ -1,23 +1,23 @@
 #[cfg(test)]
-mod chunk_test;
+pub mod chunk_test;
 
-pub(crate) mod chunk_abort;
-pub(crate) mod chunk_cookie_ack;
-pub(crate) mod chunk_cookie_echo;
-pub(crate) mod chunk_error;
-pub(crate) mod chunk_forward_tsn;
-pub(crate) mod chunk_header;
-pub(crate) mod chunk_heartbeat;
-pub(crate) mod chunk_heartbeat_ack;
-pub(crate) mod chunk_init;
+pub mod chunk_abort;
+pub mod chunk_cookie_ack;
+pub mod chunk_cookie_echo;
+pub mod chunk_error;
+pub mod chunk_forward_tsn;
+pub mod chunk_header;
+pub mod chunk_heartbeat;
+pub mod chunk_heartbeat_ack;
+pub mod chunk_init;
 pub mod chunk_payload_data;
-pub(crate) mod chunk_reconfig;
-pub(crate) mod chunk_selective_ack;
-pub(crate) mod chunk_shutdown;
-pub(crate) mod chunk_shutdown_ack;
-pub(crate) mod chunk_shutdown_complete;
-pub(crate) mod chunk_type;
-pub(crate) mod chunk_unknown;
+pub mod chunk_reconfig;
+pub mod chunk_selective_ack;
+pub mod chunk_shutdown;
+pub mod chunk_shutdown_ack;
+pub mod chunk_shutdown_complete;
+pub mod chunk_type;
+pub mod chunk_unknown;
 
 use std::any::Any;
 use std::fmt;
@@ -28,7 +28,7 @@ use chunk_header::*;
 
 use crate::error::{Error, Result};
 
-pub(crate) trait Chunk: fmt::Display + fmt::Debug {
+pub trait Chunk: fmt::Display + fmt::Debug {
     fn header(&self) -> ChunkHeader;
     fn unmarshal(raw: &Bytes) -> Result<Self>
     where

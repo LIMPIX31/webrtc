@@ -12,9 +12,9 @@ pub const LABEL_SRTCP_ENCRYPTION: u8 = 0x03;
 pub const LABEL_SRTCP_AUTHENTICATION_TAG: u8 = 0x04;
 pub const LABEL_SRTCP_SALT: u8 = 0x05;
 
-pub(crate) const SRTCP_INDEX_SIZE: usize = 4;
+pub const SRTCP_INDEX_SIZE: usize = 4;
 
-pub(crate) fn aes_cm_key_derivation(
+pub fn aes_cm_key_derivation(
     label: u8,
     master_key: &[u8],
     master_salt: &[u8],
@@ -67,7 +67,7 @@ pub(crate) fn aes_cm_key_derivation(
 /// i = 2^16 * roc + SEQ
 /// IV = (salt*2 ^ 16) | (ssrc*2 ^ 64) | (i*2 ^ 16)
 /// ```
-pub(crate) fn generate_counter(
+pub fn generate_counter(
     sequence_number: u16,
     rollover_counter: u32,
     ssrc: u32,
@@ -93,7 +93,7 @@ pub(crate) fn generate_counter(
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
     use crate::protection_profile::*;
 

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod url_test;
+pub mod url_test;
 
 use std::borrow::Cow;
 use std::convert::From;

@@ -4,7 +4,7 @@ use crate::candidate::candidate_peer_reflexive::CandidatePeerReflexiveConfig;
 use crate::candidate::candidate_relay::CandidateRelayConfig;
 use crate::candidate::candidate_server_reflexive::CandidateServerReflexiveConfig;
 
-pub(crate) fn host_candidate() -> Result<CandidateBase> {
+pub fn host_candidate() -> Result<CandidateBase> {
     CandidateHostConfig {
         base_config: CandidateBaseConfig {
             network: "udp".to_owned(),
@@ -17,7 +17,7 @@ pub(crate) fn host_candidate() -> Result<CandidateBase> {
     .new_candidate_host()
 }
 
-pub(crate) fn prflx_candidate() -> Result<CandidateBase> {
+pub fn prflx_candidate() -> Result<CandidateBase> {
     CandidatePeerReflexiveConfig {
         base_config: CandidateBaseConfig {
             network: "udp".to_owned(),
@@ -30,7 +30,7 @@ pub(crate) fn prflx_candidate() -> Result<CandidateBase> {
     .new_candidate_peer_reflexive()
 }
 
-pub(crate) fn srflx_candidate() -> Result<CandidateBase> {
+pub fn srflx_candidate() -> Result<CandidateBase> {
     CandidateServerReflexiveConfig {
         base_config: CandidateBaseConfig {
             network: "udp".to_owned(),
@@ -43,7 +43,7 @@ pub(crate) fn srflx_candidate() -> Result<CandidateBase> {
     .new_candidate_server_reflexive()
 }
 
-pub(crate) fn relay_candidate() -> Result<CandidateBase> {
+pub fn relay_candidate() -> Result<CandidateBase> {
     CandidateRelayConfig {
         base_config: CandidateBaseConfig {
             network: "udp".to_owned(),

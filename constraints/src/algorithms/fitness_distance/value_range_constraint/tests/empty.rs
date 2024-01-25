@@ -30,7 +30,7 @@ macro_rules! generate_empty_value_range_constraint_tests {
     };
 }
 
-mod u64_constraint {
+pub mod u64_constraint {
     use super::*;
 
     generate_empty_value_range_constraint_tests!(
@@ -52,7 +52,7 @@ mod u64_constraint {
     );
 }
 
-mod f64_constraint {
+pub mod f64_constraint {
     use super::*;
 
     generate_empty_value_range_constraint_tests!(

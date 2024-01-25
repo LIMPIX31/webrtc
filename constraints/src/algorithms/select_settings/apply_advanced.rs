@@ -12,7 +12,7 @@ use crate::MediaTrackSettings;
 /// This may change the order of items in `feasible_candidates`.
 /// In practice however this is not a problem as we have to sort
 /// it by fitness-distance eventually anyway.
-pub(super) fn apply_advanced_constraints<'a>(
+pub fn apply_advanced_constraints<'a>(
     mut candidates: Vec<(&'a MediaTrackSettings, f64)>,
     advanced_constraints: &SanitizedAdvancedMediaTrackConstraints,
 ) -> Vec<(&'a MediaTrackSettings, f64)> {
@@ -52,7 +52,7 @@ pub(super) fn apply_advanced_constraints<'a>(
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::iter::FromIterator;
 
     use super::*;

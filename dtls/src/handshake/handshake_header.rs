@@ -6,15 +6,15 @@ use super::*;
 
 // msg_len for Handshake messages assumes an extra 12 bytes for
 // sequence, Fragment and version information
-pub(crate) const HANDSHAKE_HEADER_LENGTH: usize = 12;
+pub const HANDSHAKE_HEADER_LENGTH: usize = 12;
 
 #[derive(Copy, Clone, PartialEq, Eq, Debug, Default)]
 pub struct HandshakeHeader {
-    pub(crate) handshake_type: HandshakeType,
-    pub(crate) length: u32, // uint24 in spec
-    pub(crate) message_sequence: u16,
-    pub(crate) fragment_offset: u32, // uint24 in spec
-    pub(crate) fragment_length: u32, // uint24 in spec
+    pub handshake_type: HandshakeType,
+    pub length: u32, // uint24 in spec
+    pub message_sequence: u16,
+    pub fragment_offset: u32, // uint24 in spec
+    pub fragment_length: u32, // uint24 in spec
 }
 
 impl HandshakeHeader {

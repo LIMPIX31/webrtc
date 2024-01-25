@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_certificate_request_test;
+pub mod handshake_message_certificate_request_test;
 
 use std::io::{Read, Write};
 
@@ -18,8 +18,8 @@ server's Certificate message).
 */
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageCertificateRequest {
-    pub(crate) certificate_types: Vec<ClientCertificateType>,
-    pub(crate) signature_hash_algorithms: Vec<SignatureHashAlgorithm>,
+    pub certificate_types: Vec<ClientCertificateType>,
+    pub signature_hash_algorithms: Vec<SignatureHashAlgorithm>,
 }
 
 const HANDSHAKE_MESSAGE_CERTIFICATE_REQUEST_MIN_LENGTH: usize = 5;

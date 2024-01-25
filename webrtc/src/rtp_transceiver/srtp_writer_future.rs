@@ -19,7 +19,7 @@ use crate::rtp_transceiver::SSRC;
 /// Used to override outgoing `RTP` packets' sequence numbers. On creating it is
 /// unabled and can be enabled before sending data beginning. Once data sending
 /// began it can not be enabled any more.
-pub(crate) struct SequenceTransformer(util::sync::Mutex<SequenceTransformerInner>);
+pub struct SequenceTransformer(util::sync::Mutex<SequenceTransformerInner>);
 
 /// [`SequenceTransformer`] inner.
 struct SequenceTransformerInner {
@@ -32,7 +32,7 @@ struct SequenceTransformerInner {
 
 impl SequenceTransformer {
     /// Creates a new [`SequenceTransformer`].
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self(util::sync::Mutex::new(SequenceTransformerInner {
             offset: 0,
             last_sq: rand::random(),
@@ -51,7 +51,7 @@ impl SequenceTransformer {
     ///
     /// With [`Error::ErrRTPSenderSeqTransEnabled`] on trying to enable
     /// [`SequenceTransformer`] after data sending began.
-    pub(crate) fn enable(&self) -> Result<()> {
+    pub fn enable(&self) -> Result<()> {
         let mut guard = self.0.lock();
 
         if guard.enabled {
@@ -67,7 +67,7 @@ impl SequenceTransformer {
 
     /// Indicates [`SequenceTransformer`] about necessity of recalculating
     /// `offset`.
-    pub(crate) fn reset_offset(&self) {
+    pub fn reset_offset(&self) {
         self.0.lock().reset_needed = true;
     }
 
@@ -101,14 +101,14 @@ impl SequenceTransformer {
 
 /// SrtpWriterFuture blocks Read/Write calls until
 /// the SRTP Session is available
-pub(crate) struct SrtpWriterFuture {
-    pub(crate) closed: AtomicBool,
-    pub(crate) ssrc: SSRC,
-    pub(crate) rtp_sender: Weak<RTPSenderInternal>,
-    pub(crate) rtp_transport: Arc<RTCDtlsTransport>,
-    pub(crate) rtcp_read_stream: Mutex<Option<Arc<Stream>>>, // atomic.Value // *
-    pub(crate) rtp_write_session: Mutex<Option<Arc<Session>>>, // atomic.Value // *
-    pub(crate) seq_trans: Arc<SequenceTransformer>,
+pub struct SrtpWriterFuture {
+    pub closed: AtomicBool,
+    pub ssrc: SSRC,
+    pub rtp_sender: Weak<RTPSenderInternal>,
+    pub rtp_transport: Arc<RTCDtlsTransport>,
+    pub rtcp_read_stream: Mutex<Option<Arc<Stream>>>, // atomic.Value // *
+    pub rtp_write_session: Mutex<Option<Arc<Session>>>, // atomic.Value // *
+    pub seq_trans: Arc<SequenceTransformer>,
 }
 
 impl SrtpWriterFuture {

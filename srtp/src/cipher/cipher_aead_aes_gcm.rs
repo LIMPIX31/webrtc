@@ -14,7 +14,7 @@ pub const CIPHER_AEAD_AES_GCM_AUTH_TAG_LEN: usize = 16;
 const RTCP_ENCRYPTION_FLAG: u8 = 0x80;
 
 /// AEAD Cipher based on AES.
-pub(crate) struct CipherAeadAesGcm {
+pub struct CipherAeadAesGcm {
     srtp_cipher: aes_gcm::Aes128Gcm,
     srtcp_cipher: aes_gcm::Aes128Gcm,
     srtp_session_salt: Vec<u8>,
@@ -133,7 +133,7 @@ impl Cipher for CipherAeadAesGcm {
 
 impl CipherAeadAesGcm {
     /// Create a new AEAD instance.
-    pub(crate) fn new(master_key: &[u8], master_salt: &[u8]) -> Result<CipherAeadAesGcm> {
+    pub fn new(master_key: &[u8], master_salt: &[u8]) -> Result<CipherAeadAesGcm> {
         let srtp_session_key = aes_cm_key_derivation(
             LABEL_SRTP_ENCRYPTION,
             master_key,
@@ -188,7 +188,7 @@ impl CipherAeadAesGcm {
     /// value is then XORed to the 12-octet salt to form the 12-octet IV.
     ///
     /// https://tools.ietf.org/html/rfc7714#section-8.1
-    pub(crate) fn rtp_initialization_vector(
+    pub fn rtp_initialization_vector(
         &self,
         header: &rtp::header::Header,
         roc: u32,
@@ -212,7 +212,7 @@ impl CipherAeadAesGcm {
     /// form the 12-octet IV.
     ///
     /// https://tools.ietf.org/html/rfc7714#section-9.1
-    pub(crate) fn rtcp_initialization_vector(&self, srtcp_index: usize, ssrc: u32) -> Vec<u8> {
+    pub fn rtcp_initialization_vector(&self, srtcp_index: usize, ssrc: u32) -> Vec<u8> {
         let mut iv = vec![0u8; 12];
 
         BigEndian::write_u32(&mut iv[2..], ssrc);
@@ -230,7 +230,7 @@ impl CipherAeadAesGcm {
     /// "ESRTCP word"
     ///
     /// https://tools.ietf.org/html/rfc7714#section-17
-    pub(crate) fn rtcp_additional_authenticated_data(
+    pub fn rtcp_additional_authenticated_data(
         &self,
         rtcp_packet: &[u8],
         srtcp_index: usize,

@@ -6,15 +6,15 @@ use tokio::time::{Duration, Instant};
 
 use super::*;
 
-pub(crate) const PERMISSION_TIMEOUT: Duration = Duration::from_secs(5 * 60);
+pub const PERMISSION_TIMEOUT: Duration = Duration::from_secs(5 * 60);
 
 /// `Permission` represents a TURN permission. TURN permissions mimic the address-restricted
 /// filtering mechanism of NATs that comply with [RFC4787].
 ///
 /// https://tools.ietf.org/html/rfc5766#section-2.3
 pub struct Permission {
-    pub(crate) addr: SocketAddr,
-    pub(crate) permissions: Option<Arc<Mutex<HashMap<String, Permission>>>>,
+    pub addr: SocketAddr,
+    pub permissions: Option<Arc<Mutex<HashMap<String, Permission>>>>,
     reset_tx: Option<mpsc::Sender<Duration>>,
     timer_expired: Arc<AtomicBool>,
 }
@@ -30,7 +30,7 @@ impl Permission {
         }
     }
 
-    pub(crate) async fn start(&mut self, lifetime: Duration) {
+    pub async fn start(&mut self, lifetime: Duration) {
         let (reset_tx, mut reset_rx) = mpsc::channel(1);
         self.reset_tx = Some(reset_tx);
 
@@ -66,13 +66,13 @@ impl Permission {
         });
     }
 
-    pub(crate) fn stop(&mut self) -> bool {
+    pub fn stop(&mut self) -> bool {
         let expired = self.reset_tx.is_none() || self.timer_expired.load(Ordering::SeqCst);
         self.reset_tx.take();
         expired
     }
 
-    pub(crate) async fn refresh(&self, lifetime: Duration) {
+    pub async fn refresh(&self, lifetime: Duration) {
         if let Some(tx) = &self.reset_tx {
             let _ = tx.send(lifetime).await;
         }

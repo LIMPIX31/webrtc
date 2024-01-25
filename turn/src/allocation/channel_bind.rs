@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod channel_bind_test;
+pub mod channel_bind_test;
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -15,9 +15,9 @@ use crate::proto::channum::*;
 /// https://tools.ietf.org/html/rfc5766#section-2.5.
 #[derive(Clone)]
 pub struct ChannelBind {
-    pub(crate) peer: SocketAddr,
-    pub(crate) number: ChannelNumber,
-    pub(crate) channel_bindings: Option<Arc<Mutex<HashMap<ChannelNumber, ChannelBind>>>>,
+    pub peer: SocketAddr,
+    pub number: ChannelNumber,
+    pub channel_bindings: Option<Arc<Mutex<HashMap<ChannelNumber, ChannelBind>>>>,
     reset_tx: Option<mpsc::Sender<Duration>>,
     timer_expired: Arc<AtomicBool>,
 }
@@ -34,7 +34,7 @@ impl ChannelBind {
         }
     }
 
-    pub(crate) async fn start(&mut self, lifetime: Duration) {
+    pub async fn start(&mut self, lifetime: Duration) {
         let (reset_tx, mut reset_rx) = mpsc::channel(1);
         self.reset_tx = Some(reset_tx);
 
@@ -72,13 +72,13 @@ impl ChannelBind {
         });
     }
 
-    pub(crate) fn stop(&mut self) -> bool {
+    pub fn stop(&mut self) -> bool {
         let expired = self.reset_tx.is_none() || self.timer_expired.load(Ordering::SeqCst);
         self.reset_tx.take();
         expired
     }
 
-    pub(crate) async fn refresh(&self, lifetime: Duration) {
+    pub async fn refresh(&self, lifetime: Duration) {
         if let Some(tx) = &self.reset_tx {
             let _ = tx.send(lifetime).await;
         }

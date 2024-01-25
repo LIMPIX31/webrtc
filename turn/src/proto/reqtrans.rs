@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod reqtrans_test;
+pub mod reqtrans_test;
 
 use std::fmt;
 

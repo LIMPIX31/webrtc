@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod integrity_test;
+pub mod integrity_test;
 
 use std::fmt;
 
@@ -12,7 +12,7 @@ use crate::error::*;
 use crate::message::*;
 
 // separator for credentials.
-pub(crate) const CREDENTIALS_SEP: &str = ":";
+pub const CREDENTIALS_SEP: &str = ":";
 
 // MessageIntegrity represents MESSAGE-INTEGRITY attribute.
 //
@@ -62,7 +62,7 @@ impl Setter for MessageIntegrity {
     }
 }
 
-pub(crate) const MESSAGE_INTEGRITY_SIZE: usize = 20;
+pub const MESSAGE_INTEGRITY_SIZE: usize = 20;
 
 impl MessageIntegrity {
     // new_long_term_integrity returns new MessageIntegrity with key for long-term

@@ -68,14 +68,14 @@ use crate::util::get_padding_size;
 ///Reserved for ECN Capable (Note 2)   Optional    32768 (0x8000)
 ///Host Name IP (Note 3)          Optional    11<Paste>
 #[derive(Default, Debug)]
-pub(crate) struct ChunkInit {
-    pub(crate) is_ack: bool,
-    pub(crate) initiate_tag: u32,
-    pub(crate) advertised_receiver_window_credit: u32,
-    pub(crate) num_outbound_streams: u16,
-    pub(crate) num_inbound_streams: u16,
-    pub(crate) initial_tsn: u32,
-    pub(crate) params: Vec<Box<dyn Param + Send + Sync>>,
+pub struct ChunkInit {
+    pub is_ack: bool,
+    pub initiate_tag: u32,
+    pub advertised_receiver_window_credit: u32,
+    pub num_outbound_streams: u16,
+    pub num_inbound_streams: u16,
+    pub initial_tsn: u32,
+    pub params: Vec<Box<dyn Param + Send + Sync>>,
 }
 
 impl Clone for ChunkInit {
@@ -92,8 +92,8 @@ impl Clone for ChunkInit {
     }
 }
 
-pub(crate) const INIT_CHUNK_MIN_LENGTH: usize = 16;
-pub(crate) const INIT_OPTIONAL_VAR_HEADER_LENGTH: usize = 4;
+pub const INIT_CHUNK_MIN_LENGTH: usize = 16;
+pub const INIT_OPTIONAL_VAR_HEADER_LENGTH: usize = 4;
 
 /// makes chunkInitCommon printable
 impl fmt::Display for ChunkInit {
@@ -292,7 +292,7 @@ impl Chunk for ChunkInit {
 }
 
 impl ChunkInit {
-    pub(crate) fn set_supported_extensions(&mut self) {
+    pub fn set_supported_extensions(&mut self) {
         // TODO RFC5061 https://tools.ietf.org/html/rfc6525#section-5.2
         // An implementation supporting this (Supported Extensions Parameter)
         // extension MUST list the ASCONF, the ASCONF-ACK, and the AUTH chunks

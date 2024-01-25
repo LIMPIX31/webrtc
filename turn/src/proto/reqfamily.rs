@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod reqfamily_test;
+pub mod reqfamily_test;
 
 use std::fmt;
 

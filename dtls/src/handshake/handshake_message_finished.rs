@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_finished_test;
+pub mod handshake_message_finished_test;
 
 use std::io::{Read, Write};
 
@@ -7,7 +7,7 @@ use super::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageFinished {
-    pub(crate) verify_data: Vec<u8>,
+    pub verify_data: Vec<u8>,
 }
 
 impl HandshakeMessageFinished {

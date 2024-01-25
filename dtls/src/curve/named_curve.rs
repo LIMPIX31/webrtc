@@ -23,16 +23,16 @@ impl From<u16> for NamedCurve {
     }
 }
 
-pub(crate) enum NamedCurvePrivateKey {
+pub enum NamedCurvePrivateKey {
     EphemeralSecretP256(p256::ecdh::EphemeralSecret),
     EphemeralSecretP384(p384::ecdh::EphemeralSecret),
     StaticSecretX25519(x25519_dalek::StaticSecret),
 }
 
 pub struct NamedCurveKeypair {
-    pub(crate) curve: NamedCurve,
-    pub(crate) public_key: Vec<u8>,
-    pub(crate) private_key: NamedCurvePrivateKey,
+    pub curve: NamedCurve,
+    pub public_key: Vec<u8>,
+    pub private_key: NamedCurvePrivateKey,
 }
 
 fn elliptic_curve_keypair(curve: NamedCurve) -> Result<NamedCurveKeypair> {

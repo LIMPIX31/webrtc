@@ -125,7 +125,7 @@ fn test_constrained(
     result.unwrap()
 }
 
-mod unconstrained {
+pub mod unconstrained {
     use super::*;
 
     fn default_constraints() -> MediaTrackConstraints {
@@ -160,7 +160,7 @@ mod unconstrained {
     }
 }
 
-mod overconstrained {
+pub mod overconstrained {
     use super::*;
     use crate::MediaTrackProperty;
 
@@ -274,7 +274,7 @@ mod overconstrained {
     }
 }
 
-mod constrained {
+pub mod constrained {
     use super::*;
 
     #[test]
@@ -500,7 +500,7 @@ mod constrained {
 //                                                         └───────┬──────┘
 //     selected settings: ─────────────────────────────────────────┘
 // ```
-mod smoke {
+pub mod smoke {
     use super::*;
     use crate::{MediaTrackConstraintSet, ValueConstraint, ValueRangeConstraint};
 

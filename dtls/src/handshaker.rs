@@ -51,7 +51,7 @@ use crate::signature_hash_algorithm::*;
 //           Retransmit last flight
 
 #[derive(Copy, Clone, PartialEq)]
-pub(crate) enum HandshakeState {
+pub enum HandshakeState {
     Errored,
     Preparing,
     Sending,
@@ -71,27 +71,27 @@ impl fmt::Display for HandshakeState {
     }
 }
 
-pub(crate) type VerifyPeerCertificateFn =
+pub type VerifyPeerCertificateFn =
     Arc<dyn (Fn(&[Vec<u8>], &[rustls::Certificate]) -> Result<()>) + Send + Sync>;
 
-pub(crate) struct HandshakeConfig {
-    pub(crate) local_psk_callback: Option<PskCallback>,
-    pub(crate) local_psk_identity_hint: Option<Vec<u8>>,
-    pub(crate) local_cipher_suites: Vec<CipherSuiteId>, // Available CipherSuites
-    pub(crate) local_signature_schemes: Vec<SignatureHashAlgorithm>, // Available signature schemes
-    pub(crate) extended_master_secret: ExtendedMasterSecretType, // Policy for the Extended Master Support extension
-    pub(crate) local_srtp_protection_profiles: Vec<SrtpProtectionProfile>, // Available SRTPProtectionProfiles, if empty no SRTP support
-    pub(crate) server_name: String,
-    pub(crate) client_auth: ClientAuthType, // If we are a client should we request a client certificate
-    pub(crate) local_certificates: Vec<Certificate>,
-    pub(crate) name_to_certificate: HashMap<String, Certificate>,
-    pub(crate) insecure_skip_verify: bool,
-    pub(crate) insecure_verification: bool,
-    pub(crate) verify_peer_certificate: Option<VerifyPeerCertificateFn>,
-    pub(crate) server_cert_verifier: Arc<dyn rustls::client::ServerCertVerifier>,
-    pub(crate) client_cert_verifier: Option<Arc<dyn rustls::server::ClientCertVerifier>>,
-    pub(crate) retransmit_interval: tokio::time::Duration,
-    pub(crate) initial_epoch: u16,
+pub struct HandshakeConfig {
+    pub local_psk_callback: Option<PskCallback>,
+    pub local_psk_identity_hint: Option<Vec<u8>>,
+    pub local_cipher_suites: Vec<CipherSuiteId>, // Available CipherSuites
+    pub local_signature_schemes: Vec<SignatureHashAlgorithm>, // Available signature schemes
+    pub extended_master_secret: ExtendedMasterSecretType, // Policy for the Extended Master Support extension
+    pub local_srtp_protection_profiles: Vec<SrtpProtectionProfile>, // Available SRTPProtectionProfiles, if empty no SRTP support
+    pub server_name: String,
+    pub client_auth: ClientAuthType, // If we are a client should we request a client certificate
+    pub local_certificates: Vec<Certificate>,
+    pub name_to_certificate: HashMap<String, Certificate>,
+    pub insecure_skip_verify: bool,
+    pub insecure_verification: bool,
+    pub verify_peer_certificate: Option<VerifyPeerCertificateFn>,
+    pub server_cert_verifier: Arc<dyn rustls::client::ServerCertVerifier>,
+    pub client_cert_verifier: Option<Arc<dyn rustls::server::ClientCertVerifier>>,
+    pub retransmit_interval: tokio::time::Duration,
+    pub initial_epoch: u16,
     //log           logging.LeveledLogger
     //mu sync.Mutex
 }
@@ -124,7 +124,7 @@ impl Default for HandshakeConfig {
 }
 
 impl HandshakeConfig {
-    pub(crate) fn get_certificate(&self, server_name: &str) -> Result<Certificate> {
+    pub fn get_certificate(&self, server_name: &str) -> Result<Certificate> {
         //TODO
         /*if self.name_to_certificate.is_empty() {
             let mut name_to_certificate = HashMap::new();
@@ -191,7 +191,7 @@ impl HandshakeConfig {
     }
 }
 
-pub(crate) fn srv_cli_str(is_client: bool) -> String {
+pub fn srv_cli_str(is_client: bool) -> String {
     if is_client {
         return "client".to_owned();
     }
@@ -199,7 +199,7 @@ pub(crate) fn srv_cli_str(is_client: bool) -> String {
 }
 
 impl DTLSConn {
-    pub(crate) async fn handshake(&mut self, mut state: HandshakeState) -> Result<()> {
+    pub async fn handshake(&mut self, mut state: HandshakeState) -> Result<()> {
         loop {
             trace!(
                 "[handshake:{}] {}: {}",

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod compound_packet_test;
+pub mod compound_packet_test;
 
 use std::any::Any;
 use std::fmt;

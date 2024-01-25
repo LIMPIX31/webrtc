@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_certificate_verify_test;
+pub mod handshake_message_certificate_verify_test;
 
 use std::io::{Read, Write};
 
@@ -10,8 +10,8 @@ use crate::signature_hash_algorithm::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HandshakeMessageCertificateVerify {
-    pub(crate) algorithm: SignatureHashAlgorithm,
-    pub(crate) signature: Vec<u8>,
+    pub algorithm: SignatureHashAlgorithm,
+    pub signature: Vec<u8>,
 }
 
 const HANDSHAKE_MESSAGE_CERTIFICATE_VERIFY_MIN_LENGTH: usize = 4;

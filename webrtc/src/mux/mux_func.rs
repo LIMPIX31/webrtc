@@ -42,7 +42,7 @@ pub fn match_srtp_or_srtcp(b: &[u8]) -> bool {
     match_range(128, 191)(b)
 }
 
-pub(crate) fn is_rtcp(buf: &[u8]) -> bool {
+pub fn is_rtcp(buf: &[u8]) -> bool {
     // Not long enough to determine RTP/RTCP
     if buf.len() < 4 {
         return false;

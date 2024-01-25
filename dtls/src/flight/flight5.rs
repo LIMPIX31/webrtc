@@ -23,7 +23,7 @@ use crate::record_layer::*;
 use crate::signature_hash_algorithm::*;
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct Flight5;
+pub struct Flight5;
 
 impl fmt::Display for Flight5 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

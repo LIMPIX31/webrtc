@@ -97,7 +97,7 @@ impl fmt::Display for RTCIceConnectionState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

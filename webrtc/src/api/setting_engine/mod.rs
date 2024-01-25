@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod setting_engine_test;
+pub mod setting_engine_test;
 
 use std::sync::Arc;
 
@@ -58,30 +58,30 @@ pub struct ReplayProtection {
 /// use-cases without deviating from the WebRTC API elsewhere.
 #[derive(Default, Clone)]
 pub struct SettingEngine {
-    pub(crate) detach: Detach,
-    pub(crate) timeout: Timeout,
-    pub(crate) candidates: Candidates,
-    pub(crate) replay_protection: ReplayProtection,
-    pub(crate) sdp_media_level_fingerprints: bool,
-    pub(crate) answering_dtls_role: DTLSRole,
-    pub(crate) disable_certificate_fingerprint_verification: bool,
-    pub(crate) allow_insecure_verification_algorithm: bool,
-    pub(crate) disable_srtp_replay_protection: bool,
-    pub(crate) disable_srtcp_replay_protection: bool,
-    pub(crate) vnet: Option<Arc<Net>>,
+    pub detach: Detach,
+    pub timeout: Timeout,
+    pub candidates: Candidates,
+    pub replay_protection: ReplayProtection,
+    pub sdp_media_level_fingerprints: bool,
+    pub answering_dtls_role: DTLSRole,
+    pub disable_certificate_fingerprint_verification: bool,
+    pub allow_insecure_verification_algorithm: bool,
+    pub disable_srtp_replay_protection: bool,
+    pub disable_srtcp_replay_protection: bool,
+    pub vnet: Option<Arc<Net>>,
     //BufferFactory                             :func(packetType packetio.BufferPacketType, ssrc uint32) io.ReadWriteCloser,
     //iceTCPMux                                 :ice.TCPMux,?
     //iceProxyDialer                            :proxy.Dialer,?
-    pub(crate) udp_network: UDPNetwork,
-    pub(crate) disable_media_engine_copy: bool,
-    pub(crate) srtp_protection_profiles: Vec<SrtpProtectionProfile>,
-    pub(crate) receive_mtu: usize,
-    pub(crate) mid_generator: Option<Arc<dyn Fn(isize) -> String + Send + Sync>>,
+    pub udp_network: UDPNetwork,
+    pub disable_media_engine_copy: bool,
+    pub srtp_protection_profiles: Vec<SrtpProtectionProfile>,
+    pub receive_mtu: usize,
+    pub mid_generator: Option<Arc<dyn Fn(isize) -> String + Send + Sync>>,
 }
 
 impl SettingEngine {
     /// get_receive_mtu returns the configured MTU. If SettingEngine's MTU is configured to 0 it returns the default
-    pub(crate) fn get_receive_mtu(&self) -> usize {
+    pub fn get_receive_mtu(&self) -> usize {
         if self.receive_mtu != 0 {
             self.receive_mtu
         } else {

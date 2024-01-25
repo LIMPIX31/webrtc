@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod data_channel_test;
+pub mod data_channel_test;
 
 use std::borrow::Borrow;
 use std::future::Future;

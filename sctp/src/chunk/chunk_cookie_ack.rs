@@ -14,7 +14,7 @@ use super::*;
 /// |   Type = 11   |Chunk  Flags   |     Length = 4                |
 /// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Debug, Clone)]
-pub(crate) struct ChunkCookieAck;
+pub struct ChunkCookieAck;
 
 /// makes ChunkCookieAck printable
 impl fmt::Display for ChunkCookieAck {

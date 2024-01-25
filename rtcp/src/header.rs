@@ -172,7 +172,7 @@ impl Unmarshal for Header {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use bytes::Bytes;
 
     use super::*;

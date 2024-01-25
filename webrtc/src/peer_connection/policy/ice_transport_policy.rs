@@ -48,7 +48,7 @@ impl fmt::Display for RTCIceTransportPolicy {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod api_test;
+pub mod api_test;
 
 pub mod interceptor_registry;
 pub mod media_engine;
@@ -34,9 +34,9 @@ use crate::track::track_local::TrackLocal;
 /// defaultAPI object. Note that the global version of the API
 /// may be phased out in the future.
 pub struct API {
-    pub(crate) setting_engine: Arc<SettingEngine>,
-    pub(crate) media_engine: Arc<MediaEngine>,
-    pub(crate) interceptor_registry: Registry,
+    pub setting_engine: Arc<SettingEngine>,
+    pub media_engine: Arc<MediaEngine>,
+    pub interceptor_registry: Registry,
 }
 
 impl API {

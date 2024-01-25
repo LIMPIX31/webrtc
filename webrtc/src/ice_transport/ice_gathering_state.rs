@@ -50,7 +50,7 @@ impl fmt::Display for RTCIceGatheringState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

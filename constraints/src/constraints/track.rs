@@ -167,7 +167,7 @@ impl ResolvedMediaTrackConstraints {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::iter::FromIterator;
 
     use super::*;
@@ -287,7 +287,7 @@ mod tests {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use std::iter::FromIterator;
 
     use super::*;

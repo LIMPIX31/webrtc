@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod vp8_test;
+pub mod vp8_test;
 
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 

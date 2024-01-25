@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod stream_test;
+pub mod stream_test;
 
 use std::future::Future;
 use std::net::Shutdown;
@@ -61,26 +61,26 @@ pub type OnBufferedAmountLowFn =
 /// Stream represents an SCTP stream
 #[derive(Default)]
 pub struct Stream {
-    pub(crate) max_payload_size: u32,
-    pub(crate) max_message_size: Arc<AtomicU32>, // clone from association
-    pub(crate) state: Arc<AtomicU8>,             // clone from association
-    pub(crate) awake_write_loop_ch: Option<Arc<mpsc::Sender<()>>>,
-    pub(crate) pending_queue: Arc<PendingQueue>,
+    pub max_payload_size: u32,
+    pub max_message_size: Arc<AtomicU32>, // clone from association
+    pub state: Arc<AtomicU8>,             // clone from association
+    pub awake_write_loop_ch: Option<Arc<mpsc::Sender<()>>>,
+    pub pending_queue: Arc<PendingQueue>,
 
-    pub(crate) stream_identifier: u16,
-    pub(crate) default_payload_type: AtomicU32, //PayloadProtocolIdentifier,
-    pub(crate) reassembly_queue: Mutex<ReassemblyQueue>,
-    pub(crate) sequence_number: AtomicU16,
-    pub(crate) read_notifier: Notify,
-    pub(crate) read_shutdown: AtomicBool,
-    pub(crate) write_shutdown: AtomicBool,
-    pub(crate) unordered: AtomicBool,
-    pub(crate) reliability_type: AtomicU8, //ReliabilityType,
-    pub(crate) reliability_value: AtomicU32,
-    pub(crate) buffered_amount: AtomicUsize,
-    pub(crate) buffered_amount_low: AtomicUsize,
-    pub(crate) on_buffered_amount_low: ArcSwapOption<Mutex<OnBufferedAmountLowFn>>,
-    pub(crate) name: String,
+    pub stream_identifier: u16,
+    pub default_payload_type: AtomicU32, //PayloadProtocolIdentifier,
+    pub reassembly_queue: Mutex<ReassemblyQueue>,
+    pub sequence_number: AtomicU16,
+    pub read_notifier: Notify,
+    pub read_shutdown: AtomicBool,
+    pub write_shutdown: AtomicBool,
+    pub unordered: AtomicBool,
+    pub reliability_type: AtomicU8, //ReliabilityType,
+    pub reliability_value: AtomicU32,
+    pub buffered_amount: AtomicUsize,
+    pub buffered_amount_low: AtomicUsize,
+    pub on_buffered_amount_low: ArcSwapOption<Mutex<OnBufferedAmountLowFn>>,
+    pub name: String,
 }
 
 impl fmt::Debug for Stream {
@@ -107,7 +107,7 @@ impl fmt::Debug for Stream {
 }
 
 impl Stream {
-    pub(crate) fn new(
+    pub fn new(
         name: String,
         stream_identifier: u16,
         max_payload_size: u32,
@@ -200,7 +200,7 @@ impl Stream {
         }
     }
 
-    pub(crate) async fn handle_data(&self, pd: ChunkPayloadData) {
+    pub async fn handle_data(&self, pd: ChunkPayloadData) {
         let readable = {
             let mut reassembly_queue = self.reassembly_queue.lock().await;
             if reassembly_queue.push(pd) {
@@ -219,7 +219,7 @@ impl Stream {
         }
     }
 
-    pub(crate) async fn handle_forward_tsn_for_ordered(&self, ssn: u16) {
+    pub async fn handle_forward_tsn_for_ordered(&self, ssn: u16) {
         if self.unordered.load(Ordering::SeqCst) {
             return; // unordered chunks are handled by handleForwardUnordered method
         }
@@ -238,7 +238,7 @@ impl Stream {
         }
     }
 
-    pub(crate) async fn handle_forward_tsn_for_unordered(&self, new_cumulative_tsn: u32) {
+    pub async fn handle_forward_tsn_for_unordered(&self, new_cumulative_tsn: u32) {
         if !self.unordered.load(Ordering::SeqCst) {
             return; // ordered chunks are handled by handleForwardTSNOrdered method
         }
@@ -423,7 +423,7 @@ impl Stream {
 
     /// This method is called by association's read_loop (go-)routine to notify this stream
     /// of the specified amount of outgoing data has been delivered to the peer.
-    pub(crate) async fn on_buffer_released(&self, n_bytes_released: i64) {
+    pub async fn on_buffer_released(&self, n_bytes_released: i64) {
         if n_bytes_released <= 0 {
             return;
         }
@@ -465,7 +465,7 @@ impl Stream {
 
     /// get_num_bytes_in_reassembly_queue returns the number of bytes of data currently queued to
     /// be read (once chunk is complete).
-    pub(crate) async fn get_num_bytes_in_reassembly_queue(&self) -> usize {
+    pub async fn get_num_bytes_in_reassembly_queue(&self) -> usize {
         // No lock is required as it reads the size with atomic load function.
         let reassembly_queue = self.reassembly_queue.lock().await;
         reassembly_queue.get_num_bytes()
@@ -639,7 +639,7 @@ impl PollStream {
 
     /// get_num_bytes_in_reassembly_queue returns the number of bytes of data currently queued to
     /// be read (once chunk is complete).
-    pub(crate) async fn get_num_bytes_in_reassembly_queue(&self) -> usize {
+    pub async fn get_num_bytes_in_reassembly_queue(&self) -> usize {
         // No lock is required as it reads the size with atomic load function.
         let reassembly_queue = self.stream.reassembly_queue.lock().await;
         reassembly_queue.get_num_bytes()

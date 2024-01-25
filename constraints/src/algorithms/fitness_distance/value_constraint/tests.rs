@@ -138,7 +138,7 @@ macro_rules! test_value_constraint {
     }};
 }
 
-mod bool;
-mod f64;
-mod string;
-mod u64;
+pub mod bool;
+pub mod f64;
+pub mod string;
+pub mod u64;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod util_test;
+pub mod util_test;
 
 use std::collections::HashMap;
 use std::fmt;
@@ -73,7 +73,7 @@ impl From<&str> for ConnectionRole {
 /// Session ID is recommended to be constructed by generating a 64-bit
 /// quantity with the highest bit set to zero and the remaining 63-bits
 /// being cryptographically random.
-pub(crate) fn new_session_id() -> u64 {
+pub fn new_session_id() -> u64 {
     let c = u64::MAX ^ (1u64 << 63);
     rand::random::<u64>() & c
 }
@@ -104,7 +104,7 @@ impl fmt::Display for Codec {
     }
 }
 
-pub(crate) fn parse_rtpmap(rtpmap: &str) -> Result<Codec> {
+pub fn parse_rtpmap(rtpmap: &str) -> Result<Codec> {
     // a=rtpmap:<payload type> <encoding name>/<clock rate>[/<encoding parameters>]
     let split: Vec<&str> = rtpmap.split_whitespace().collect();
     if split.len() != 2 {
@@ -140,7 +140,7 @@ pub(crate) fn parse_rtpmap(rtpmap: &str) -> Result<Codec> {
     })
 }
 
-pub(crate) fn parse_fmtp(fmtp: &str) -> Result<Codec> {
+pub fn parse_fmtp(fmtp: &str) -> Result<Codec> {
     // a=fmtp:<format> <format specific parameters>
     let split: Vec<&str> = fmtp.split_whitespace().collect();
     if split.len() != 2 {
@@ -162,7 +162,7 @@ pub(crate) fn parse_fmtp(fmtp: &str) -> Result<Codec> {
     })
 }
 
-pub(crate) fn parse_rtcp_fb(rtcp_fb: &str) -> Result<Codec> {
+pub fn parse_rtcp_fb(rtcp_fb: &str) -> Result<Codec> {
     // a=ftcp-fb:<payload type> <RTCP feedback type> [<RTCP feedback parameter>]
     let split: Vec<&str> = rtcp_fb.splitn(2, ' ').collect();
     if split.len() != 2 {
@@ -181,7 +181,7 @@ pub(crate) fn parse_rtcp_fb(rtcp_fb: &str) -> Result<Codec> {
     })
 }
 
-pub(crate) fn merge_codecs(mut codec: Codec, codecs: &mut HashMap<u8, Codec>) {
+pub fn merge_codecs(mut codec: Codec, codecs: &mut HashMap<u8, Codec>) {
     if let Some(saved_codec) = codecs.get_mut(&codec.payload_type) {
         if saved_codec.payload_type == 0 {
             saved_codec.payload_type = codec.payload_type
@@ -226,7 +226,7 @@ fn equivalent_fmtp(want: &str, got: &str) -> bool {
     true
 }
 
-pub(crate) fn codecs_match(wanted: &Codec, got: &Codec) -> bool {
+pub fn codecs_match(wanted: &Codec, got: &Codec) -> bool {
     if !wanted.name.is_empty() && wanted.name.to_lowercase() != got.name.to_lowercase() {
         return false;
     }

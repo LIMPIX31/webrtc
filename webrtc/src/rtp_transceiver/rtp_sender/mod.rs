@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod rtp_sender_test;
+pub mod rtp_sender_test;
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Weak};
@@ -25,11 +25,11 @@ use crate::track::track_local::{
     InterceptorToTrackLocalWriter, TrackLocal, TrackLocalContext, TrackLocalWriter,
 };
 
-pub(crate) struct RTPSenderInternal {
-    pub(crate) send_called_rx: Mutex<mpsc::Receiver<()>>,
-    pub(crate) stop_called_rx: Arc<Notify>,
-    pub(crate) stop_called_signal: Arc<AtomicBool>,
-    pub(crate) rtcp_interceptor: Mutex<Option<Arc<dyn RTCPReader + Send + Sync>>>,
+pub struct RTPSenderInternal {
+    pub send_called_rx: Mutex<mpsc::Receiver<()>>,
+    pub stop_called_rx: Arc<Notify>,
+    pub stop_called_signal: Arc<AtomicBool>,
+    pub rtcp_interceptor: Mutex<Option<Arc<dyn RTCPReader + Send + Sync>>>,
 }
 
 impl RTPSenderInternal {
@@ -80,34 +80,34 @@ impl RTPSenderInternal {
 
 /// RTPSender allows an application to control how a given Track is encoded and transmitted to a remote peer
 pub struct RTCRtpSender {
-    pub(crate) track: Mutex<Option<Arc<dyn TrackLocal + Send + Sync>>>,
+    pub track: Mutex<Option<Arc<dyn TrackLocal + Send + Sync>>>,
 
-    pub(crate) srtp_stream: Arc<SrtpWriterFuture>,
-    pub(crate) stream_info: Mutex<StreamInfo>,
+    pub srtp_stream: Arc<SrtpWriterFuture>,
+    pub stream_info: Mutex<StreamInfo>,
     seq_trans: Arc<SequenceTransformer>,
 
-    pub(crate) context: Mutex<TrackLocalContext>,
+    pub context: Mutex<TrackLocalContext>,
 
-    pub(crate) transport: Arc<RTCDtlsTransport>,
+    pub transport: Arc<RTCDtlsTransport>,
 
-    pub(crate) payload_type: PayloadType,
-    pub(crate) ssrc: SSRC,
+    pub payload_type: PayloadType,
+    pub ssrc: SSRC,
     receive_mtu: usize,
 
     /// a transceiver sender since we can just check the
     /// transceiver negotiation status
-    pub(crate) negotiated: AtomicBool,
+    pub negotiated: AtomicBool,
 
-    pub(crate) media_engine: Arc<MediaEngine>,
-    pub(crate) interceptor: Arc<dyn Interceptor + Send + Sync>,
+    pub media_engine: Arc<MediaEngine>,
+    pub interceptor: Arc<dyn Interceptor + Send + Sync>,
 
-    pub(crate) id: String,
+    pub id: String,
 
     /// The id of the initial track, even if we later change to a different
     /// track id should be use when negotiating.
-    pub(crate) initial_track_id: std::sync::Mutex<Option<String>>,
+    pub initial_track_id: std::sync::Mutex<Option<String>>,
     /// AssociatedMediaStreamIds from the WebRTC specifications
-    pub(crate) associated_media_stream_ids: std::sync::Mutex<Vec<String>>,
+    pub associated_media_stream_ids: std::sync::Mutex<Vec<String>>,
 
     rtp_transceiver: SyncMutex<Option<Weak<RTCRtpTransceiver>>>,
 
@@ -115,7 +115,7 @@ pub struct RTCRtpSender {
     stop_called_tx: Arc<Notify>,
     stop_called_signal: Arc<AtomicBool>,
 
-    pub(crate) paused: Arc<AtomicBool>,
+    pub paused: Arc<AtomicBool>,
 
     internal: Arc<RTPSenderInternal>,
 }
@@ -211,15 +211,15 @@ impl RTCRtpSender {
         }
     }
 
-    pub(crate) fn is_negotiated(&self) -> bool {
+    pub fn is_negotiated(&self) -> bool {
         self.negotiated.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn set_negotiated(&self) {
+    pub fn set_negotiated(&self) {
         self.negotiated.store(true, Ordering::SeqCst);
     }
 
-    pub(crate) fn set_rtp_transceiver(&self, rtp_transceiver: Option<Weak<RTCRtpTransceiver>>) {
+    pub fn set_rtp_transceiver(&self, rtp_transceiver: Option<Weak<RTCRtpTransceiver>>) {
         if let Some(t) = rtp_transceiver.as_ref().and_then(|t| t.upgrade()) {
             self.set_paused(!t.direction().has_send());
         }
@@ -227,7 +227,7 @@ impl RTCRtpSender {
         *tr = rtp_transceiver;
     }
 
-    pub(crate) fn set_paused(&self, paused: bool) {
+    pub fn set_paused(&self, paused: bool) {
         self.paused.store(paused, Ordering::SeqCst);
     }
 
@@ -496,23 +496,23 @@ impl RTCRtpSender {
     }
 
     /// has_sent tells if data has been ever sent for this instance
-    pub(crate) fn has_sent(&self) -> bool {
+    pub fn has_sent(&self) -> bool {
         let send_called_tx = self.send_called_tx.lock();
         send_called_tx.is_none()
     }
 
     /// has_stopped tells if stop has been called
-    pub(crate) async fn has_stopped(&self) -> bool {
+    pub async fn has_stopped(&self) -> bool {
         self.stop_called_signal.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn initial_track_id(&self) -> Option<String> {
+    pub fn initial_track_id(&self) -> Option<String> {
         let lock = self.initial_track_id.lock().unwrap();
 
         lock.clone()
     }
 
-    pub(crate) fn set_initial_track_id(&self, id: String) -> Result<()> {
+    pub fn set_initial_track_id(&self, id: String) -> Result<()> {
         let mut lock = self.initial_track_id.lock().unwrap();
 
         if lock.is_some() {
@@ -524,7 +524,7 @@ impl RTCRtpSender {
         Ok(())
     }
 
-    pub(crate) fn associate_media_stream_id(&self, id: String) -> bool {
+    pub fn associate_media_stream_id(&self, id: String) -> bool {
         let mut lock = self.associated_media_stream_ids.lock().unwrap();
 
         if lock.contains(&id) {
@@ -536,7 +536,7 @@ impl RTCRtpSender {
         true
     }
 
-    pub(crate) fn associated_media_stream_ids(&self) -> Vec<String> {
+    pub fn associated_media_stream_ids(&self) -> Vec<String> {
         let lock = self.associated_media_stream_ids.lock().unwrap();
 
         lock.clone()

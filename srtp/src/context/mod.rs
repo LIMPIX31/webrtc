@@ -1,9 +1,9 @@
 #[cfg(test)]
-mod context_test;
+pub mod context_test;
 #[cfg(test)]
-mod srtcp_test;
+pub mod srtcp_test;
 #[cfg(test)]
-mod srtp_test;
+pub mod srtp_test;
 
 use std::collections::HashMap;
 
@@ -23,7 +23,7 @@ const MAX_ROC_DISORDER: u16 = 100;
 
 /// Encrypt/Decrypt state for a single SRTP SSRC
 #[derive(Default)]
-pub(crate) struct SrtpSsrcState {
+pub struct SrtpSsrcState {
     ssrc: u32,
     rollover_counter: u32,
     rollover_has_processed: bool,
@@ -33,7 +33,7 @@ pub(crate) struct SrtpSsrcState {
 
 /// Encrypt/Decrypt state for a single SRTCP SSRC
 #[derive(Default)]
-pub(crate) struct SrtcpSsrcState {
+pub struct SrtcpSsrcState {
     srtcp_index: usize,
     ssrc: u32,
     replay_detector: Option<Box<dyn ReplayDetector + Send + 'static>>,

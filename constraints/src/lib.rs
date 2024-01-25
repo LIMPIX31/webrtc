@@ -9,17 +9,17 @@ pub mod errors;
 pub mod macros;
 pub mod property;
 
-mod capabilities;
-mod capability;
-mod constraint;
-mod constraints;
-mod enumerations;
-mod setting;
-mod settings;
-mod supported_constraints;
+pub mod capabilities;
+pub mod capability;
+pub mod constraint;
+pub mod constraints;
+pub mod enumerations;
+pub mod setting;
+pub mod settings;
+pub mod supported_constraints;
 
 #[allow(unused_imports)]
-pub(crate) use self::{capabilities::MediaStreamCapabilities, settings::MediaStreamSettings};
+pub use self::{capabilities::MediaStreamCapabilities, settings::MediaStreamSettings};
 #[allow(unused_imports)]
 pub use self::{
     capabilities::MediaTrackCapabilities,

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod allocation_test;
+pub mod allocation_test;
 
 pub mod allocation_manager;
 pub mod channel_bind;
@@ -70,17 +70,17 @@ impl AllocationInfo {
 pub struct Allocation {
     protocol: Protocol,
     turn_socket: Arc<dyn Conn + Send + Sync>,
-    pub(crate) relay_addr: SocketAddr,
-    pub(crate) relay_socket: Arc<dyn Conn + Send + Sync>,
+    pub relay_addr: SocketAddr,
+    pub relay_socket: Arc<dyn Conn + Send + Sync>,
     five_tuple: FiveTuple,
     username: Username,
     permissions: Arc<Mutex<HashMap<String, Permission>>>,
     channel_bindings: Arc<Mutex<HashMap<ChannelNumber, ChannelBind>>>,
-    pub(crate) allocations: Option<AllocationMap>,
+    pub allocations: Option<AllocationMap>,
     reset_tx: SyncMutex<Option<mpsc::Sender<Duration>>>,
     timer_expired: Arc<AtomicBool>,
     closed: AtomicBool, // Option<mpsc::Receiver<()>>,
-    pub(crate) relayed_bytes: AtomicUsize,
+    pub relayed_bytes: AtomicUsize,
     drop_tx: Option<Sender<u32>>,
     alloc_close_notify: Option<mpsc::Sender<AllocationInfo>>,
 }

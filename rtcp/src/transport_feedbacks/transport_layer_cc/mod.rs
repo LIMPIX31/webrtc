@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod transport_layer_cc_test;
+pub mod transport_layer_cc_test;
 
 use std::any::Any;
 use std::fmt;

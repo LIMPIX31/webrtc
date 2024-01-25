@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod handshake_message_server_hello_test;
+pub mod handshake_message_server_hello_test;
 
 use std::fmt;
 use std::io::{BufReader, BufWriter};
@@ -22,12 +22,12 @@ https://tools.ietf.org/html/rfc5246#section-7.4.1.3
 */
 #[derive(Clone)]
 pub struct HandshakeMessageServerHello {
-    pub(crate) version: ProtocolVersion,
-    pub(crate) random: HandshakeRandom,
+    pub version: ProtocolVersion,
+    pub random: HandshakeRandom,
 
-    pub(crate) cipher_suite: CipherSuiteId,
-    pub(crate) compression_method: CompressionMethodId,
-    pub(crate) extensions: Vec<Extension>,
+    pub cipher_suite: CipherSuiteId,
+    pub compression_method: CompressionMethodId,
+    pub extensions: Vec<Extension>,
 }
 
 impl PartialEq for HandshakeMessageServerHello {

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extension_server_name_test;
+pub mod extension_server_name_test;
 
 use std::io::{Read, Write};
 
@@ -11,7 +11,7 @@ const EXTENSION_SERVER_NAME_TYPE_DNSHOST_NAME: u8 = 0;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ExtensionServerName {
-    pub(crate) server_name: String,
+    pub server_name: String,
 }
 
 impl ExtensionServerName {

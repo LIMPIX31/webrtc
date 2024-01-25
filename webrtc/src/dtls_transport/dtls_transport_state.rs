@@ -76,7 +76,7 @@ impl fmt::Display for RTCDtlsTransportState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

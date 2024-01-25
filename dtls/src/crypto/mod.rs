@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod crypto_test;
+pub mod crypto_test;
 
 pub mod crypto_cbc;
 pub mod crypto_ccm;
@@ -114,7 +114,7 @@ impl Certificate {
     }
 }
 
-pub(crate) fn value_key_message(
+pub fn value_key_message(
     client_random: &[u8],
     server_random: &[u8],
     public_key: &[u8],
@@ -253,7 +253,7 @@ impl CryptoPrivateKey {
 // hash/signature algorithm pair that appears in that extension
 //
 // https://tools.ietf.org/html/rfc5246#section-7.4.2
-pub(crate) fn generate_key_signature(
+pub fn generate_key_signature(
     client_random: &[u8],
     server_random: &[u8],
     public_key: &[u8],
@@ -355,7 +355,7 @@ fn verify_signature(
     Ok(())
 }
 
-pub(crate) fn verify_key_signature(
+pub fn verify_key_signature(
     message: &[u8],
     hash_algorithm: &SignatureHashAlgorithm,
     remote_key_signature: &[u8],
@@ -379,7 +379,7 @@ pub(crate) fn verify_key_signature(
 // CertificateVerify message is sent to explicitly verify possession of
 // the private key in the certificate.
 // https://tools.ietf.org/html/rfc5246#section-7.3
-pub(crate) fn generate_certificate_verify(
+pub fn generate_certificate_verify(
     handshake_bodies: &[u8],
     private_key: &CryptoPrivateKey, /*, hashAlgorithm hashAlgorithm*/
 ) -> Result<Vec<u8>> {
@@ -410,7 +410,7 @@ pub(crate) fn generate_certificate_verify(
     Ok(signature)
 }
 
-pub(crate) fn verify_certificate_verify(
+pub fn verify_certificate_verify(
     handshake_bodies: &[u8],
     hash_algorithm: &SignatureHashAlgorithm,
     remote_key_signature: &[u8],
@@ -426,7 +426,7 @@ pub(crate) fn verify_certificate_verify(
     )
 }
 
-pub(crate) fn load_certs(raw_certificates: &[Vec<u8>]) -> Result<Vec<rustls::Certificate>> {
+pub fn load_certs(raw_certificates: &[Vec<u8>]) -> Result<Vec<rustls::Certificate>> {
     if raw_certificates.is_empty() {
         return Err(Error::ErrLengthMismatch);
     }
@@ -440,7 +440,7 @@ pub(crate) fn load_certs(raw_certificates: &[Vec<u8>]) -> Result<Vec<rustls::Cer
     Ok(certs)
 }
 
-pub(crate) fn verify_client_cert(
+pub fn verify_client_cert(
     raw_certificates: &[Vec<u8>],
     cert_verifier: &Arc<dyn rustls::server::ClientCertVerifier>,
 ) -> Result<Vec<rustls::Certificate>> {
@@ -459,7 +459,7 @@ pub(crate) fn verify_client_cert(
     Ok(chains)
 }
 
-pub(crate) fn verify_server_cert(
+pub fn verify_server_cert(
     raw_certificates: &[Vec<u8>],
     cert_verifier: &Arc<dyn rustls::client::ServerCertVerifier>,
     server_name: &str,
@@ -488,7 +488,7 @@ pub(crate) fn verify_server_cert(
     Ok(chains)
 }
 
-pub(crate) fn generate_aead_additional_data(h: &RecordLayerHeader, payload_len: usize) -> Vec<u8> {
+pub fn generate_aead_additional_data(h: &RecordLayerHeader, payload_len: usize) -> Vec<u8> {
     let mut additional_data = vec![0u8; 13];
     // SequenceNumber MUST be set first
     // we only want uint48, clobbering an extra 2 (using uint64, rust doesn't have uint48)
@@ -503,7 +503,7 @@ pub(crate) fn generate_aead_additional_data(h: &RecordLayerHeader, payload_len: 
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     #[cfg(feature = "pem")]
     use super::*;
 

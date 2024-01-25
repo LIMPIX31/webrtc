@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod extension_supported_point_formats_test;
+pub mod extension_supported_point_formats_test;
 
 use super::*;
 
@@ -12,7 +12,7 @@ pub const ELLIPTIC_CURVE_POINT_FORMAT_UNCOMPRESSED: EllipticCurvePointFormat = 0
 // https://tools.ietf.org/html/rfc4492#section-5.1.2
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ExtensionSupportedPointFormats {
-    pub(crate) point_formats: Vec<EllipticCurvePointFormat>,
+    pub point_formats: Vec<EllipticCurvePointFormat>,
 }
 
 impl ExtensionSupportedPointFormats {

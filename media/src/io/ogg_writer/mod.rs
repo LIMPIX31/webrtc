@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod ogg_writer_test;
+pub mod ogg_writer_test;
 
 use std::io::{BufWriter, Seek, Write};
 

@@ -122,7 +122,7 @@ impl ResolvedAdvancedMediaTrackConstraints {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::property::all::name::*;
     use crate::MediaTrackConstraintSet;

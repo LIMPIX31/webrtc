@@ -32,12 +32,12 @@ pub enum DTLSRole {
 /// not begin until the answerer is received, which adds additional
 /// latency. setup:active allows the answer and the DTLS handshake to
 /// occur in parallel.  Thus, setup:active is RECOMMENDED.
-pub(crate) const DEFAULT_DTLS_ROLE_ANSWER: DTLSRole = DTLSRole::Client;
+pub const DEFAULT_DTLS_ROLE_ANSWER: DTLSRole = DTLSRole::Client;
 
 /// The endpoint that is the offerer MUST use the setup attribute
 /// value of setup:actpass and be prepared to receive a client_hello
 /// before it receives the answer.
-pub(crate) const DEFAULT_DTLS_ROLE_OFFER: DTLSRole = DTLSRole::Auto;
+pub const DEFAULT_DTLS_ROLE_OFFER: DTLSRole = DTLSRole::Auto;
 
 impl fmt::Display for DTLSRole {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -76,7 +76,7 @@ impl From<&SessionDescription> for DTLSRole {
 }
 
 impl DTLSRole {
-    pub(crate) fn to_connection_role(self) -> ConnectionRole {
+    pub fn to_connection_role(self) -> ConnectionRole {
         match self {
             DTLSRole::Client => ConnectionRole::Active,
             DTLSRole::Server => ConnectionRole::Passive,
@@ -87,7 +87,7 @@ impl DTLSRole {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use std::io::Cursor;
 
     use super::*;

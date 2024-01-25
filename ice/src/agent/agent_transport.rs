@@ -81,18 +81,18 @@ impl Agent {
     }
 }
 
-pub(crate) struct AgentConn {
-    pub(crate) selected_pair: ArcSwapOption<CandidatePair>,
-    pub(crate) checklist: Mutex<Vec<Arc<CandidatePair>>>,
+pub struct AgentConn {
+    pub selected_pair: ArcSwapOption<CandidatePair>,
+    pub checklist: Mutex<Vec<Arc<CandidatePair>>>,
 
-    pub(crate) buffer: Buffer,
-    pub(crate) bytes_received: AtomicUsize,
-    pub(crate) bytes_sent: AtomicUsize,
-    pub(crate) done: AtomicBool,
+    pub buffer: Buffer,
+    pub bytes_received: AtomicUsize,
+    pub bytes_sent: AtomicUsize,
+    pub done: AtomicBool,
 }
 
 impl AgentConn {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             selected_pair: ArcSwapOption::empty(),
             checklist: Mutex::new(vec![]),
@@ -105,11 +105,11 @@ impl AgentConn {
             done: AtomicBool::new(false),
         }
     }
-    pub(crate) fn get_selected_pair(&self) -> Option<Arc<CandidatePair>> {
+    pub fn get_selected_pair(&self) -> Option<Arc<CandidatePair>> {
         self.selected_pair.load().clone()
     }
 
-    pub(crate) async fn get_best_available_candidate_pair(&self) -> Option<Arc<CandidatePair>> {
+    pub async fn get_best_available_candidate_pair(&self) -> Option<Arc<CandidatePair>> {
         let mut best: Option<&Arc<CandidatePair>> = None;
 
         let checklist = self.checklist.lock().await;
@@ -130,7 +130,7 @@ impl AgentConn {
         best.cloned()
     }
 
-    pub(crate) async fn get_best_valid_candidate_pair(&self) -> Option<Arc<CandidatePair>> {
+    pub async fn get_best_valid_candidate_pair(&self) -> Option<Arc<CandidatePair>> {
         let mut best: Option<&Arc<CandidatePair>> = None;
 
         let checklist = self.checklist.lock().await;

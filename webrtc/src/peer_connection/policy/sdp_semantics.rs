@@ -58,7 +58,7 @@ impl fmt::Display for RTCSdpSemantics {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use std::collections::HashSet;
 
     use sdp::description::media::MediaDescription;

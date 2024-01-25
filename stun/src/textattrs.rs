@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod textattrs_test;
+pub mod textattrs_test;
 
 use std::fmt;
 

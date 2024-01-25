@@ -6,12 +6,12 @@ use super::param_type::*;
 use super::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub(crate) struct ParamHeader {
-    pub(crate) typ: ParamType,
-    pub(crate) value_length: u16,
+pub struct ParamHeader {
+    pub typ: ParamType,
+    pub value_length: u16,
 }
 
-pub(crate) const PARAM_HEADER_LENGTH: usize = 4;
+pub const PARAM_HEADER_LENGTH: usize = 4;
 
 /// String makes paramHeader printable
 impl fmt::Display for ParamHeader {

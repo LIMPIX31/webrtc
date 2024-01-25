@@ -242,7 +242,7 @@ impl fmt::Display for MediaName {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::MediaDescription;
 
     #[test]

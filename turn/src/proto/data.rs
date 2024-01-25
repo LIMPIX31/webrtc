@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod data_test;
+pub mod data_test;
 
 use stun::attributes::*;
 use stun::message::*;

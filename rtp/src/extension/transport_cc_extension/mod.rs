@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod transport_cc_extension_test;
+pub mod transport_cc_extension_test;
 
 use bytes::{Buf, BufMut};
 use serde::{Deserialize, Serialize};

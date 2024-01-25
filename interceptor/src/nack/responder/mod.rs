@@ -1,6 +1,6 @@
-mod responder_stream;
+pub mod responder_stream;
 #[cfg(test)]
-mod responder_test;
+pub mod responder_test;
 
 use std::collections::HashMap;
 use std::future::Future;

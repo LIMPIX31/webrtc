@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod packet_test;
+pub mod packet_test;
 
 use std::fmt;
 

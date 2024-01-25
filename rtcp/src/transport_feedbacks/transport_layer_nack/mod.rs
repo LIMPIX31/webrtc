@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod transport_layer_nack_test;
+pub mod transport_layer_nack_test;
 
 use std::any::Any;
 use std::fmt;

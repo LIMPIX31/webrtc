@@ -8,8 +8,8 @@ use super::param_type::*;
 use super::*;
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamStateCookie {
-    pub(crate) cookie: Bytes,
+pub struct ParamStateCookie {
+    pub cookie: Bytes,
 }
 
 /// String makes paramStateCookie printable
@@ -53,7 +53,7 @@ impl Param for ParamStateCookie {
 }
 
 impl ParamStateCookie {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         let mut cookie = BytesMut::new();
         cookie.resize(32, 0);
         rand::thread_rng().fill(cookie.as_mut());

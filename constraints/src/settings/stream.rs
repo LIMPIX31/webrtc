@@ -14,7 +14,7 @@ use crate::MediaTrackSettings;
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
-pub(crate) struct MediaStreamSettings {
+pub struct MediaStreamSettings {
     #[cfg_attr(
         feature = "serde",
         serde(skip_serializing_if = "core::option::Option::is_none")
@@ -29,7 +29,7 @@ pub(crate) struct MediaStreamSettings {
 
 #[cfg(feature = "serde")]
 #[cfg(test)]
-mod serde_tests {
+pub mod serde_tests {
     use super::*;
     use crate::macros::test_serde_symmetry;
 

@@ -46,7 +46,7 @@ pub struct TrackRemote {
     kind: AtomicU8,         //RTPCodecType,
     ssrc: AtomicU32,        //SSRC,
     codec: SyncMutex<RTCRtpCodecParameters>,
-    pub(crate) params: SyncMutex<RTCRtpParameters>,
+    pub params: SyncMutex<RTCRtpParameters>,
     rid: SmolStr,
 
     media_engine: Arc<MediaEngine>,
@@ -74,7 +74,7 @@ impl std::fmt::Debug for TrackRemote {
 }
 
 impl TrackRemote {
-    pub(crate) fn new(
+    pub fn new(
         receive_mtu: usize,
         kind: RTPCodecType,
         ssrc: SSRC,
@@ -236,7 +236,7 @@ impl TrackRemote {
 
     /// check_and_update_track checks payloadType for every incoming packet
     /// once a different payloadType is detected the track will be updated
-    pub(crate) async fn check_and_update_track(&self, pkt: &rtp::packet::Packet) -> Result<()> {
+    pub async fn check_and_update_track(&self, pkt: &rtp::packet::Packet) -> Result<()> {
         let payload_type = pkt.header.payload_type;
         if payload_type != self.payload_type() {
             let p = self
@@ -276,7 +276,7 @@ impl TrackRemote {
     }
 
     /// peek is like Read, but it doesn't discard the packet read
-    pub(crate) async fn peek(&self, b: &mut [u8]) -> Result<(rtp::packet::Packet, Attributes)> {
+    pub async fn peek(&self, b: &mut [u8]) -> Result<(rtp::packet::Packet, Attributes)> {
         let (pkt, a) = self.read(b).await?;
 
         // this might overwrite data if somebody peeked between the Read
@@ -294,7 +294,7 @@ impl TrackRemote {
     /// This is useful when a track is first created to populate data read from the track in the
     /// process of identifying the track as part of simulcast probing. Using this during other
     /// parts of the track's lifecycle is probably an error.
-    pub(crate) async fn prepopulate_peeked_data(
+    pub async fn prepopulate_peeked_data(
         &self,
         data: VecDeque<(rtp::packet::Packet, Attributes)>,
     ) {
@@ -302,7 +302,7 @@ impl TrackRemote {
         internal.peeked = data;
     }
 
-    pub(crate) async fn fire_onmute(&self) {
+    pub async fn fire_onmute(&self) {
         let on_mute = self.handlers.on_mute.load();
 
         if let Some(f) = on_mute.as_ref() {
@@ -310,7 +310,7 @@ impl TrackRemote {
         };
     }
 
-    pub(crate) async fn fire_onunmute(&self) {
+    pub async fn fire_onunmute(&self) {
         let on_unmute = self.handlers.on_unmute.load();
 
         if let Some(f) = on_unmute.as_ref() {

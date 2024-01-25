@@ -322,7 +322,7 @@ where
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use byteorder::NativeEndian;
 
     use super::*;

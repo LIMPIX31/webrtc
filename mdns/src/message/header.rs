@@ -107,7 +107,7 @@ pub struct HeaderInternal {
 }
 
 impl HeaderInternal {
-    pub(crate) fn count(&self, sec: Section) -> u16 {
+    pub fn count(&self, sec: Section) -> u16 {
         match sec {
             Section::Questions => self.questions,
             Section::Answers => self.answers,
@@ -118,7 +118,7 @@ impl HeaderInternal {
     }
 
     // pack appends the wire format of the header to msg.
-    pub(crate) fn pack(&self, mut msg: Vec<u8>) -> Vec<u8> {
+    pub fn pack(&self, mut msg: Vec<u8>) -> Vec<u8> {
         msg = pack_uint16(msg, self.id);
         msg = pack_uint16(msg, self.bits);
         msg = pack_uint16(msg, self.questions);
@@ -128,7 +128,7 @@ impl HeaderInternal {
         msg
     }
 
-    pub(crate) fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
+    pub fn unpack(&mut self, msg: &[u8], off: usize) -> Result<usize> {
         let (id, off) = unpack_uint16(msg, off)?;
         self.id = id;
 
@@ -150,7 +150,7 @@ impl HeaderInternal {
         Ok(off)
     }
 
-    pub(crate) fn header(&self) -> Header {
+    pub fn header(&self) -> Header {
         Header {
             id: self.id,
             response: (self.bits & HEADER_BIT_QR) != 0,

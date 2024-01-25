@@ -9,13 +9,13 @@ use crate::header::*;
 use crate::packet::*;
 use crate::util::*;
 
-pub(crate) const RECEPTION_REPORT_LENGTH: usize = 24;
-pub(crate) const FRACTION_LOST_OFFSET: usize = 4;
-pub(crate) const TOTAL_LOST_OFFSET: usize = 5;
-pub(crate) const LAST_SEQ_OFFSET: usize = 8;
-pub(crate) const JITTER_OFFSET: usize = 12;
-pub(crate) const LAST_SR_OFFSET: usize = 16;
-pub(crate) const DELAY_OFFSET: usize = 20;
+pub const RECEPTION_REPORT_LENGTH: usize = 24;
+pub const FRACTION_LOST_OFFSET: usize = 4;
+pub const TOTAL_LOST_OFFSET: usize = 5;
+pub const LAST_SEQ_OFFSET: usize = 8;
+pub const JITTER_OFFSET: usize = 12;
+pub const LAST_SR_OFFSET: usize = 16;
+pub const DELAY_OFFSET: usize = 20;
 
 /// A ReceptionReport block conveys statistics on the reception of RTP packets
 /// from a single synchronization source.

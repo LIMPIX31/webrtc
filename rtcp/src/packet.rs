@@ -81,7 +81,7 @@ where
 
 /// unmarshaller is a factory which pulls the first RTCP packet from a bytestream,
 /// and returns it's parsed representation, and the amount of data that was processed.
-pub(crate) fn unmarshaller<B>(raw_data: &mut B) -> Result<Box<dyn Packet + Send + Sync>>
+pub fn unmarshaller<B>(raw_data: &mut B) -> Result<Box<dyn Packet + Send + Sync>>
 where
     B: Buf,
 {
@@ -121,7 +121,7 @@ where
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use bytes::Bytes;
 
     use super::*;

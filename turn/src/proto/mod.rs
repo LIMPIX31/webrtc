@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod proto_test;
+pub mod proto_test;
 
 pub mod addr;
 pub mod chandata;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod alert_test;
+pub mod alert_test;
 
 use std::fmt;
 use std::io::{Read, Write};
@@ -10,7 +10,7 @@ use super::content::*;
 use crate::error::Result;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
-pub(crate) enum AlertLevel {
+pub enum AlertLevel {
     Warning = 1,
     Fatal = 2,
     Invalid,
@@ -37,7 +37,7 @@ impl From<u8> for AlertLevel {
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
-pub(crate) enum AlertDescription {
+pub enum AlertDescription {
     CloseNotify = 0,
     UnexpectedMessage = 10,
     BadRecordMac = 20,
@@ -147,8 +147,8 @@ impl From<u8> for AlertDescription {
 // https://tools.ietf.org/html/rfc5246#section-7.2
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Alert {
-    pub(crate) alert_level: AlertLevel,
-    pub(crate) alert_description: AlertDescription,
+    pub alert_level: AlertLevel,
+    pub alert_description: AlertDescription,
 }
 
 impl fmt::Display for Alert {

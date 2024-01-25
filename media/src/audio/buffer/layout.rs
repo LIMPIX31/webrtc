@@ -31,7 +31,7 @@ impl BufferLayout for Interleaved {
 
 #[cfg(test)]
 #[inline(always)]
-pub(crate) fn deinterleaved<T>(input: &[T], output: &mut [T], channels: usize)
+pub fn deinterleaved<T>(input: &[T], output: &mut [T], channels: usize)
 where
     T: Copy,
 {
@@ -40,7 +40,7 @@ where
 
 /// De-interleaves an interleaved slice using a memory access pattern
 /// that's optimized for efficient cached (i.e. sequential) reads.
-pub(crate) fn deinterleaved_by<T, U, F>(input: &[T], output: &mut [U], channels: usize, f: F)
+pub fn deinterleaved_by<T, U, F>(input: &[T], output: &mut [U], channels: usize, f: F)
 where
     F: Fn(&T) -> U,
 {
@@ -61,7 +61,7 @@ where
 
 #[cfg(test)]
 #[inline(always)]
-pub(crate) fn interleaved<T>(input: &[T], output: &mut [T], channels: usize)
+pub fn interleaved<T>(input: &[T], output: &mut [T], channels: usize)
 where
     T: Copy,
 {
@@ -70,7 +70,7 @@ where
 
 /// Interleaves an de-interleaved slice using a memory access pattern
 /// that's optimized for efficient cached (i.e. sequential) reads.
-pub(crate) fn interleaved_by<T, U, F>(input: &[T], output: &mut [U], channels: usize, f: F)
+pub fn interleaved_by<T, U, F>(input: &[T], output: &mut [U], channels: usize, f: F)
 where
     F: Fn(&T) -> U,
 {
@@ -90,7 +90,7 @@ where
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     #[test]

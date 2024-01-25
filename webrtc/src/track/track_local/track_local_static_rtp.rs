@@ -11,7 +11,7 @@ use crate::error::flatten_errs;
 /// If you wish to send a media.Sample use TrackLocalStaticSample
 #[derive(Debug)]
 pub struct TrackLocalStaticRTP {
-    pub(crate) bindings: Mutex<Vec<Arc<TrackBinding>>>,
+    pub bindings: Mutex<Vec<Arc<TrackBinding>>>,
     codec: RTCRtpCodecCapability,
     id: String,
     stream_id: String,

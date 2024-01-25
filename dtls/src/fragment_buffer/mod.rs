@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod fragment_buffer_test;
+pub mod fragment_buffer_test;
 
 use std::collections::HashMap;
 use std::io::{BufWriter, Cursor};
@@ -12,13 +12,13 @@ use crate::record_layer::record_layer_header::*;
 // 2 mb max buffer size
 const FRAGMENT_BUFFER_MAX_SIZE: usize = 2_000_000;
 
-pub(crate) struct Fragment {
+pub struct Fragment {
     record_layer_header: RecordLayerHeader,
     handshake_header: HandshakeHeader,
     data: Vec<u8>,
 }
 
-pub(crate) struct FragmentBuffer {
+pub struct FragmentBuffer {
     // map of MessageSequenceNumbers that hold slices of fragments
     cache: HashMap<u16, Vec<Fragment>>,
 

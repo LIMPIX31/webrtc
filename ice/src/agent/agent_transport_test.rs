@@ -6,7 +6,7 @@ use super::agent_vnet_test::*;
 use super::*;
 use crate::agent::agent_transport::AgentConn;
 
-pub(crate) async fn pipe(
+pub async fn pipe(
     default_config0: Option<AgentConfig>,
     default_config1: Option<AgentConfig>,
 ) -> Result<(Arc<impl Conn>, Arc<impl Conn>, Arc<Agent>, Arc<Agent>)> {

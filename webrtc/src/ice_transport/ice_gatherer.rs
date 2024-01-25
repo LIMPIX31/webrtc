@@ -50,22 +50,22 @@ pub type OnGatheringCompleteHdlrFn =
 /// exchanged in signaling.
 #[derive(Default)]
 pub struct RTCIceGatherer {
-    pub(crate) validated_servers: Vec<Url>,
-    pub(crate) gather_policy: RTCIceTransportPolicy,
-    pub(crate) setting_engine: Arc<SettingEngine>,
+    pub validated_servers: Vec<Url>,
+    pub gather_policy: RTCIceTransportPolicy,
+    pub setting_engine: Arc<SettingEngine>,
 
-    pub(crate) state: Arc<AtomicU8>, //ICEGathererState,
-    pub(crate) agent: Mutex<Option<Arc<ice::agent::Agent>>>,
+    pub state: Arc<AtomicU8>, //ICEGathererState,
+    pub agent: Mutex<Option<Arc<ice::agent::Agent>>>,
 
-    pub(crate) on_local_candidate_handler: Arc<ArcSwapOption<Mutex<OnLocalCandidateHdlrFn>>>,
-    pub(crate) on_state_change_handler: Arc<ArcSwapOption<Mutex<OnICEGathererStateChangeHdlrFn>>>,
+    pub on_local_candidate_handler: Arc<ArcSwapOption<Mutex<OnLocalCandidateHdlrFn>>>,
+    pub on_state_change_handler: Arc<ArcSwapOption<Mutex<OnICEGathererStateChangeHdlrFn>>>,
 
     // Used for gathering_complete_promise
-    pub(crate) on_gathering_complete_handler: Arc<ArcSwapOption<Mutex<OnGatheringCompleteHdlrFn>>>,
+    pub on_gathering_complete_handler: Arc<ArcSwapOption<Mutex<OnGatheringCompleteHdlrFn>>>,
 }
 
 impl RTCIceGatherer {
-    pub(crate) fn new(
+    pub fn new(
         validated_servers: Vec<Url>,
         gather_policy: RTCIceTransportPolicy,
         setting_engine: Arc<SettingEngine>,
@@ -79,7 +79,7 @@ impl RTCIceGatherer {
         }
     }
 
-    pub(crate) async fn create_agent(&self) -> Result<()> {
+    pub async fn create_agent(&self) -> Result<()> {
         // NOTE: A lock is held for the duration of this function in order to
         // avoid potential double-agent creations. Care should be taken to
         // ensure we do not do anything expensive other than the actual agent
@@ -282,12 +282,12 @@ impl RTCIceGatherer {
         }
     }
 
-    pub(crate) async fn get_agent(&self) -> Option<Arc<Agent>> {
+    pub async fn get_agent(&self) -> Option<Arc<Agent>> {
         let agent = self.agent.lock().await;
         agent.clone()
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         if let Some(agent) = self.get_agent().await {
             let mut reports = HashMap::new();
 
@@ -316,7 +316,7 @@ impl RTCIceGatherer {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use tokio::sync::mpsc;
 
     use super::*;

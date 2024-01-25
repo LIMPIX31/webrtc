@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod renegotiation_info_test;
+pub mod renegotiation_info_test;
 
 use super::*;
 use crate::error::Error::ErrInvalidPacketLength;
@@ -11,7 +11,7 @@ const RENEGOTIATION_INFO_HEADER_SIZE: usize = 5;
 /// https://tools.ietf.org/html/rfc5746
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ExtensionRenegotiationInfo {
-    pub(crate) renegotiated_connection: u8,
+    pub renegotiated_connection: u8,
 }
 
 impl ExtensionRenegotiationInfo {

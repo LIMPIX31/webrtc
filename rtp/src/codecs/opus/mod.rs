@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod opus_test;
+pub mod opus_test;
 
 use bytes::Bytes;
 

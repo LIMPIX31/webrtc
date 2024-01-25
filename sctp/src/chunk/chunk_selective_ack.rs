@@ -39,9 +39,9 @@ use super::*;
 ///|                       Duplicate TSN X                         |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Debug, Default, Copy, Clone)]
-pub(crate) struct GapAckBlock {
-    pub(crate) start: u16,
-    pub(crate) end: u16,
+pub struct GapAckBlock {
+    pub start: u16,
+    pub end: u16,
 }
 
 /// makes gapAckBlock printable
@@ -52,11 +52,11 @@ impl fmt::Display for GapAckBlock {
 }
 
 #[derive(Default, Debug)]
-pub(crate) struct ChunkSelectiveAck {
-    pub(crate) cumulative_tsn_ack: u32,
-    pub(crate) advertised_receiver_window_credit: u32,
-    pub(crate) gap_ack_blocks: Vec<GapAckBlock>,
-    pub(crate) duplicate_tsn: Vec<u32>,
+pub struct ChunkSelectiveAck {
+    pub cumulative_tsn_ack: u32,
+    pub advertised_receiver_window_credit: u32,
+    pub gap_ack_blocks: Vec<GapAckBlock>,
+    pub duplicate_tsn: Vec<u32>,
 }
 
 /// makes chunkSelectiveAck printable
@@ -75,7 +75,7 @@ impl fmt::Display for ChunkSelectiveAck {
     }
 }
 
-pub(crate) const SELECTIVE_ACK_HEADER_SIZE: usize = 12;
+pub const SELECTIVE_ACK_HEADER_SIZE: usize = 12;
 
 impl Chunk for ChunkSelectiveAck {
     fn header(&self) -> ChunkHeader {

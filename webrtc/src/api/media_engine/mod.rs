@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod media_engine_test;
+pub mod media_engine_test;
 
 use std::collections::HashMap;
 use std::ops::Range;
@@ -55,11 +55,11 @@ pub const MIME_TYPE_TELEPHONE_EVENT: &str = "audio/telephone-event";
 const VALID_EXT_IDS: Range<isize> = 1..15;
 
 #[derive(Default, Clone)]
-pub(crate) struct MediaEngineHeaderExtension {
-    pub(crate) uri: String,
-    pub(crate) is_audio: bool,
-    pub(crate) is_video: bool,
-    pub(crate) allowed_direction: Option<RTCRtpTransceiverDirection>,
+pub struct MediaEngineHeaderExtension {
+    pub uri: String,
+    pub is_audio: bool,
+    pub is_video: bool,
+    pub allowed_direction: Option<RTCRtpTransceiverDirection>,
 }
 
 impl MediaEngineHeaderExtension {
@@ -82,17 +82,17 @@ impl MediaEngineHeaderExtension {
 #[derive(Default)]
 pub struct MediaEngine {
     // If we have attempted to negotiate a codec type yet.
-    pub(crate) negotiated_video: AtomicBool,
-    pub(crate) negotiated_audio: AtomicBool,
+    pub negotiated_video: AtomicBool,
+    pub negotiated_audio: AtomicBool,
 
-    pub(crate) video_codecs: Vec<RTCRtpCodecParameters>,
-    pub(crate) audio_codecs: Vec<RTCRtpCodecParameters>,
-    pub(crate) negotiated_video_codecs: SyncMutex<Vec<RTCRtpCodecParameters>>,
-    pub(crate) negotiated_audio_codecs: SyncMutex<Vec<RTCRtpCodecParameters>>,
+    pub video_codecs: Vec<RTCRtpCodecParameters>,
+    pub audio_codecs: Vec<RTCRtpCodecParameters>,
+    pub negotiated_video_codecs: SyncMutex<Vec<RTCRtpCodecParameters>>,
+    pub negotiated_audio_codecs: SyncMutex<Vec<RTCRtpCodecParameters>>,
 
     header_extensions: Vec<MediaEngineHeaderExtension>,
     proposed_header_extensions: SyncMutex<HashMap<isize, MediaEngineHeaderExtension>>,
-    pub(crate) negotiated_header_extensions: SyncMutex<HashMap<isize, MediaEngineHeaderExtension>>,
+    pub negotiated_header_extensions: SyncMutex<HashMap<isize, MediaEngineHeaderExtension>>,
 }
 
 impl MediaEngine {
@@ -417,7 +417,7 @@ impl MediaEngine {
 
     /// get_header_extension_id returns the negotiated ID for a header extension.
     /// If the Header Extension isn't enabled ok will be false
-    pub(crate) async fn get_header_extension_id(
+    pub async fn get_header_extension_id(
         &self,
         extension: RTCRtpHeaderExtensionCapability,
     ) -> (isize, bool, bool) {
@@ -437,7 +437,7 @@ impl MediaEngine {
 
     /// clone_to copies any user modifiable state of the MediaEngine
     /// all internal state is reset
-    pub(crate) fn clone_to(&self) -> Self {
+    pub fn clone_to(&self) -> Self {
         MediaEngine {
             video_codecs: self.video_codecs.clone(),
             audio_codecs: self.audio_codecs.clone(),
@@ -446,7 +446,7 @@ impl MediaEngine {
         }
     }
 
-    pub(crate) async fn get_codec_by_payload(
+    pub async fn get_codec_by_payload(
         &self,
         payload_type: PayloadType,
     ) -> Result<(RTCRtpCodecParameters, RTPCodecType)> {
@@ -470,7 +470,7 @@ impl MediaEngine {
         Err(Error::ErrCodecNotFound)
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         let mut reports = HashMap::new();
 
         for codec in &self.video_codecs {
@@ -485,7 +485,7 @@ impl MediaEngine {
     }
 
     /// Look up a codec and enable if it exists
-    pub(crate) fn match_remote_codec(
+    pub fn match_remote_codec(
         &self,
         remote_codec: &RTCRtpCodecParameters,
         typ: RTPCodecType,
@@ -539,7 +539,7 @@ impl MediaEngine {
     }
 
     /// Look up a header extension and enable if it exists
-    pub(crate) async fn update_header_extension(
+    pub async fn update_header_extension(
         &self,
         id: isize,
         extension: &str,
@@ -589,7 +589,7 @@ impl MediaEngine {
         Ok(())
     }
 
-    pub(crate) async fn push_codecs(&self, codecs: Vec<RTCRtpCodecParameters>, typ: RTPCodecType) {
+    pub async fn push_codecs(&self, codecs: Vec<RTCRtpCodecParameters>, typ: RTPCodecType) {
         for codec in codecs {
             if typ == RTPCodecType::Audio {
                 let mut negotiated_audio_codecs = self.negotiated_audio_codecs.lock();
@@ -602,7 +602,7 @@ impl MediaEngine {
     }
 
     /// Update the MediaEngine from a remote description
-    pub(crate) async fn update_from_remote_description(
+    pub async fn update_from_remote_description(
         &self,
         desc: &SessionDescription,
     ) -> Result<()> {
@@ -657,7 +657,7 @@ impl MediaEngine {
         Ok(())
     }
 
-    pub(crate) fn get_codecs_by_kind(&self, typ: RTPCodecType) -> Vec<RTCRtpCodecParameters> {
+    pub fn get_codecs_by_kind(&self, typ: RTPCodecType) -> Vec<RTCRtpCodecParameters> {
         if typ == RTPCodecType::Video {
             if self.negotiated_video.load(Ordering::SeqCst) {
                 let negotiated_video_codecs = self.negotiated_video_codecs.lock();
@@ -677,7 +677,7 @@ impl MediaEngine {
         }
     }
 
-    pub(crate) fn get_rtp_parameters_by_kind(
+    pub fn get_rtp_parameters_by_kind(
         &self,
         typ: RTPCodecType,
         direction: RTCRtpTransceiverDirection,
@@ -775,7 +775,7 @@ impl MediaEngine {
         }
     }
 
-    pub(crate) async fn get_rtp_parameters_by_payload_type(
+    pub async fn get_rtp_parameters_by_payload_type(
         &self,
         payload_type: PayloadType,
     ) -> Result<RTCRtpParameters> {

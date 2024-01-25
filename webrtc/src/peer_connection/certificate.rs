@@ -18,15 +18,15 @@ use crate::stats::{CertificateStats, StatsReportType};
 #[derive(Clone, Debug)]
 pub struct RTCCertificate {
     /// DTLS certificate.
-    pub(crate) dtls_certificate: dtls::crypto::Certificate,
+    pub dtls_certificate: dtls::crypto::Certificate,
     /// Timestamp after which this certificate is no longer valid.
-    pub(crate) expires: SystemTime,
+    pub expires: SystemTime,
     /// Certificate's ID used for statistics.
     ///
     /// Example: "certificate-1667202302853538793"
     ///
     /// See [`CertificateStats`].
-    pub(crate) stats_id: String,
+    pub stats_id: String,
 }
 
 impl PartialEq for RTCCertificate {
@@ -205,7 +205,7 @@ impl RTCCertificate {
         fingerprints
     }
 
-    pub(crate) async fn collect_stats(&self, collector: &StatsCollector) {
+    pub async fn collect_stats(&self, collector: &StatsCollector) {
         if let Some(fingerprint) = self.get_fingerprints().into_iter().next() {
             let stats = CertificateStats::new(self, fingerprint);
             collector.insert(
@@ -227,7 +227,7 @@ fn gen_stats_id() -> String {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

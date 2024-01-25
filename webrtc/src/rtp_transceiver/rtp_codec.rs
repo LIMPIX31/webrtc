@@ -123,7 +123,7 @@ pub struct RTCRtpParameters {
 }
 
 #[derive(Default, Debug, Copy, Clone, PartialEq)]
-pub(crate) enum CodecMatch {
+pub enum CodecMatch {
     #[default]
     None = 0,
     Partial = 1,
@@ -133,7 +133,7 @@ pub(crate) enum CodecMatch {
 /// Do a fuzzy find for a codec in the list of codecs
 /// Used for lookup up a codec in an existing list to find a match
 /// Returns codecMatchExact, codecMatchPartial, or codecMatchNone
-pub(crate) fn codec_parameters_fuzzy_search(
+pub fn codec_parameters_fuzzy_search(
     needle: &RTCRtpCodecParameters,
     haystack: &[RTCRtpCodecParameters],
 ) -> (RTCRtpCodecParameters, CodecMatch) {

@@ -1,6 +1,6 @@
-mod generator_stream;
+pub mod generator_stream;
 #[cfg(test)]
-mod generator_test;
+pub mod generator_test;
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -95,8 +95,8 @@ struct GeneratorInternal {
 pub struct Generator {
     internal: Arc<GeneratorInternal>,
 
-    pub(crate) wg: Mutex<Option<WaitGroup>>,
-    pub(crate) close_tx: Mutex<Option<mpsc::Sender<()>>>,
+    pub wg: Mutex<Option<WaitGroup>>,
+    pub close_tx: Mutex<Option<mpsc::Sender<()>>>,
 }
 
 impl Generator {

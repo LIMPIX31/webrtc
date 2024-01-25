@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod net_test;
+pub mod net_test;
 
 use std::collections::HashMap;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
@@ -20,16 +20,16 @@ use crate::vnet::conn::{ConnObserver, UdpConn};
 use crate::vnet::router::*;
 use crate::{conn, ifaces, Conn};
 
-pub(crate) const LO0_STR: &str = "lo0";
-pub(crate) const UDP_STR: &str = "udp";
+pub const LO0_STR: &str = "lo0";
+pub const UDP_STR: &str = "udp";
 
 lazy_static! {
     pub static ref MAC_ADDR_COUNTER: AtomicU64 = AtomicU64::new(0xBEEFED910200);
 }
 
-pub(crate) type HardwareAddr = Vec<u8>;
+pub type HardwareAddr = Vec<u8>;
 
-pub(crate) fn new_mac_address() -> HardwareAddr {
+pub fn new_mac_address() -> HardwareAddr {
     let b = MAC_ADDR_COUNTER
         .fetch_add(1, Ordering::SeqCst)
         .to_be_bytes();
@@ -37,10 +37,10 @@ pub(crate) fn new_mac_address() -> HardwareAddr {
 }
 
 #[derive(Default)]
-pub(crate) struct VNetInternal {
-    pub(crate) interfaces: Vec<Interface>,         // read-only
-    pub(crate) router: Option<Arc<Mutex<Router>>>, // read-only
-    pub(crate) udp_conns: UdpConnMap,              // read-only
+pub struct VNetInternal {
+    pub interfaces: Vec<Interface>,         // read-only
+    pub router: Option<Arc<Mutex<Router>>>, // read-only
+    pub udp_conns: UdpConnMap,              // read-only
 }
 
 impl VNetInternal {
@@ -110,9 +110,9 @@ impl ConnObserver for VNetInternal {
 
 #[derive(Default)]
 pub struct VNet {
-    pub(crate) interfaces: Vec<Interface>, // read-only
-    pub(crate) static_ips: Vec<IpAddr>,    // read-only
-    pub(crate) vi: Arc<Mutex<VNetInternal>>,
+    pub interfaces: Vec<Interface>, // read-only
+    pub static_ips: Vec<IpAddr>,    // read-only
+    pub vi: Arc<Mutex<VNetInternal>>,
 }
 
 #[async_trait]
@@ -177,12 +177,12 @@ impl Nic for VNet {
 }
 
 impl VNet {
-    pub(crate) fn get_interfaces(&self) -> &[Interface] {
+    pub fn get_interfaces(&self) -> &[Interface] {
         &self.interfaces
     }
 
     // caller must hold the mutex
-    pub(crate) fn get_all_ipaddrs(&self, ipv6: bool) -> Vec<IpAddr> {
+    pub fn get_all_ipaddrs(&self, ipv6: bool) -> Vec<IpAddr> {
         let mut ips = vec![];
 
         for ifc in &self.interfaces {
@@ -197,7 +197,7 @@ impl VNet {
     }
 
     // caller must hold the mutex
-    pub(crate) fn has_ipaddr(&self, ip: IpAddr) -> bool {
+    pub fn has_ipaddr(&self, ip: IpAddr) -> bool {
         for ifc in &self.interfaces {
             for ipnet in ifc.addrs() {
                 let loc_ip = ipnet.addr();
@@ -226,7 +226,7 @@ impl VNet {
     }
 
     // caller must hold the mutex
-    pub(crate) async fn allocate_local_addr(&self, ip: IpAddr, port: u16) -> Result<()> {
+    pub async fn allocate_local_addr(&self, ip: IpAddr, port: u16) -> Result<()> {
         // gather local IP addresses to bind
         let mut ips = vec![];
         if ip.is_unspecified() {
@@ -252,7 +252,7 @@ impl VNet {
     }
 
     // caller must hold the mutex
-    pub(crate) async fn assign_port(&self, ip: IpAddr, start: u16, end: u16) -> Result<u16> {
+    pub async fn assign_port(&self, ip: IpAddr, start: u16, end: u16) -> Result<u16> {
         // choose randomly from the range between start and end (inclusive)
         if end < start {
             return Err(Error::ErrEndPortLessThanStart);
@@ -271,7 +271,7 @@ impl VNet {
         Err(Error::ErrPortSpaceExhausted)
     }
 
-    pub(crate) async fn resolve_addr(&self, use_ipv4: bool, address: &str) -> Result<SocketAddr> {
+    pub async fn resolve_addr(&self, use_ipv4: bool, address: &str) -> Result<SocketAddr> {
         let v: Vec<&str> = address.splitn(2, ':').collect();
         if v.len() != 2 {
             return Err(Error::ErrAddrNotUdpAddr);
@@ -321,7 +321,7 @@ impl VNet {
     }
 
     // caller must hold the mutex
-    pub(crate) async fn bind(
+    pub async fn bind(
         &self,
         mut local_addr: SocketAddr,
     ) -> Result<Arc<dyn Conn + Send + Sync>> {
@@ -351,7 +351,7 @@ impl VNet {
         Ok(conn)
     }
 
-    pub(crate) async fn dail(
+    pub async fn dail(
         &self,
         use_ipv4: bool,
         remote_addr: &str,

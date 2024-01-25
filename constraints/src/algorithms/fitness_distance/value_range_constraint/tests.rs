@@ -138,6 +138,6 @@ macro_rules! test_value_range_constraint {
     }};
 }
 
-mod empty;
-mod f64;
-mod u64;
+pub mod empty;
+pub mod f64;
+pub mod u64;

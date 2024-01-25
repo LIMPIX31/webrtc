@@ -13,7 +13,7 @@ use waitgroup::WaitGroup;
 use super::*;
 use crate::candidate::candidate_base::unmarshal_candidate;
 
-pub(crate) struct MockConn;
+pub struct MockConn;
 
 #[async_trait]
 impl Conn for MockConn {
@@ -43,15 +43,15 @@ impl Conn for MockConn {
     }
 }
 
-pub(crate) struct VNet {
-    pub(crate) wan: Arc<Mutex<router::Router>>,
-    pub(crate) net0: Arc<net::Net>,
-    pub(crate) net1: Arc<net::Net>,
-    pub(crate) server: turn::server::Server,
+pub struct VNet {
+    pub wan: Arc<Mutex<router::Router>>,
+    pub net0: Arc<net::Net>,
+    pub net1: Arc<net::Net>,
+    pub server: turn::server::Server,
 }
 
 impl VNet {
-    pub(crate) async fn close(&self) -> Result<(), Error> {
+    pub async fn close(&self) -> Result<(), Error> {
         self.server.close().await?;
         let mut w = self.wan.lock().await;
         w.stop().await?;
@@ -59,16 +59,16 @@ impl VNet {
     }
 }
 
-pub(crate) const VNET_GLOBAL_IPA: &str = "27.1.1.1";
-pub(crate) const VNET_LOCAL_IPA: &str = "192.168.0.1";
-pub(crate) const VNET_LOCAL_SUBNET_MASK_A: &str = "24";
-pub(crate) const VNET_GLOBAL_IPB: &str = "28.1.1.1";
-pub(crate) const VNET_LOCAL_IPB: &str = "10.2.0.1";
-pub(crate) const VNET_LOCAL_SUBNET_MASK_B: &str = "24";
-pub(crate) const VNET_STUN_SERVER_IP: &str = "1.2.3.4";
-pub(crate) const VNET_STUN_SERVER_PORT: u16 = 3478;
+pub const VNET_GLOBAL_IPA: &str = "27.1.1.1";
+pub const VNET_LOCAL_IPA: &str = "192.168.0.1";
+pub const VNET_LOCAL_SUBNET_MASK_A: &str = "24";
+pub const VNET_GLOBAL_IPB: &str = "28.1.1.1";
+pub const VNET_LOCAL_IPB: &str = "10.2.0.1";
+pub const VNET_LOCAL_SUBNET_MASK_B: &str = "24";
+pub const VNET_STUN_SERVER_IP: &str = "1.2.3.4";
+pub const VNET_STUN_SERVER_PORT: u16 = 3478;
 
-pub(crate) async fn build_simple_vnet(
+pub async fn build_simple_vnet(
     _nat_type0: nat::NatType,
     _nat_type1: nat::NatType,
 ) -> Result<VNet, Error> {
@@ -117,7 +117,7 @@ pub(crate) async fn build_simple_vnet(
     })
 }
 
-pub(crate) async fn build_vnet(
+pub async fn build_vnet(
     nat_type0: nat::NatType,
     nat_type1: nat::NatType,
 ) -> Result<VNet, Error> {
@@ -187,12 +187,12 @@ pub(crate) async fn build_vnet(
     })
 }
 
-pub(crate) struct TestAuthHandler {
-    pub(crate) cred_map: HashMap<String, Vec<u8>>,
+pub struct TestAuthHandler {
+    pub cred_map: HashMap<String, Vec<u8>>,
 }
 
 impl TestAuthHandler {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         let mut cred_map = HashMap::new();
         cred_map.insert(
             "user".to_owned(),
@@ -218,7 +218,7 @@ impl turn::auth::AuthHandler for TestAuthHandler {
     }
 }
 
-pub(crate) async fn add_vnet_stun(wan_net: Arc<net::Net>) -> Result<turn::server::Server, Error> {
+pub async fn add_vnet_stun(wan_net: Arc<net::Net>) -> Result<turn::server::Server, Error> {
     // Run TURN(STUN) server
     let conn = wan_net
         .bind(SocketAddr::from_str(&format!(
@@ -247,7 +247,7 @@ pub(crate) async fn add_vnet_stun(wan_net: Arc<net::Net>) -> Result<turn::server
     Ok(server)
 }
 
-pub(crate) async fn connect_with_vnet(
+pub async fn connect_with_vnet(
     a_agent: &Arc<Agent>,
     b_agent: &Arc<Agent>,
 ) -> Result<(Arc<impl Conn>, Arc<impl Conn>), Error> {
@@ -281,12 +281,12 @@ pub(crate) async fn connect_with_vnet(
 }
 
 #[derive(Default)]
-pub(crate) struct AgentTestConfig {
-    pub(crate) urls: Vec<Url>,
-    pub(crate) nat_1to1_ip_candidate_type: CandidateType,
+pub struct AgentTestConfig {
+    pub urls: Vec<Url>,
+    pub nat_1to1_ip_candidate_type: CandidateType,
 }
 
-pub(crate) async fn pipe_with_vnet(
+pub async fn pipe_with_vnet(
     v: &VNet,
     a0test_config: AgentTestConfig,
     a1test_config: AgentTestConfig,
@@ -341,7 +341,7 @@ pub(crate) async fn pipe_with_vnet(
     Ok((a_conn, b_conn))
 }
 
-pub(crate) fn on_connected() -> (OnConnectionStateChangeHdlrFn, mpsc::Receiver<()>) {
+pub fn on_connected() -> (OnConnectionStateChangeHdlrFn, mpsc::Receiver<()>) {
     let (done_tx, done_rx) = mpsc::channel::<()>(1);
     let done_tx = Arc::new(Mutex::new(Some(done_tx)));
     let hdlr_fn: OnConnectionStateChangeHdlrFn = Box::new(move |state: ConnectionState| {
@@ -356,7 +356,7 @@ pub(crate) fn on_connected() -> (OnConnectionStateChangeHdlrFn, mpsc::Receiver<(
     (hdlr_fn, done_rx)
 }
 
-pub(crate) async fn gather_and_exchange_candidates(
+pub async fn gather_and_exchange_candidates(
     a_agent: &Arc<Agent>,
     b_agent: &Arc<Agent>,
 ) -> Result<(), Error> {
@@ -409,12 +409,12 @@ pub(crate) async fn gather_and_exchange_candidates(
     Ok(())
 }
 
-pub(crate) async fn start_router(router: &Arc<Mutex<router::Router>>) -> Result<(), Error> {
+pub async fn start_router(router: &Arc<Mutex<router::Router>>) -> Result<(), Error> {
     let mut w = router.lock().await;
     Ok(w.start().await?)
 }
 
-pub(crate) async fn connect_net2router(
+pub async fn connect_net2router(
     net: &Arc<net::Net>,
     router: &Arc<Mutex<router::Router>>,
 ) -> Result<(), Error> {
@@ -432,7 +432,7 @@ pub(crate) async fn connect_net2router(
     Ok(())
 }
 
-pub(crate) async fn connect_router2router(
+pub async fn connect_router2router(
     child: &Arc<Mutex<router::Router>>,
     parent: &Arc<Mutex<router::Router>>,
 ) -> Result<(), Error> {

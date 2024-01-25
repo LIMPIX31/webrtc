@@ -1,5 +1,5 @@
-pub(crate) mod generic;
-pub(crate) mod h264;
+pub mod generic;
+pub mod h264;
 
 use std::any::Any;
 use std::collections::HashMap;

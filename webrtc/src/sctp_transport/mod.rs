@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod sctp_transport_test;
+pub mod sctp_transport_test;
 
 pub mod sctp_transport_capabilities;
 pub mod sctp_transport_state;
@@ -59,7 +59,7 @@ struct AcceptDataChannelParams {
 /// SCTPTransport provides details about the SCTP transport.
 #[derive(Default)]
 pub struct RTCSctpTransport {
-    pub(crate) dtls_transport: Arc<RTCDtlsTransport>,
+    pub dtls_transport: Arc<RTCDtlsTransport>,
 
     // State represents the current state of the SCTP transport.
     state: AtomicU8, // RTCSctpTransportState
@@ -83,9 +83,9 @@ pub struct RTCSctpTransport {
     on_data_channel_opened_handler: Arc<ArcSwapOption<Mutex<OnDataChannelOpenedHdlrFn>>>,
 
     // DataChannels
-    pub(crate) data_channels: Arc<Mutex<Vec<Arc<RTCDataChannel>>>>,
-    pub(crate) data_channels_opened: Arc<AtomicU32>,
-    pub(crate) data_channels_requested: Arc<AtomicU32>,
+    pub data_channels: Arc<Mutex<Vec<Arc<RTCDataChannel>>>>,
+    pub data_channels_opened: Arc<AtomicU32>,
+    pub data_channels_requested: Arc<AtomicU32>,
     data_channels_accepted: Arc<AtomicU32>,
 
     notify_tx: Arc<Notify>,
@@ -94,7 +94,7 @@ pub struct RTCSctpTransport {
 }
 
 impl RTCSctpTransport {
-    pub(crate) fn new(
+    pub fn new(
         dtls_transport: Arc<RTCDtlsTransport>,
         setting_engine: Arc<SettingEngine>,
     ) -> Self {
@@ -356,7 +356,7 @@ impl RTCSctpTransport {
         self.state.load(Ordering::SeqCst).into()
     }
 
-    pub(crate) async fn collect_stats(
+    pub async fn collect_stats(
         &self,
         collector: &StatsCollector,
         peer_connection_id: String,
@@ -392,7 +392,7 @@ impl RTCSctpTransport {
         collector.merge(reports);
     }
 
-    pub(crate) async fn generate_and_set_data_channel_id(
+    pub async fn generate_and_set_data_channel_id(
         &self,
         dtls_role: DTLSRole,
     ) -> Result<u16> {
@@ -422,20 +422,20 @@ impl RTCSctpTransport {
         Err(Error::ErrMaxDataChannelID)
     }
 
-    pub(crate) async fn association(&self) -> Option<Arc<Association>> {
+    pub async fn association(&self) -> Option<Arc<Association>> {
         let sctp_association = self.sctp_association.lock().await;
         sctp_association.clone()
     }
 
-    pub(crate) fn data_channels_accepted(&self) -> u32 {
+    pub fn data_channels_accepted(&self) -> u32 {
         self.data_channels_accepted.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn data_channels_opened(&self) -> u32 {
+    pub fn data_channels_opened(&self) -> u32 {
         self.data_channels_opened.load(Ordering::SeqCst)
     }
 
-    pub(crate) fn data_channels_requested(&self) -> u32 {
+    pub fn data_channels_requested(&self) -> u32 {
         self.data_channels_requested.load(Ordering::SeqCst)
     }
 }

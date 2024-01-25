@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod router_test;
+pub mod router_test;
 
 use std::collections::HashMap;
 use std::future::Future;
@@ -76,13 +76,13 @@ pub type ChunkFilterFn = Box<dyn (Fn(&(dyn Chunk + Send + Sync)) -> bool) + Send
 
 #[derive(Default)]
 pub struct RouterInternal {
-    pub(crate) nat_type: Option<NatType>,          // read-only
-    pub(crate) ipv4net: IpNet,                     // read-only
-    pub(crate) parent: Option<Arc<Mutex<Router>>>, // read-only
-    pub(crate) nat: NetworkAddressTranslator,      // read-only
-    pub(crate) nics: HashMap<String, Arc<Mutex<dyn Nic + Send + Sync>>>, // read-only
-    pub(crate) chunk_filters: Vec<ChunkFilterFn>,  // requires mutex [x]
-    pub(crate) last_id: u8, // requires mutex [x], used to assign the last digit of IPv4 address
+    pub nat_type: Option<NatType>,          // read-only
+    pub ipv4net: IpNet,                     // read-only
+    pub parent: Option<Arc<Mutex<Router>>>, // read-only
+    pub nat: NetworkAddressTranslator,      // read-only
+    pub nics: HashMap<String, Arc<Mutex<dyn Nic + Send + Sync>>>, // read-only
+    pub chunk_filters: Vec<ChunkFilterFn>,  // requires mutex [x]
+    pub last_id: u8, // requires mutex [x], used to assign the last digit of IPv4 address
 }
 
 // Router ...
@@ -98,7 +98,7 @@ pub struct Router {
     static_local_ips: HashMap<String, IpAddr>, // read-only,
     children: Vec<Arc<Mutex<Router>>>,         // read-only
     done: Option<mpsc::Sender<()>>,            // requires mutex [x]
-    pub(crate) resolver: Arc<Mutex<Resolver>>, // read-only
+    pub resolver: Arc<Mutex<Resolver>>, // read-only
     push_ch: Option<mpsc::Sender<()>>,         // writer requires mutex
     router_internal: Arc<Mutex<RouterInternal>>,
 }
@@ -293,7 +293,7 @@ impl Router {
     }
 
     // caller must hold the mutex
-    pub(crate) fn get_interfaces(&self) -> &[Interface] {
+    pub fn get_interfaces(&self) -> &[Interface] {
         &self.interfaces
     }
 
@@ -408,7 +408,7 @@ impl Router {
         router_internal.chunk_filters.push(filter);
     }
 
-    pub(crate) async fn push(&self, mut c: Box<dyn Chunk + Send + Sync>) {
+    pub async fn push(&self, mut c: Box<dyn Chunk + Send + Sync>) {
         log::debug!("[{}] route {}", self.name, c);
         if self.done.is_some() {
             c.set_timestamp();
@@ -526,7 +526,7 @@ impl Router {
 
 impl RouterInternal {
     // caller must hold the mutex
-    pub(crate) async fn add_nic(&mut self, nic: Arc<Mutex<dyn Nic + Send + Sync>>) -> Result<()> {
+    pub async fn add_nic(&mut self, nic: Arc<Mutex<dyn Nic + Send + Sync>>) -> Result<()> {
         let mut ips = {
             let ni = nic.lock().await;
             ni.get_static_ips().await

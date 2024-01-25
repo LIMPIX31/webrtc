@@ -4,7 +4,7 @@
 pub mod agent;
 pub mod candidate;
 pub mod control;
-mod error;
+pub mod error;
 pub mod external_ip_mapper;
 pub mod mdns;
 pub mod network_type;

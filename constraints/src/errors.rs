@@ -38,7 +38,7 @@ impl std::fmt::Display for OverconstrainedError {
 }
 
 impl OverconstrainedError {
-    pub(super) fn exposing_device_information(
+    pub fn exposing_device_information(
         failed_constraints: HashMap<MediaTrackProperty, ConstraintFailureInfo>,
     ) -> Self {
         let failed_constraint = failed_constraints

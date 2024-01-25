@@ -61,7 +61,7 @@ impl fmt::Display for RTCBundlePolicy {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

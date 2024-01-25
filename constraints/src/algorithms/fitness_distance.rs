@@ -18,12 +18,12 @@ pub trait FitnessDistance<Subject> {
     fn fitness_distance(&self, subject: Subject) -> Result<f64, Self::Error>;
 }
 
-mod empty_constraint;
-mod setting;
-mod settings;
-mod value_constraint;
-mod value_range_constraint;
-mod value_sequence_constraint;
+pub mod empty_constraint;
+pub mod setting;
+pub mod settings;
+pub mod value_constraint;
+pub mod value_range_constraint;
+pub mod value_sequence_constraint;
 
 use std::cmp::Ordering;
 
@@ -91,7 +91,7 @@ fn relative_fitness_distance(actual: f64, ideal: f64) -> f64 {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
 
     mod relative_fitness_distance {

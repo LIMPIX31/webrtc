@@ -3,7 +3,7 @@ use std::fmt;
 /// paramType represents a SCTP INIT/INITACK parameter
 #[derive(Debug, Copy, Clone, PartialEq)]
 #[repr(C)]
-pub(crate) enum ParamType {
+pub enum ParamType {
     HeartbeatInfo,
     /// Heartbeat Info [RFCRFC4960]
     Ipv4Addr,

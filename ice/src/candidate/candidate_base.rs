@@ -31,31 +31,31 @@ pub struct CandidateBaseConfig {
 }
 
 pub struct CandidateBase {
-    pub(crate) id: String,
-    pub(crate) network_type: AtomicU8,
-    pub(crate) candidate_type: CandidateType,
+    pub id: String,
+    pub network_type: AtomicU8,
+    pub candidate_type: CandidateType,
 
-    pub(crate) component: AtomicU16,
-    pub(crate) address: String,
-    pub(crate) port: u16,
-    pub(crate) related_address: Option<CandidateRelatedAddress>,
-    pub(crate) tcp_type: TcpType,
+    pub component: AtomicU16,
+    pub address: String,
+    pub port: u16,
+    pub related_address: Option<CandidateRelatedAddress>,
+    pub tcp_type: TcpType,
 
-    pub(crate) resolved_addr: SyncMutex<SocketAddr>,
+    pub resolved_addr: SyncMutex<SocketAddr>,
 
-    pub(crate) last_sent: AtomicU64,
-    pub(crate) last_received: AtomicU64,
+    pub last_sent: AtomicU64,
+    pub last_received: AtomicU64,
 
-    pub(crate) conn: Option<Arc<dyn util::Conn + Send + Sync>>,
-    pub(crate) closed_ch: Arc<Mutex<Option<broadcast::Sender<()>>>>,
+    pub conn: Option<Arc<dyn util::Conn + Send + Sync>>,
+    pub closed_ch: Arc<Mutex<Option<broadcast::Sender<()>>>>,
 
-    pub(crate) foundation_override: String,
-    pub(crate) priority_override: u32,
+    pub foundation_override: String,
+    pub priority_override: u32,
 
     //CandidateHost
-    pub(crate) network: String,
+    pub network: String,
     //CandidateRelay
-    pub(crate) relay_client: Option<Arc<turn::client::Client>>,
+    pub relay_client: Option<Arc<turn::client::Client>>,
 }
 
 impl Default for CandidateBase {

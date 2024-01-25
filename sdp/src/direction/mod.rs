@@ -1,7 +1,7 @@
 use std::fmt;
 
 #[cfg(test)]
-mod direction_test;
+pub mod direction_test;
 
 /// Direction is a marker for transmission direction of an endpoint
 #[derive(Default, Debug, PartialEq, Eq, Clone)]

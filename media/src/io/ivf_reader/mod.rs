@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod ivf_reader_test;
+pub mod ivf_reader_test;
 
 use std::io::Read;
 

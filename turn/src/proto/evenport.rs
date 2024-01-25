@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod evenport_test;
+pub mod evenport_test;
 
 use std::fmt;
 

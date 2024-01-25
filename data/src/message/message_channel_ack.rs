@@ -39,7 +39,7 @@ impl Unmarshal for DataChannelAck {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use bytes::{Bytes, BytesMut};
 
     use super::*;

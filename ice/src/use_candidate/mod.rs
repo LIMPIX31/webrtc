@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod use_candidate_test;
+pub mod use_candidate_test;
 
 use stun::attributes::ATTR_USE_CANDIDATE;
 use stun::message::*;

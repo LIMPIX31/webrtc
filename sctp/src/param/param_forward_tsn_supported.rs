@@ -13,7 +13,7 @@ use super::*;
 ///|    Parameter Type = 49152     |  Parameter Length = 4         |
 ///+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #[derive(Default, Debug, Clone, PartialEq)]
-pub(crate) struct ParamForwardTsnSupported;
+pub struct ParamForwardTsnSupported;
 
 impl fmt::Display for ParamForwardTsnSupported {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

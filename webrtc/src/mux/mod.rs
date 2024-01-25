@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod mux_test;
+pub mod mux_test;
 
 pub mod endpoint;
 pub mod mux_func;

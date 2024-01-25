@@ -68,7 +68,7 @@ impl fmt::Display for RTCIceGathererState {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
 
     #[test]

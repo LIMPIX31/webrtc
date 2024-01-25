@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod ivf_writer_test;
+pub mod ivf_writer_test;
 
 use std::io::{Seek, SeekFrom, Write};
 

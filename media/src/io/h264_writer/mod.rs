@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod h264_writer_test;
+pub mod h264_writer_test;
 
 use std::io::{Seek, Write};
 

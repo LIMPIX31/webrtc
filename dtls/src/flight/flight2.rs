@@ -12,7 +12,7 @@ use crate::handshake::*;
 use crate::record_layer::record_layer_header::*;
 
 #[derive(Debug, PartialEq)]
-pub(crate) struct Flight2;
+pub struct Flight2;
 
 impl fmt::Display for Flight2 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
